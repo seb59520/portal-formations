@@ -166,7 +166,7 @@ export function Dashboard() {
               {courses.map((course) => (
                 <div key={course.id} className="card">
                   <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-lg font-medium text-gray-900">
+                    <h3 className="text-lg font-medium text-gray-900 break-words flex-1 pr-2">
                       {course.title}
                     </h3>
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

@@ -661,8 +661,8 @@ export function AdminCourseEdit() {
                       <div className="space-y-3 ml-7">
                         {module.items.map((item) => (
                           <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                            <div className="flex items-center space-x-3">
-                              <span className={`w-3 h-3 rounded-full ${
+                            <div className="flex items-center space-x-3 flex-1 min-w-0">
+                              <span className={`w-3 h-3 rounded-full flex-shrink-0 ${
                                 item.type === 'resource' ? 'bg-blue-500' :
                                 item.type === 'slide' ? 'bg-green-500' :
                                 item.type === 'exercise' ? 'bg-yellow-500' :
@@ -673,10 +673,10 @@ export function AdminCourseEdit() {
                                 type="text"
                                 value={item.title}
                                 onChange={(e) => updateItem(module.id, item.id, { title: e.target.value })}
-                                className="text-sm font-medium text-gray-900 bg-transparent border-none focus:outline-none focus:ring-0 flex-1"
+                                className="text-sm font-medium text-gray-900 bg-transparent border-none focus:outline-none focus:ring-0 flex-1 min-w-0 w-full"
                                 placeholder="Titre de l'élément"
                               />
-                              <span className="text-xs text-gray-500 capitalize">
+                              <span className="text-xs text-gray-500 capitalize flex-shrink-0">
                                 {item.type}
                               </span>
                             </div>

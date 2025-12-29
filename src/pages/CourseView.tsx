@@ -298,19 +298,19 @@ export function CourseView() {
                             key={item.id}
                             className="flex items-center justify-between p-4 border border-gray-200 rounded-md hover:bg-gray-50"
                           >
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-3 h-3 rounded-full ${
+                            <div className="flex items-center space-x-3 flex-1 min-w-0">
+                              <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
                                 item.type === 'resource' ? 'bg-blue-500' :
                                 item.type === 'slide' ? 'bg-green-500' :
                                 item.type === 'exercise' ? 'bg-yellow-500' :
                                 item.type === 'tp' ? 'bg-purple-500' :
                                 'bg-red-500'
                               }`} />
-                              <div>
-                                <h3 className="text-sm font-medium text-gray-900">
+                              <div className="flex-1 min-w-0">
+                                <h3 className="text-sm font-medium text-gray-900 break-words">
                                   {item.title}
                                 </h3>
-                                <p className="text-xs text-gray-500 capitalize">
+                                <p className="text-xs text-gray-500 capitalize mt-1">
                                   {item.type === 'resource' ? 'Ressource' :
                                    item.type === 'slide' ? 'Support' :
                                    item.type === 'exercise' ? 'Exercice' :
@@ -321,7 +321,7 @@ export function CourseView() {
 
                             <Link
                               to={`/items/${item.id}`}
-                              className="btn-primary text-sm"
+                              className="btn-primary text-sm flex-shrink-0 ml-4"
                             >
                               Accéder
                             </Link>

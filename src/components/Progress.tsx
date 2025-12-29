@@ -274,9 +274,9 @@ export function Progress() {
                     ) : (
                       <Circle className="w-5 h-5 text-gray-300 flex-shrink-0" />
                     )}
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-2">
-                        <h4 className="text-sm font-medium text-gray-900">
+                        <h4 className="text-sm font-medium text-gray-900 break-words">
                           {itemProgress.item.title}
                         </h4>
                         <span className={`text-xs px-2 py-0.5 rounded ${

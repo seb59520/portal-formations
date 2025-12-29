@@ -215,16 +215,74 @@ Un mini-jeu est une activité ludique interactive pour renforcer l'apprentissage
 7. Le score est calculé automatiquement et enregistré
 
 **Calcul du score :**
-- Le score est basé sur :
-  - **Temps** : Moins de temps = meilleur score (max 1000 points)
-  - **Tentatives** : Moins de tentatives = meilleur score (max 1000 points)
-  - **Score total** : Maximum 2000 points
+- Le score est basé sur **2000 points maximum** :
+  - **Points de temps (max 1000 pts)** : Vous perdez **10 points par seconde** écoulée
+    - Exemple : 30 secondes = 1000 - (30 × 10) = 700 points
+  - **Points de précision (max 1000 pts)** : Vous perdez **50 points par tentative**
+    - Exemple : 5 tentatives = 1000 - (5 × 50) = 750 points
+  - **Score total** = Points de temps + Points de précision
+    - Exemple : 700 + 750 = 1450 points
+- 💡 **Astuce** : Pour maximiser votre score, soyez rapide ET précis !
 
 **Fonctionnalités :**
 - Les scores sont enregistrés automatiquement dans la base de données
 - Les étudiants peuvent rejouer pour améliorer leur score
 - Le temps et le nombre de tentatives sont affichés en temps réel
 - Interface responsive et intuitive
+- Explication détaillée des règles de scoring avant de commencer
+- Affichage du détail du score à la fin du jeu
+
+---
+
+#### 2. Jeu d'association de colonnes (Column Matching)
+
+**Comment créer un jeu d'association de colonnes ?**
+
+1. **Créer un élément de type "Mini-jeu"**
+   - Dans l'édition d'une formation, cliquez sur "+ Élément" dans un module
+   - Sélectionnez le type "Mini-jeu"
+
+2. **Configurer le jeu**
+   - **Type de jeu** : Sélectionnez "Association de colonnes"
+   - **Titre** : Nom du jeu
+   - **Description** : Expliquez les règles et l'objectif
+   - **Instructions** : Instructions supplémentaires (optionnel)
+
+3. **Configurer les colonnes**
+   - **Colonne 1** : Entrez les éléments, un par ligne
+   - **Colonne 2** : Entrez les éléments correspondants, un par ligne
+
+4. **Définir les correspondances**
+   - Cliquez sur "+ Ajouter" pour chaque correspondance
+   - Pour chaque correspondance, indiquez l'index de chaque colonne (0 = premier élément)
+
+**Fonctionnement pour les étudiants :**
+1. L'étudiant clique sur "Commencer le jeu"
+2. Deux colonnes s'affichent avec les éléments
+3. L'étudiant clique sur un élément de la colonne 1, puis sur l'élément correspondant de la colonne 2
+4. Si l'association est correcte → les éléments sont marqués en vert
+5. Si l'association est incorrecte → un feedback rouge apparaît
+6. Le jeu se termine quand toutes les correspondances sont trouvées
+7. Le score est calculé et enregistré automatiquement
+
+**Calcul du score :**
+- Le score est basé sur **2000 points maximum** :
+  - **Points de temps (max 1000 pts)** : Vous perdez **5 points par seconde** écoulée
+    - Exemple : 40 secondes = 1000 - (40 × 5) = 800 points
+  - **Points de précision (max 1000 pts)** : Vous perdez **100 points par tentative en trop** (au-delà du nombre minimum de correspondances)
+    - Exemple : 5 correspondances trouvées en 7 tentatives = 1000 - (2 × 100) = 800 points
+  - **Score total** = Points de temps + Points de précision
+    - Exemple : 800 + 800 = 1600 points
+- 💡 **Astuce** : Le nombre minimum de tentatives est égal au nombre de correspondances. Pour maximiser votre score, soyez rapide ET précis !
+
+**Fonctionnalités :**
+- Les scores sont enregistrés automatiquement dans la base de données
+- Les étudiants peuvent rejouer pour améliorer leur score
+- Le temps et le nombre de tentatives sont affichés en temps réel
+- Feedback visuel immédiat (vert = correct, rouge = incorrect)
+- Interface responsive avec deux colonnes côte à côte
+- Explication détaillée des règles de scoring avant de commencer
+- Affichage du détail du score à la fin du jeu
 
 ---
 

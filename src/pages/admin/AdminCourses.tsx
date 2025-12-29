@@ -136,7 +136,7 @@ export function AdminCourses() {
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-3">
-                          <h3 className="text-lg font-medium text-gray-900 truncate">
+                          <h3 className="text-lg font-medium text-gray-900 break-words">
                             {course.title}
                           </h3>
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
