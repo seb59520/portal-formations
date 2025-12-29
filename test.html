@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Portail Formations</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Test Portail Formations</h1>
+    <div id="status">Chargement...</div>
+
+    <script>
+        // Test basique de connexion
+        fetch('http://localhost:5173')
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('status').innerHTML =
+                        '<span class="success">✅ Serveur accessible sur localhost:5173</span>';
+                } else {
+                    document.getElementById('status').innerHTML =
+                        '<span class="error">❌ Serveur répond mais avec erreur: ' + response.status + '</span>';
+                }
+            })
+            .catch(error => {
+                document.getElementById('status').innerHTML =
+                    '<span class="error">❌ Impossible de contacter localhost:5173: ' + error.message + '</span>';
+            });
+
+        // Note: Les variables d'environnement ne sont pas testables depuis un fichier HTML statique
+        setTimeout(() => {
+            const envDiv = document.createElement('div');
+            envDiv.innerHTML = '<h2>Note:</h2>';
+            envDiv.innerHTML += '<p>Les variables d\'environnement ne peuvent pas être testées depuis ce fichier HTML.</p>';
+            envDiv.innerHTML += '<p>Elles sont seulement disponibles dans l\'application React.</p>';
+            document.body.appendChild(envDiv);
+        }, 1000);
+    </script>
+</body>
+</html>

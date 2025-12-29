@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Session Portail Formations</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        .warning { color: orange; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Session Portail Formations</h1>
+
+    <div class="section">
+        <h2>1. LocalStorage Supabase</h2>
+        <div id="localStorage">Chargement...</div>
+        <button onclick="checkLocalStorage()">Actualiser</button>
+    </div>
+
+    <div class="section">
+        <h2>2. Test Connexion Supabase</h2>
+        <div id="supabaseTest">Chargement...</div>
+        <button onclick="testSupabaseConnection()">Tester</button>
+    </div>
+
+    <div class="section">
+        <h2>3. Session Actuelle</h2>
+        <div id="sessionInfo">Chargement...</div>
+        <button onclick="checkSession()">Vérifier Session</button>
+    </div>
+
+    <div class="section">
+        <h2>4. Test API Profiles</h2>
+        <div id="profilesTest">Chargement...</div>
+        <button onclick="testProfilesAPI()">Tester Profiles</button>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://cofoqneikwdocyihzuzg.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNvZm9xbmVpa3dkb2N5aWh6dXpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5NDQ1NzgsImV4cCI6MjA4MjUyMDU3OH0.lc1Kz-Iv_8NWAE8rgbf7FzINIALGhTXXnsLDc4d1WsM';
+
+        function checkLocalStorage() {
+            const keys = Object.keys(localStorage).filter(k => k.includes('supabase'));
+            const content = keys.length > 0
+                ? keys.map(key => `<strong>${key}:</strong> ${localStorage.getItem(key).substring(0, 50)}...`).join('<br>')
+                : '<span class="error">❌ Aucun token Supabase trouvé</span>';
+
+            document.getElementById('localStorage').innerHTML = content;
+        }
+
+        async function testSupabaseConnection() {
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+
+                if (response.ok) {
+                    document.getElementById('supabaseTest').innerHTML = '<span class="success">✅ Connexion Supabase OK</span>';
+                } else {
+                    document.getElementById('supabaseTest').innerHTML = `<span class="error">❌ Erreur HTTP ${response.status}</span>`;
+                }
+            } catch (error) {
+                document.getElementById('supabaseTest').innerHTML = `<span class="error">❌ Erreur réseau: ${error.message}</span>`;
+            }
+        }
+
+        async function checkSession() {
+            // Simuler la récupération de session comme le fait l'app
+            const keys = Object.keys(localStorage).filter(k => k.includes('supabase'));
+            if (keys.length === 0) {
+                document.getElementById('sessionInfo').innerHTML = '<span class="error">❌ Aucune session trouvée</span>';
+                return;
+            }
+
+            try {
+                // Essayer de parser le token
+                const tokenKey = keys.find(k => k.includes('auth-token'));
+                if (tokenKey) {
+                    const tokenData = JSON.parse(localStorage.getItem(tokenKey));
+                    const accessToken = tokenData?.access_token;
+
+                    if (accessToken) {
+                        // Vérifier si le token n'est pas expiré
+                        const payload = JSON.parse(atob(accessToken.split('.')[1]));
+                        const now = Date.now() / 1000;
+
+                        if (payload.exp > now) {
+                            document.getElementById('sessionInfo').innerHTML =
+                                `<span class="success">✅ Session valide jusqu'à ${new Date(payload.exp * 1000).toLocaleString()}</span>`;
+                        } else {
+                            document.getElementById('sessionInfo').innerHTML =
+                                '<span class="error">❌ Token expiré</span>';
+                        }
+                    } else {
+                        document.getElementById('sessionInfo').innerHTML =
+                            '<span class="warning">⚠️ Token trouvé mais mal formé</span>';
+                    }
+                }
+            } catch (error) {
+                document.getElementById('sessionInfo').innerHTML =
+                    `<span class="error">❌ Erreur parsing token: ${error.message}</span>`;
+            }
+        }
+
+        async function testProfilesAPI() {
+            const keys = Object.keys(localStorage).filter(k => k.includes('supabase'));
+            if (keys.length === 0) {
+                document.getElementById('profilesTest').innerHTML = '<span class="error">❌ Pas de token pour tester</span>';
+                return;
+            }
+
+            try {
+                const tokenKey = keys.find(k => k.includes('auth-token'));
+                const tokenData = JSON.parse(localStorage.getItem(tokenKey));
+                const accessToken = tokenData?.access_token;
+
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=*`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('profilesTest').innerHTML =
+                        `<span class="success">✅ API Profiles OK - ${data.length} profils trouvés</span>`;
+                } else {
+                    document.getElementById('profilesTest').innerHTML =
+                        `<span class="error">❌ Erreur API ${response.status}: ${response.statusText}</span>`;
+                }
+            } catch (error) {
+                document.getElementById('profilesTest').innerHTML =
+                    `<span class="error">❌ Erreur réseau: ${error.message}</span>`;
+            }
+        }
+
+        // Charger automatiquement au démarrage
+        window.onload = function() {
+            checkLocalStorage();
+            testSupabaseConnection();
+            checkSession();
+        };
+    </script>
+</body>
+</html>

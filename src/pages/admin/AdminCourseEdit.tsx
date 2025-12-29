@@ -89,6 +89,9 @@ export function AdminCourseEdit() {
         updated_at: new Date().toISOString()
       }
 
+      let finalCourseId = courseId
+
+      // Sauvegarder ou créer la formation
       if (isNew) {
         const { data, error } = await supabase
           .from('courses')
@@ -97,7 +100,8 @@ export function AdminCourseEdit() {
           .single()
 
         if (error) throw error
-        navigate(`/admin/courses/${data.id}`)
+        finalCourseId = data.id
+        navigate(`/admin/courses/${data.id}`, { replace: true })
       } else {
         const { error } = await supabase
           .from('courses')
@@ -105,11 +109,174 @@ export function AdminCourseEdit() {
           .eq('id', courseId)
 
         if (error) throw error
-        await fetchCourse() // Recharger pour voir les changements
+        finalCourseId = courseId
+      }
+
+      // Sauvegarder/mettre à jour les modules
+      const modulesToCreate = modules.filter(m => m.id.startsWith('temp-'))
+      const modulesToUpdate = modules.filter(m => !m.id.startsWith('temp-'))
+      let savedModules: any[] = []
+      let savedItems: any[] = []
+
+      // Créer les nouveaux modules
+      if (modulesToCreate.length > 0) {
+        const modulesData = modulesToCreate.map((module) => ({
+          course_id: finalCourseId,
+          title: module.title,
+          position: module.position
+        }))
+
+        const { data: saved, error: modulesError } = await supabase
+          .from('modules')
+          .insert(modulesData)
+          .select()
+
+        if (modulesError) throw modulesError
+        savedModules = saved || []
+      }
+
+      // Mettre à jour les modules existants en parallèle
+      if (modulesToUpdate.length > 0) {
+        const updatePromises = modulesToUpdate.map(module =>
+          supabase
+            .from('modules')
+            .update({
+              title: module.title,
+              position: module.position
+            })
+            .eq('id', module.id)
+        )
+        
+        const updateResults = await Promise.all(updatePromises)
+        const updateErrors = updateResults.filter(r => r.error)
+        if (updateErrors.length > 0) {
+          console.error('Errors updating modules:', updateErrors)
+        }
+      }
+
+      // Mettre à jour les IDs des modules dans l'état si des modules ont été créés
+      let allModules = modules
+      if (savedModules.length > 0) {
+        allModules = modules.map(module => {
+          if (module.id.startsWith('temp-')) {
+            const savedModule = savedModules.find((sm, idx) => 
+              modulesToCreate[idx]?.title === sm.title && modulesToCreate[idx]?.position === sm.position
+            )
+            return savedModule ? { ...module, id: savedModule.id, course_id: savedModule.course_id } : module
+          }
+          return module
+        })
+        setModules(allModules)
+      }
+
+      // Sauvegarder les items temporaires et mettre à jour les existants
+      const itemsToCreate: Array<{ module_id: string; item: Item }> = []
+      const itemsToUpdate: Array<{ item: Item }> = []
+
+      allModules.forEach(module => {
+        module.items.forEach(item => {
+          if (item.id.startsWith('temp-')) {
+            itemsToCreate.push({ module_id: module.id, item })
+          } else {
+            itemsToUpdate.push({ item })
+          }
+        })
+      })
+
+      // Créer les nouveaux items
+      if (itemsToCreate.length > 0) {
+        const itemsData = itemsToCreate.map(({ module_id, item }) => ({
+          module_id,
+          type: item.type,
+          title: item.title,
+          content: item.content,
+          asset_path: item.asset_path,
+          external_url: item.external_url,
+          position: item.position,
+          published: item.published
+        }))
+
+        const { data: saved, error: itemsError } = await supabase
+          .from('items')
+          .insert(itemsData)
+          .select()
+
+        if (itemsError) throw itemsError
+        savedItems = saved || []
+      }
+
+      // Mettre à jour les items existants en parallèle (seulement si changements significatifs)
+      if (itemsToUpdate.length > 0) {
+        const updatePromises = itemsToUpdate.map(({ item }) =>
+          supabase
+            .from('items')
+            .update({
+              title: item.title,
+              type: item.type,
+              position: item.position,
+              published: item.published
+            })
+            .eq('id', item.id)
+        )
+        
+        const updateResults = await Promise.all(updatePromises)
+        const updateErrors = updateResults.filter(r => r.error)
+        if (updateErrors.length > 0) {
+          console.error('Errors updating items:', updateErrors)
+        }
+      }
+
+      // Mettre à jour l'état local avec les nouveaux IDs (sans recharger)
+      let finalModules = modules
+      
+      // Mettre à jour les IDs des modules créés
+      if (savedModules.length > 0) {
+        finalModules = modules.map(module => {
+          if (module.id.startsWith('temp-')) {
+            const savedModule = savedModules.find((sm, idx) => 
+              modulesToCreate[idx]?.title === sm.title && modulesToCreate[idx]?.position === sm.position
+            )
+            if (savedModule) {
+              return { ...module, id: savedModule.id, course_id: savedModule.course_id }
+            }
+          }
+          return module
+        })
+      }
+      
+      // Mettre à jour les IDs des items créés
+      if (savedItems.length > 0) {
+        finalModules = finalModules.map(module => {
+          const moduleItems = module.items.map(item => {
+            if (item.id.startsWith('temp-')) {
+              // Trouver l'item sauvegardé correspondant (par titre et position)
+              const savedItem = savedItems.find(si => 
+                si.module_id === module.id && 
+                si.title === item.title && 
+                si.position === item.position
+              )
+              if (savedItem) {
+                return { ...item, id: savedItem.id }
+              }
+            }
+            return item
+          })
+          return { ...module, items: moduleItems }
+        })
+      }
+      
+      // Mettre à jour l'état seulement si nécessaire
+      if (savedModules.length > 0 || savedItems.length > 0) {
+        setModules(finalModules)
+      }
+      
+      // Afficher un message de succès
+      if (!isNew) {
+        setError('') // Effacer les erreurs
       }
     } catch (error) {
       console.error('Error saving course:', error)
-      setError('Erreur lors de la sauvegarde.')
+      setError(`Erreur lors de la sauvegarde: ${error instanceof Error ? error.message : 'Erreur inconnue'}`)
     } finally {
       setSaving(false)
     }
@@ -193,6 +360,69 @@ export function AdminCourseEdit() {
     ))
   }
 
+  const saveAndEditItem = async (moduleId: string, item: Item) => {
+    // Vérifier que le module existe (pas temporaire)
+    const module = modules.find(m => m.id === moduleId)
+    if (!module || module.id.startsWith('temp-')) {
+      setError('Veuillez d\'abord sauvegarder le module contenant cet élément.')
+      return
+    }
+
+    if (!item.title?.trim()) {
+      setError('Veuillez donner un titre à l\'élément avant de le modifier.')
+      return
+    }
+
+    try {
+      setSaving(true)
+      setError('')
+
+      // Créer l'item dans la base de données
+      const itemData = {
+        module_id: moduleId,
+        type: item.type,
+        title: item.title.trim(),
+        content: item.content || {},
+        asset_path: item.asset_path,
+        external_url: item.external_url,
+        position: item.position,
+        published: item.published
+      }
+
+      const { data: savedItem, error: itemError } = await supabase
+        .from('items')
+        .insert(itemData)
+        .select()
+        .single()
+
+      if (itemError) {
+        console.error('Error saving item:', itemError)
+        throw new Error(itemError.message || 'Erreur lors de la sauvegarde')
+      }
+
+      if (!savedItem) {
+        throw new Error('Aucune donnée retournée après la sauvegarde')
+      }
+
+      // Mettre à jour l'état local avec le nouvel ID (sans recharger)
+      setModules(modules.map(m =>
+        m.id === moduleId
+          ? {
+              ...m,
+              items: m.items.map(i => i.id === item.id ? { ...i, id: savedItem.id } : i)
+            }
+          : m
+      ))
+
+      // Rediriger vers la page d'édition
+      navigate(`/admin/items/${savedItem.id}/edit`)
+    } catch (error) {
+      console.error('Error saving item:', error)
+      setError(`Erreur lors de la sauvegarde: ${error instanceof Error ? error.message : 'Erreur inconnue'}`)
+      setSaving(false)
+    }
+  }
+
   const deleteItem = async (moduleId: string, itemId: string) => {
     if (itemId.startsWith('temp-')) {
       setModules(modules.map(m =>
@@ -252,10 +482,10 @@ export function AdminCourseEdit() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="btn-primary inline-flex items-center space-x-2 disabled:opacity-50"
+              className="btn-primary inline-flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save className="w-4 h-4" />
-              <span>{saving ? 'Sauvegarde...' : 'Sauvegarder'}</span>
+              <span>{saving ? 'Sauvegarde en cours...' : 'Sauvegarder'}</span>
             </button>
           </div>
         </div>
@@ -448,12 +678,25 @@ export function AdminCourseEdit() {
                               </span>
                             </div>
                             <div className="flex items-center space-x-2">
-                              <Link
-                                to={`/admin/items/${item.id}/edit`}
-                                className="text-blue-600 hover:text-blue-800"
-                              >
-                                <Edit className="w-4 h-4" />
-                              </Link>
+                              {item.id.startsWith('temp-') ? (
+                                <button
+                                  onClick={() => saveAndEditItem(module.id, item)}
+                                  disabled={saving || module.id.startsWith('temp-')}
+                                  className="text-blue-600 hover:text-blue-800 disabled:text-gray-400 disabled:cursor-not-allowed"
+                                  title={module.id.startsWith('temp-') 
+                                    ? "Sauvegardez d'abord le module" 
+                                    : "Sauvegarder et modifier cet élément"}
+                                >
+                                  <Edit className="w-4 h-4" />
+                                </button>
+                              ) : (
+                                <Link
+                                  to={`/admin/items/${item.id}/edit`}
+                                  className="text-blue-600 hover:text-blue-800"
+                                >
+                                  <Edit className="w-4 h-4" />
+                                </Link>
+                              )}
                               <button
                                 onClick={() => deleteItem(module.id, item.id)}
                                 className="text-red-600 hover:text-red-800"

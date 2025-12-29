@@ -4,6 +4,8 @@ import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabaseClient'
 import { Item, Submission } from '../types/database'
 import { ItemRenderer } from '../components/ItemRenderer'
+import { ChapterViewer } from '../components/ChapterViewer'
+import { RichTextEditor } from '../components/RichTextEditor'
 
 export function ItemView() {
   const { itemId } = useParams<{ itemId: string }>()
@@ -42,18 +44,18 @@ export function ItemView() {
 
       if (itemError) throw itemError
 
-      // Vérifier l'accès à la formation
+      // Vérifier l'accès à la formation (seulement si pas admin)
       const courseId = itemData.modules?.courses?.id
-      if (courseId) {
+      if (courseId && profile?.role !== 'admin' && user?.id) {
         const { data: accessCheck, error: accessError } = await supabase
           .from('enrollments')
           .select('id')
-          .eq('user_id', user?.id)
+          .eq('user_id', user.id)
           .eq('course_id', courseId)
           .eq('status', 'active')
-          .single()
+          .maybeSingle()
 
-        if (accessError && profile?.role !== 'admin') {
+        if (accessError || !accessCheck) {
           setError('Vous n\'avez pas accès à cet élément.')
           setLoading(false)
           return
@@ -138,12 +140,32 @@ export function ItemView() {
 
       {/* Main content */}
       <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <ItemRenderer
-            item={item}
-            submission={submission}
-            onSubmissionUpdate={setSubmission}
-          />
+        <div className="px-4 py-6 sm:px-0 space-y-8">
+          {/* Contenu principal de l'item */}
+          {item.content?.body && (
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Contenu</h2>
+              <RichTextEditor
+                content={item.content.body}
+                onChange={() => {}} // Lecture seule
+                editable={false}
+              />
+            </div>
+          )}
+
+          {/* Chapitres */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <ChapterViewer itemId={item.id} />
+          </div>
+
+          {/* Contenu spécifique selon le type (exercices, TP, etc.) */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <ItemRenderer
+              item={item}
+              submission={submission}
+              onSubmissionUpdate={setSubmission}
+            />
+          </div>
         </div>
       </main>
     </div>

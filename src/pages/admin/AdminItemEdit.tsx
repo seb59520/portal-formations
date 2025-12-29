@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { supabase } from '../../lib/supabaseClient'
 import { Item } from '../../types/database'
 import { Save, Upload } from 'lucide-react'
 import { FileUpload } from '../../components/FileUpload'
+import { RichTextEditor } from '../../components/RichTextEditor'
+import { ChapterManager } from '../../components/ChapterManager'
 
 export function AdminItemEdit() {
   const { itemId } = useParams<{ itemId: string }>()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
   const navigate = useNavigate()
   const isNew = itemId === 'new'
+  const moduleIdFromUrl = searchParams.get('module_id')
 
   const [item, setItem] = useState<Partial<Item>>({
     type: 'resource',
@@ -19,32 +23,84 @@ export function AdminItemEdit() {
     asset_path: null,
     external_url: null,
     position: 0,
-    published: true
+    published: true,
+    module_id: moduleIdFromUrl || undefined
   })
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(!isNew)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const [redirected, setRedirected] = useState(false)
 
   useEffect(() => {
-    if (!isNew && itemId) {
-      fetchItem()
+    // Si c'est un ID temporaire, rediriger vers la création d'un nouvel item (une seule fois)
+    if (itemId && itemId.startsWith('temp-') && !redirected) {
+      setRedirected(true)
+      // Extraire le module_id depuis l'URL ou utiliser celui par défaut
+      const moduleId = moduleIdFromUrl
+      if (moduleId) {
+        navigate(`/admin/items/new?module_id=${moduleId}`, { replace: true })
+      } else {
+        // Si on n'a pas de module_id, rediriger vers la liste des cours
+        navigate('/admin', { replace: true })
+      }
+      return
     }
-  }, [itemId, isNew])
+
+    // Ne rien faire si on a déjà redirigé
+    if (redirected) return
+
+    if (!isNew && itemId && !itemId.startsWith('temp-')) {
+      fetchItem()
+    } else if (isNew && moduleIdFromUrl) {
+      setItem(prev => ({ ...prev, module_id: moduleIdFromUrl }))
+      setLoading(false)
+    } else if (isNew) {
+      setLoading(false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemId, isNew, moduleIdFromUrl, redirected])
 
   const fetchItem = async () => {
+    if (!itemId || itemId === 'new' || itemId.startsWith('temp-')) {
+      setLoading(false)
+      return
+    }
+
     try {
+      setLoading(true)
+      setError('')
+      
       const { data, error } = await supabase
         .from('items')
         .select('*')
         .eq('id', itemId)
         .single()
 
-      if (error) throw error
+      if (error) {
+        console.error('Error fetching item:', error)
+        // Erreur 400 peut signifier que l'item n'existe pas ou problème de permissions
+        if (error.code === 'PGRST116') {
+          setError('Élément non trouvé. Vérifiez que l\'ID est correct.')
+        } else if (error.code === '42501' || error.message?.includes('permission')) {
+          setError('Vous n\'avez pas la permission d\'accéder à cet élément.')
+        } else {
+          setError(`Erreur lors du chargement: ${error.message || error.code || 'Erreur inconnue'}`)
+        }
+        setLoading(false)
+        return
+      }
+      
+      if (!data) {
+        setError('Élément non trouvé.')
+        setLoading(false)
+        return
+      }
+      
       setItem(data)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching item:', error)
-      setError('Erreur lors du chargement.')
+      setError(`Erreur lors du chargement: ${error?.message || 'Erreur inconnue'}`)
     } finally {
       setLoading(false)
     }
@@ -75,9 +131,11 @@ export function AdminItemEdit() {
         assetPath = fileName
       }
 
+      // Sauvegarder le contenu body si présent
       const itemData = {
         ...item,
         asset_path: assetPath,
+        content: item.content || {},
         updated_at: new Date().toISOString()
       }
 
@@ -89,7 +147,8 @@ export function AdminItemEdit() {
           .single()
 
         if (error) throw error
-        navigate(`/admin/items/${data.id}/edit`)
+        // Rediriger vers la page d'édition avec le nouvel ID
+        navigate(`/admin/items/${data.id}/edit`, { replace: true })
       } else {
         const { error } = await supabase
           .from('items')
@@ -238,20 +297,52 @@ export function AdminItemEdit() {
               </div>
             </div>
 
+            {/* Contenu principal avec éditeur riche */}
+            {!isNew && itemId && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium text-gray-900">Contenu principal</h3>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Écrivez le contenu de la leçon directement ici
+                  </label>
+                  <RichTextEditor
+                    content={item.content?.body || null}
+                    onChange={(content) => {
+                      setItem({
+                        ...item,
+                        content: {
+                          ...item.content,
+                          body: content
+                        }
+                      })
+                    }}
+                    placeholder="Commencez à écrire le contenu de votre leçon..."
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Chapitres - seulement si l'item est sauvegardé (pas de temp ID) */}
+            {!isNew && itemId && !itemId.startsWith('temp-') && (
+              <div className="space-y-4">
+                <ChapterManager itemId={itemId} />
+              </div>
+            )}
+
             {/* Contenu spécifique selon le type */}
             {item.type === 'resource' && (
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900">Ressource</h3>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
+                    Description (courte)
                   </label>
                   <textarea
                     value={item.content?.description || ''}
                     onChange={(e) => handleContentChange('description', e.target.value)}
                     rows={3}
                     className="input-field"
-                    placeholder="Description de la ressource"
+                    placeholder="Description courte de la ressource"
                   />
                 </div>
 
@@ -293,14 +384,14 @@ export function AdminItemEdit() {
                 <h3 className="text-lg font-medium text-gray-900">Support projeté</h3>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
+                    Description (courte)
                   </label>
                   <textarea
                     value={item.content?.description || ''}
                     onChange={(e) => handleContentChange('description', e.target.value)}
                     rows={3}
                     className="input-field"
-                    placeholder="Description du support"
+                    placeholder="Description courte du support"
                   />
                 </div>
 
@@ -325,62 +416,116 @@ export function AdminItemEdit() {
             {item.type === 'exercise' && (
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900">Exercice</h3>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Énoncé
-                  </label>
-                  <textarea
-                    value={item.content?.question || ''}
-                    onChange={(e) => handleContentChange('question', e.target.value)}
-                    rows={4}
-                    className="input-field"
-                    placeholder="Énoncé de l'exercice"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Correction (optionnel)
-                  </label>
-                  <textarea
-                    value={item.content?.correction || ''}
-                    onChange={(e) => handleContentChange('correction', e.target.value)}
-                    rows={4}
-                    className="input-field"
-                    placeholder="Correction de l'exercice"
-                  />
-                </div>
+                {!isNew && itemId ? (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Énoncé de l'exercice
+                      </label>
+                      <RichTextEditor
+                        content={item.content?.question || null}
+                        onChange={(content) => handleContentChange('question', content)}
+                        placeholder="Écrivez l'énoncé de l'exercice..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Correction (optionnel)
+                      </label>
+                      <RichTextEditor
+                        content={item.content?.correction || null}
+                        onChange={(content) => handleContentChange('correction', content)}
+                        placeholder="Écrivez la correction de l'exercice..."
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Énoncé
+                      </label>
+                      <textarea
+                        value={item.content?.question || ''}
+                        onChange={(e) => handleContentChange('question', e.target.value)}
+                        rows={4}
+                        className="input-field"
+                        placeholder="Énoncé de l'exercice"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Correction (optionnel)
+                      </label>
+                      <textarea
+                        value={item.content?.correction || ''}
+                        onChange={(e) => handleContentChange('correction', e.target.value)}
+                        rows={4}
+                        className="input-field"
+                        placeholder="Correction de l'exercice"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
             {item.type === 'tp' && (
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900">TP</h3>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Instructions
-                  </label>
-                  <textarea
-                    value={item.content?.instructions || ''}
-                    onChange={(e) => handleContentChange('instructions', e.target.value)}
-                    rows={4}
-                    className="input-field"
-                    placeholder="Instructions du TP"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Checklist
-                  </label>
-                  <textarea
-                    value={item.content?.checklist?.join('\n') || ''}
-                    onChange={(e) => handleContentChange('checklist', e.target.value.split('\n').filter(item => item.trim()))}
-                    rows={4}
-                    className="input-field"
-                    placeholder="Une tâche par ligne"
-                  />
-                </div>
+                {!isNew && itemId ? (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Instructions du TP
+                      </label>
+                      <RichTextEditor
+                        content={item.content?.instructions || null}
+                        onChange={(content) => handleContentChange('instructions', content)}
+                        placeholder="Écrivez les instructions du TP..."
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Checklist (une tâche par ligne)
+                      </label>
+                      <textarea
+                        value={item.content?.checklist?.join('\n') || ''}
+                        onChange={(e) => handleContentChange('checklist', e.target.value.split('\n').filter(item => item.trim()))}
+                        rows={4}
+                        className="input-field"
+                        placeholder="Une tâche par ligne"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Instructions
+                      </label>
+                      <textarea
+                        value={item.content?.instructions || ''}
+                        onChange={(e) => handleContentChange('instructions', e.target.value)}
+                        rows={4}
+                        className="input-field"
+                        placeholder="Instructions du TP"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Checklist
+                      </label>
+                      <textarea
+                        value={item.content?.checklist?.join('\n') || ''}
+                        onChange={(e) => handleContentChange('checklist', e.target.value.split('\n').filter(item => item.trim()))}
+                        rows={4}
+                        className="input-field"
+                        placeholder="Une tâche par ligne"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             )}
 

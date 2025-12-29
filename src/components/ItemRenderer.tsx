@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../hooks/useAuth'
 import { PdfViewer } from './PdfViewer'
 import { FileUpload } from './FileUpload'
+import { RichTextEditor } from './RichTextEditor'
 
 interface ItemRendererProps {
   item: Item
@@ -181,10 +182,20 @@ export function ItemRenderer({ item, submission, onSubmissionUpdate }: ItemRende
 
     return (
       <div className="space-y-6">
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <h3 className="font-medium text-blue-900 mb-2">Énoncé</h3>
-          <p className="text-blue-800">{item.content?.question}</p>
-        </div>
+        {item.content?.question && (
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <h3 className="font-medium text-blue-900 mb-2">Énoncé</h3>
+            {typeof item.content.question === 'object' ? (
+              <RichTextEditor
+                content={item.content.question}
+                onChange={() => {}}
+                editable={false}
+              />
+            ) : (
+              <p className="text-blue-800">{item.content.question}</p>
+            )}
+          </div>
+        )}
 
         <div className="space-y-4">
           <h3 className="font-medium text-gray-900">Votre réponse</h3>
@@ -218,7 +229,15 @@ export function ItemRenderer({ item, submission, onSubmissionUpdate }: ItemRende
             {item.content?.correction && isGraded && (
               <div className="mt-4">
                 <h4 className="font-medium text-gray-900">Correction</h4>
-                <p className="text-gray-700">{item.content.correction}</p>
+                {typeof item.content.correction === 'object' ? (
+                  <RichTextEditor
+                    content={item.content.correction}
+                    onChange={() => {}}
+                    editable={false}
+                  />
+                ) : (
+                  <p className="text-gray-700">{item.content.correction}</p>
+                )}
               </div>
             )}
           </div>
@@ -233,9 +252,18 @@ export function ItemRenderer({ item, submission, onSubmissionUpdate }: ItemRende
 
     return (
       <div className="space-y-6">
-        <div className="bg-purple-50 p-4 rounded-lg">
-          <h3 className="font-medium text-purple-900 mb-2">Consignes du TP</h3>
-          <p className="text-purple-800">{item.content?.instructions}</p>
+        {item.content?.instructions && (
+          <div className="bg-purple-50 p-4 rounded-lg">
+            <h3 className="font-medium text-purple-900 mb-2">Consignes du TP</h3>
+            {typeof item.content.instructions === 'object' ? (
+              <RichTextEditor
+                content={item.content.instructions}
+                onChange={() => {}}
+                editable={false}
+              />
+            ) : (
+              <p className="text-purple-800">{item.content.instructions}</p>
+            )}
           {item.content?.checklist && (
             <div className="mt-4">
               <h4 className="font-medium text-purple-900">Checklist</h4>
@@ -246,7 +274,8 @@ export function ItemRenderer({ item, submission, onSubmissionUpdate }: ItemRende
               </ul>
             </div>
           )}
-        </div>
+          </div>
+        )}
 
         <div className="space-y-4">
           <h3 className="font-medium text-gray-900">Votre rendu</h3>

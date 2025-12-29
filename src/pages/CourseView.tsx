@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabaseClient'
 import { Course, Module, Item } from '../types/database'
+import { CourseFeaturesTiles } from '../components/CourseFeaturesTiles'
 
 interface ModuleWithItems extends Module {
   items: Item[]
@@ -10,36 +11,41 @@ interface ModuleWithItems extends Module {
 
 export function CourseView() {
   const { courseId } = useParams<{ courseId: string }>()
+  const [searchParams] = useSearchParams()
   const { user, profile } = useAuth()
   const [course, setCourse] = useState<Course | null>(null)
   const [modules, setModules] = useState<ModuleWithItems[]>([])
+  const [allItems, setAllItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const filterType = searchParams.get('filter') as Item['type'] | null
 
   useEffect(() => {
-    if (courseId) {
+    if (courseId && user) {
       fetchCourse()
     }
-  }, [courseId])
+  }, [courseId, user])
 
   const fetchCourse = async () => {
     try {
       setError('')
 
-      // Vérifier l'accès à la formation
-      const { data: accessCheck, error: accessError } = await supabase
-        .from('enrollments')
-        .select('id')
-        .eq('user_id', user?.id)
-        .eq('course_id', courseId)
-        .eq('status', 'active')
-        .single()
+      // Vérifier l'accès à la formation (seulement si pas admin)
+      if (profile?.role !== 'admin' && user?.id) {
+        const { data: accessCheck, error: accessError } = await supabase
+          .from('enrollments')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('course_id', courseId)
+          .eq('status', 'active')
+          .maybeSingle()
 
-      // Si pas d'inscription active et pas admin
-      if (accessError && profile?.role !== 'admin') {
-        setError('Vous n\'avez pas accès à cette formation.')
-        setLoading(false)
-        return
+        // Si pas d'inscription active
+        if (accessError || !accessCheck) {
+          setError('Vous n\'avez pas accès à cette formation.')
+          setLoading(false)
+          return
+        }
       }
 
       // Récupérer les détails de la formation
@@ -71,6 +77,10 @@ export function CourseView() {
       })) || []
 
       setModules(sortedModules)
+
+      // Collecter tous les items pour les tuiles
+      const allItemsList = sortedModules.flatMap(module => module.items || [])
+      setAllItems(allItemsList)
     } catch (error) {
       console.error('Error fetching course:', error)
       setError('Erreur lors du chargement de la formation.')
@@ -135,6 +145,15 @@ export function CourseView() {
       {/* Main content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
+          {/* Tuiles de fonctionnalités */}
+          {course && allItems.length > 0 && (
+            <CourseFeaturesTiles 
+              course={course} 
+              items={allItems} 
+              courseId={courseId!} 
+            />
+          )}
+
           {modules.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">
@@ -143,54 +162,83 @@ export function CourseView() {
             </div>
           ) : (
             <div className="space-y-8">
-              {modules.map((module) => (
-                <div key={module.id} className="bg-white rounded-lg shadow p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                    {module.title}
-                  </h2>
+              {modules.map((module) => {
+                // Filtrer les items si un filtre est actif
+                const filteredItems = filterType 
+                  ? module.items.filter(item => item.type === filterType)
+                  : module.items
 
-                  {module.items.length === 0 ? (
-                    <p className="text-gray-500">Aucun élément dans ce module.</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {module.items.map((item) => (
-                        <div
-                          key={item.id}
-                          className="flex items-center justify-between p-4 border border-gray-200 rounded-md hover:bg-gray-50"
-                        >
-                          <div className="flex items-center space-x-3">
-                            <div className={`w-3 h-3 rounded-full ${
-                              item.type === 'resource' ? 'bg-blue-500' :
-                              item.type === 'slide' ? 'bg-green-500' :
-                              item.type === 'exercise' ? 'bg-yellow-500' :
-                              item.type === 'tp' ? 'bg-purple-500' :
-                              'bg-red-500'
-                            }`} />
-                            <div>
-                              <h3 className="text-sm font-medium text-gray-900">
-                                {item.title}
-                              </h3>
-                              <p className="text-xs text-gray-500 capitalize">
-                                {item.type === 'resource' ? 'Ressource' :
-                                 item.type === 'slide' ? 'Support' :
-                                 item.type === 'exercise' ? 'Exercice' :
-                                 item.type === 'tp' ? 'TP' : 'Jeu'}
-                              </p>
-                            </div>
-                          </div>
+                if (filteredItems.length === 0 && filterType) {
+                  return null
+                }
 
-                          <Link
-                            to={`/items/${item.id}`}
-                            className="btn-primary text-sm"
+                return (
+                  <div key={module.id} className="bg-white rounded-lg shadow p-6">
+                    <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                      {module.title}
+                    </h2>
+
+                    {filteredItems.length === 0 ? (
+                      <p className="text-gray-500">Aucun élément dans ce module.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {filteredItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center justify-between p-4 border border-gray-200 rounded-md hover:bg-gray-50"
                           >
-                            Accéder
-                          </Link>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-3 h-3 rounded-full ${
+                                item.type === 'resource' ? 'bg-blue-500' :
+                                item.type === 'slide' ? 'bg-green-500' :
+                                item.type === 'exercise' ? 'bg-yellow-500' :
+                                item.type === 'tp' ? 'bg-purple-500' :
+                                'bg-red-500'
+                              }`} />
+                              <div>
+                                <h3 className="text-sm font-medium text-gray-900">
+                                  {item.title}
+                                </h3>
+                                <p className="text-xs text-gray-500 capitalize">
+                                  {item.type === 'resource' ? 'Ressource' :
+                                   item.type === 'slide' ? 'Support' :
+                                   item.type === 'exercise' ? 'Exercice' :
+                                   item.type === 'tp' ? 'TP' : 'Jeu'}
+                                </p>
+                              </div>
+                            </div>
+
+                            <Link
+                              to={`/items/${item.id}`}
+                              className="btn-primary text-sm"
+                            >
+                              Accéder
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {/* Message si aucun résultat avec le filtre */}
+          {filterType && modules.every(module => {
+            const filtered = module.items.filter(item => item.type === filterType)
+            return filtered.length === 0
+          }) && (
+            <div className="text-center py-12 bg-white rounded-lg shadow p-6">
+              <p className="text-gray-500 text-lg">
+                Aucun élément de type "{filterType}" dans cette formation.
+              </p>
+              <Link 
+                to={`/courses/${courseId}`}
+                className="btn-primary mt-4 inline-block"
+              >
+                Voir tous les éléments
+              </Link>
             </div>
           )}
         </div>

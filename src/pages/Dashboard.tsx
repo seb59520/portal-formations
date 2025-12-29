@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabaseClient'
 import { Course, Enrollment } from '../types/database'
@@ -10,8 +10,10 @@ interface CourseWithEnrollment extends Course {
 
 export function Dashboard() {
   const { user, profile, signOut } = useAuth()
+  const navigate = useNavigate()
   const [courses, setCourses] = useState<CourseWithEnrollment[]>([])
   const [loading, setLoading] = useState(true)
+  const [signingOut, setSigningOut] = useState(false)
 
   useEffect(() => {
     fetchEnrolledCourses()
@@ -19,6 +21,11 @@ export function Dashboard() {
 
   const fetchEnrolledCourses = async () => {
     try {
+      if (!user?.id) {
+        setLoading(false)
+        return
+      }
+
       // Récupérer les formations où l'utilisateur est inscrit
       const { data: enrollments, error: enrollmentsError } = await supabase
         .from('enrollments')
@@ -26,10 +33,16 @@ export function Dashboard() {
           *,
           courses (*)
         `)
-        .eq('user_id', user?.id)
+        .eq('user_id', user.id)
         .eq('status', 'active')
 
-      if (enrollmentsError) throw enrollmentsError
+      if (enrollmentsError) {
+        console.error('Error fetching enrollments:', enrollmentsError)
+        // Ne pas bloquer si erreur, juste logger
+        if (enrollmentsError.code !== 'PGRST116') {
+          throw enrollmentsError
+        }
+      }
 
       const enrolledCourses = enrollments?.map(e => ({
         ...e.courses,
@@ -66,7 +79,18 @@ export function Dashboard() {
   }
 
   const handleSignOut = async () => {
-    await signOut()
+    try {
+      setSigningOut(true)
+      await signOut()
+      // La redirection est gérée dans useAuth, mais on peut aussi le faire ici
+      navigate('/login', { replace: true })
+    } catch (error) {
+      console.error('Error signing out:', error)
+      // Même en cas d'erreur, rediriger vers la page de connexion
+      navigate('/login', { replace: true })
+    } finally {
+      setSigningOut(false)
+    }
   }
 
   if (loading) {
@@ -100,9 +124,10 @@ export function Dashboard() {
               )}
               <button
                 onClick={handleSignOut}
-                className="btn-danger text-sm"
+                disabled={signingOut}
+                className="btn-danger text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Déconnexion
+                {signingOut ? 'Déconnexion...' : 'Déconnexion'}
               </button>
             </div>
           </div>

@@ -84,3 +84,13 @@ export interface GameScore {
   metadata: Record<string, any> | null;
   created_at: string;
 }
+
+export interface Chapter {
+  id: string;
+  item_id: string;
+  title: string;
+  content: Record<string, any> | null; // Format TipTap JSON
+  position: number;
+  created_at: string;
+  updated_at: string;
+}
