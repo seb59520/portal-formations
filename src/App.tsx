@@ -7,6 +7,7 @@ import { ResetPassword } from './pages/ResetPassword'
 import { Dashboard } from './pages/Dashboard'
 import { CourseView } from './pages/CourseView'
 import { ItemView } from './pages/ItemView'
+import { Help } from './pages/Help'
 import { AdminCourses } from './pages/admin/AdminCourses'
 import { AdminCourseEdit } from './pages/admin/AdminCourseEdit'
 import { AdminItemEdit } from './pages/admin/AdminItemEdit'
@@ -64,6 +65,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ItemView />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/help"
+            element={
+              <ProtectedRoute>
+                <Help />
               </ProtectedRoute>
             }
           />
