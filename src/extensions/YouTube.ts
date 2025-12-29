@@ -62,7 +62,7 @@ export const YouTube = Node.create<YouTubeOptions>({
   },
 
   renderHTML({ HTMLAttributes }) {
-    const videoId = this.extractVideoId(HTMLAttributes.src)
+    const videoId = extractVideoId(HTMLAttributes.src)
     if (!videoId) {
       return ['div', { 'data-youtube-video': 'true', class: 'youtube-video-error' }, 'URL YouTube invalide']
     }
@@ -106,7 +106,7 @@ export const YouTube = Node.create<YouTubeOptions>({
 
   addNodeView() {
     return ({ node, HTMLAttributes }) => {
-      const videoId = this.extractVideoId(node.attrs.src)
+      const videoId = extractVideoId(node.attrs.src)
       if (!videoId) {
         return document.createElement('div')
       }
@@ -130,30 +130,30 @@ export const YouTube = Node.create<YouTubeOptions>({
       }
     }
   },
-
-  // Méthode pour extraire l'ID de la vidéo depuis différentes URLs YouTube
-  extractVideoId(url: string): string | null {
-    if (!url) return null
-
-    // Formats supportés :
-    // https://www.youtube.com/watch?v=VIDEO_ID
-    // https://youtu.be/VIDEO_ID
-    // https://www.youtube.com/embed/VIDEO_ID
-    // VIDEO_ID (juste l'ID)
-
-    const patterns = [
-      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-      /^([a-zA-Z0-9_-]{11})$/,
-    ]
-
-    for (const pattern of patterns) {
-      const match = url.match(pattern)
-      if (match && match[1]) {
-        return match[1]
-      }
-    }
-
-    return null
-  },
 })
+
+// Fonction utilitaire pour extraire l'ID de la vidéo depuis différentes URLs YouTube
+function extractVideoId(url: string): string | null {
+  if (!url) return null
+
+  // Formats supportés :
+  // https://www.youtube.com/watch?v=VIDEO_ID
+  // https://youtu.be/VIDEO_ID
+  // https://www.youtube.com/embed/VIDEO_ID
+  // VIDEO_ID (juste l'ID)
+
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+    /^([a-zA-Z0-9_-]{11})$/,
+  ]
+
+  for (const pattern of patterns) {
+    const match = url.match(pattern)
+    if (match && match[1]) {
+      return match[1]
+    }
+  }
+
+  return null
+}
 
