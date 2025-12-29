@@ -34,7 +34,10 @@ export function ItemView() {
             course_id,
             courses (
               id,
-              title
+              title,
+              access_type,
+              status,
+              created_by
             )
           )
         `)
@@ -46,19 +49,51 @@ export function ItemView() {
 
       // Vérifier l'accès à la formation (seulement si pas admin)
       const courseId = itemData.modules?.courses?.id
-      if (courseId && profile?.role !== 'admin' && user?.id) {
-        const { data: accessCheck, error: accessError } = await supabase
-          .from('enrollments')
-          .select('id')
-          .eq('user_id', user.id)
-          .eq('course_id', courseId)
-          .eq('status', 'active')
-          .maybeSingle()
+      const courseData = itemData.modules?.courses
+      
+      if (courseId && profile?.role !== 'admin' && user?.id && courseData) {
+        // Vérifier si l'utilisateur est le créateur de la formation
+        if (courseData.created_by === user.id) {
+          // Le créateur a toujours accès
+        }
+        // Vérifier si la formation est gratuite et publiée
+        else if (courseData.access_type === 'free' && courseData.status === 'published') {
+          // Les formations gratuites et publiées sont accessibles à tous
+          // Créer automatiquement un enrollment si nécessaire
+          const { data: existingEnrollment } = await supabase
+            .from('enrollments')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('course_id', courseId)
+            .maybeSingle()
 
-        if (accessError || !accessCheck) {
-          setError('Vous n\'avez pas accès à cet élément.')
-          setLoading(false)
-          return
+          if (!existingEnrollment) {
+            // Créer automatiquement l'enrollment pour les formations gratuites
+            await supabase
+              .from('enrollments')
+              .insert({
+                user_id: user.id,
+                course_id: courseId,
+                status: 'active',
+                source: 'manual'
+              })
+          }
+        }
+        // Pour les autres cas, vérifier l'enrollment
+        else {
+          const { data: accessCheck, error: accessError } = await supabase
+            .from('enrollments')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('course_id', courseId)
+            .eq('status', 'active')
+            .maybeSingle()
+
+          if (accessError || !accessCheck) {
+            setError('Vous n\'avez pas accès à cet élément.')
+            setLoading(false)
+            return
+          }
         }
       }
 
