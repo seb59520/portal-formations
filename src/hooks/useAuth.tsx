@@ -31,25 +31,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let mounted = true
     let timeoutId: NodeJS.Timeout | null = null
 
-    // Timeout de sécurité pour éviter un blocage infini (réduit à 5 secondes)
+    // Timeout de sécurité pour éviter un blocage infini (augmenté à 12 secondes)
     timeoutId = setTimeout(() => {
       if (mounted) {
         console.warn('Auth loading timeout - forcing loading to false')
         setLoading(false)
-        setProfile(null) // Forcer profile à null si timeout
-        setUser(null) // Forcer user à null si timeout
+        // Essayer de récupérer la session depuis le localStorage avant de forcer à null
+        try {
+          const storedSession = localStorage.getItem('sb-auth-token')
+          if (storedSession) {
+            const parsed = JSON.parse(storedSession)
+            if (parsed?.currentSession) {
+              console.log('Found session in localStorage after timeout, using it')
+              const session = parsed.currentSession
+              setSession(session)
+              setUser(session?.user ?? null)
+              if (session?.user) {
+                fetchProfile(session.user.id)
+              }
+              return
+            }
+          }
+        } catch (e) {
+          console.warn('Could not parse stored session:', e)
+        }
+        // Si pas de session trouvée, forcer à null
+        setProfile(null)
+        setUser(null)
         setSession(null)
       }
-    }, 5000) // 5 secondes max
+    }, 20000) // 20 secondes max
 
-    // Récupérer la session initiale avec retry et timeout
+    // Récupérer la session initiale avec retry et timeout (augmenté à 15 secondes)
     withRetry(
       () => withTimeout(
         supabase.auth.getSession(),
-        5000,
+        15000,
         'Session fetch timeout'
       ),
-      { maxRetries: 2, initialDelay: 1000 }
+      { maxRetries: 3, initialDelay: 1000, maxDelay: 3000 }
     )
       .then((result: any) => {
         if (!mounted) return
@@ -87,14 +107,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .catch((error) => {
         console.error('Error in getSession:', error)
         if (mounted) {
-          setLoading(false)
-          // Si timeout ou erreur réseau, on continue sans session
-          if (error.message?.includes('timeout') || error.message?.includes('network')) {
-            console.warn('Continuing without session due to network issue')
+          // Si timeout ou erreur réseau, essayer de récupérer depuis localStorage
+          if (error.message?.includes('timeout') || error.message?.includes('network') || error.message?.includes('aborted')) {
+            console.warn('Session fetch timeout/network error, trying localStorage fallback')
+            // Essayer de récupérer la session depuis le localStorage directement
+            try {
+              const storedSession = localStorage.getItem('sb-auth-token')
+              if (storedSession) {
+                const parsed = JSON.parse(storedSession)
+                if (parsed?.currentSession) {
+                  console.log('Found session in localStorage, using it as fallback')
+                  const session = parsed.currentSession
+                  setSession(session)
+                  setUser(session?.user ?? null)
+                  if (session?.user) {
+                    fetchProfile(session.user.id).finally(() => {
+                      setLoading(false)
+                      if (timeoutId) clearTimeout(timeoutId)
+                    })
+                    return // Ne pas continuer, on attend le profil
+                  }
+                }
+              }
+            } catch (e) {
+              console.warn('Could not parse stored session:', e)
+            }
+            // Si pas de session dans localStorage, continuer sans session
+            console.warn('No session found in localStorage, continuing without session')
+            setLoading(false)
           } else {
+            // Autre type d'erreur
             setUser(null)
             setSession(null)
             setProfile(null)
+            setLoading(false)
           }
           if (timeoutId) clearTimeout(timeoutId)
         }
