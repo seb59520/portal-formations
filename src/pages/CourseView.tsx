@@ -157,9 +157,33 @@ export function CourseView() {
               >
                 ← Retour
               </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
-                <p className="text-sm text-gray-600">{course.description}</p>
+              <div className="flex-1">
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">{course.title}</h1>
+                {course.description ? (
+                  <div className="prose prose-sm max-w-none text-gray-600">
+                    {typeof course.description === 'string' && course.description.includes('**') ? (
+                      // Si le texte contient du markdown simple, le formater
+                      <div className="whitespace-pre-wrap">
+                        {course.description.split('\n').map((line, i) => {
+                          if (line.trim().startsWith('**') && line.trim().endsWith('**')) {
+                            return <p key={i} className="font-semibold my-2">{line.replace(/\*\*/g, '')}</p>
+                          }
+                          if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
+                            return <p key={i} className="ml-4 my-1">• {line.replace(/^[-*]\s+/, '')}</p>
+                          }
+                          if (line.trim() === '') {
+                            return <br key={i} />
+                          }
+                          return <p key={i} className="my-1">{line}</p>
+                        })}
+                      </div>
+                    ) : (
+                      <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                        {course.description}
+                      </div>
+                    )}
+                  </div>
+                ) : null}
               </div>
             </div>
             {profile?.role === 'admin' && (
@@ -176,7 +200,37 @@ export function CourseView() {
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
+        <div className="px-4 py-6 sm:px-0 space-y-6">
+          {/* Description détaillée si présente et longue */}
+          {course.description && course.description.length > 150 && (
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Description</h2>
+              <div className="prose prose-sm max-w-none text-gray-700">
+                {typeof course.description === 'string' && (
+                  <div className="whitespace-pre-wrap leading-relaxed">
+                    {course.description.split('\n').map((line, i) => {
+                      const trimmed = line.trim()
+                      // Détecter les titres avec **texte**
+                      if (trimmed.startsWith('**') && trimmed.endsWith('**')) {
+                        return <h3 key={i} className="font-semibold text-gray-900 my-4 text-base">{trimmed.replace(/\*\*/g, '')}</h3>
+                      }
+                      // Détecter les listes avec - ou *
+                      if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+                        return <p key={i} className="ml-6 my-2 text-gray-700">• {trimmed.replace(/^[-*]\s+/, '')}</p>
+                      }
+                      // Lignes vides
+                      if (trimmed === '') {
+                        return <br key={i} />
+                      }
+                      // Paragraphes normaux
+                      return <p key={i} className="my-2 text-gray-700">{line}</p>
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Tuiles de fonctionnalités */}
           {course && allItems.length > 0 && (
             <CourseFeaturesTiles 

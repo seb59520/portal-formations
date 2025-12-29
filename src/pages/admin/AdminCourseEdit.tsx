@@ -527,10 +527,13 @@ export function AdminCourseEdit() {
                 <textarea
                   value={course.description || ''}
                   onChange={(e) => setCourse({ ...course, description: e.target.value })}
-                  rows={3}
-                  className="input-field"
-                  placeholder="Description de la formation"
+                  rows={8}
+                  className="input-field font-mono text-sm"
+                  placeholder="Description de la formation (vous pouvez utiliser des sauts de ligne pour structurer le texte)"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  💡 Astuce : Utilisez des sauts de ligne pour créer des paragraphes. Utilisez <strong>**texte**</strong> pour mettre en gras.
+                </p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">

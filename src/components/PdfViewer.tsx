@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 import { ChevronLeft, ChevronRight, Download, Maximize } from 'lucide-react'
+import { useUserSettings } from '../hooks/useUserSettings'
 
 // Configuration de PDF.js
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
@@ -11,11 +12,19 @@ interface PdfViewerProps {
 }
 
 export function PdfViewer({ url, className = '' }: PdfViewerProps) {
+  const { settings, updatePdfZoom } = useUserSettings()
   const [numPages, setNumPages] = useState<number | null>(null)
   const [pageNumber, setPageNumber] = useState(1)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [scale, setScale] = useState(1.0)
+  const [scale, setScale] = useState(settings?.pdf_zoom || 1.0)
+
+  // Synchroniser le zoom avec les paramètres utilisateur
+  useEffect(() => {
+    if (settings?.pdf_zoom !== undefined) {
+      setScale(settings.pdf_zoom)
+    }
+  }, [settings?.pdf_zoom])
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages)
@@ -94,7 +103,16 @@ export function PdfViewer({ url, className = '' }: PdfViewerProps) {
         <div className="flex items-center space-x-2">
           <select
             value={scale}
-            onChange={(e) => setScale(parseFloat(e.target.value))}
+            onChange={async (e) => {
+              const newScale = parseFloat(e.target.value)
+              setScale(newScale)
+              // Sauvegarder dans les paramètres utilisateur
+              try {
+                await updatePdfZoom(newScale)
+              } catch (error) {
+                console.error('Error saving zoom:', error)
+              }
+            }}
             className="text-sm border border-gray-300 rounded px-2 py-1"
           >
             <option value={0.5}>50%</option>

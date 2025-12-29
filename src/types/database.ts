@@ -94,3 +94,17 @@ export interface Chapter {
   created_at: string;
   updated_at: string;
 }
+
+export type Theme = 'light' | 'dark';
+export type FontSize = 'small' | 'normal' | 'large';
+
+export interface UserSettings {
+  id: string;
+  user_id: string;
+  pdf_zoom: number;
+  theme: Theme;
+  font_size: FontSize;
+  layout_preferences: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+}

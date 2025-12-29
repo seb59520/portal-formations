@@ -3,7 +3,11 @@ import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import Link from '@tiptap/extension-link'
 import Image from '@tiptap/extension-image'
-import { Bold, Italic, List, ListOrdered, Link as LinkIcon, Undo, Redo } from 'lucide-react'
+import TextAlign from '@tiptap/extension-text-align'
+import TextStyle from '@tiptap/extension-text-style'
+import { Color } from '@tiptap/extension-color'
+import { Highlight } from '@tiptap/extension-highlight'
+import { Bold, Italic, List, ListOrdered, Link as LinkIcon, Undo, Redo, AlignLeft, AlignCenter, AlignRight, AlignJustify, Palette } from 'lucide-react'
 
 interface RichTextEditorProps {
   content: Record<string, any> | null
@@ -40,6 +44,15 @@ export function RichTextEditor({
         HTMLAttributes: {
           class: 'max-w-full h-auto rounded',
         },
+      }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+        defaultAlignment: 'left',
+      }),
+      TextStyle,
+      Color,
+      Highlight.configure({
+        multicolor: true,
       }),
     ],
     content: content || '',
@@ -151,6 +164,63 @@ export function RichTextEditor({
             title="Ajouter un lien"
           >
             <LinkIcon className="w-4 h-4" />
+          </button>
+          <div className="w-px bg-gray-300 mx-1" />
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('left').run()}
+            className={`p-2 rounded hover:bg-gray-100 ${
+              editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200' : ''
+            }`}
+            title="Aligner à gauche"
+          >
+            <AlignLeft className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('center').run()}
+            className={`p-2 rounded hover:bg-gray-100 ${
+              editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200' : ''
+            }`}
+            title="Centrer"
+          >
+            <AlignCenter className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('right').run()}
+            className={`p-2 rounded hover:bg-gray-100 ${
+              editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200' : ''
+            }`}
+            title="Aligner à droite"
+          >
+            <AlignRight className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+            className={`p-2 rounded hover:bg-gray-100 ${
+              editor.isActive({ textAlign: 'justify' }) ? 'bg-gray-200' : ''
+            }`}
+            title="Justifier"
+          >
+            <AlignJustify className="w-4 h-4" />
+          </button>
+          <div className="w-px bg-gray-300 mx-1" />
+          <button
+            type="button"
+            onClick={() => {
+              const color = window.prompt('Entrez une couleur (ex: #FF0000, red, rgb(255,0,0)):')
+              if (color) {
+                editor.chain().focus().setColor(color).run()
+              }
+            }}
+            className={`p-2 rounded hover:bg-gray-100 ${
+              editor.isActive('textStyle') ? 'bg-gray-200' : ''
+            }`}
+            title="Couleur du texte"
+          >
+            <Palette className="w-4 h-4" />
           </button>
           <div className="w-px bg-gray-300 mx-1" />
           <button
