@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabaseClient'
 import { Course, Module, Item } from '../types/database'
 import { CourseFeaturesTiles } from '../components/CourseFeaturesTiles'
+import { Progress } from '../components/Progress'
 
 interface ModuleWithItems extends Module {
   items: Item[]
@@ -19,6 +20,7 @@ export function CourseView() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const filterType = searchParams.get('filter') as Item['type'] | null
+  const viewMode = searchParams.get('view')
 
   useEffect(() => {
     if (courseId && user) {
@@ -186,14 +188,32 @@ export function CourseView() {
                 ) : null}
               </div>
             </div>
-            {profile?.role === 'admin' && (
-              <Link
-                to={`/admin/courses/${course.id}`}
-                className="btn-secondary text-sm"
-              >
-                Modifier
-              </Link>
-            )}
+            <div className="flex items-center space-x-3">
+              {viewMode !== 'progress' && (
+                <Link
+                  to={`/courses/${courseId}?view=progress`}
+                  className="btn-secondary text-sm"
+                >
+                  Voir la progression
+                </Link>
+              )}
+              {viewMode === 'progress' && (
+                <Link
+                  to={`/courses/${courseId}`}
+                  className="btn-secondary text-sm"
+                >
+                  Retour au contenu
+                </Link>
+              )}
+              {profile?.role === 'admin' && (
+                <Link
+                  to={`/admin/courses/${course.id}`}
+                  className="btn-secondary text-sm"
+                >
+                  Modifier
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -201,6 +221,11 @@ export function CourseView() {
       {/* Main content */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0 space-y-6">
+          {/* Vue de progression */}
+          {viewMode === 'progress' ? (
+            <Progress />
+          ) : (
+            <>
           {/* Description détaillée si présente et longue */}
           {course.description && course.description.length > 150 && (
             <div className="bg-white rounded-lg shadow p-6">
@@ -326,6 +351,8 @@ export function CourseView() {
                 Voir tous les éléments
               </Link>
             </div>
+          )}
+            </>
           )}
         </div>
       </main>
