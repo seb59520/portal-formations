@@ -532,6 +532,21 @@ export function AdminItemEdit() {
             {item.type === 'game' && (
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900">Mini-jeu</h3>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Type de jeu
+                  </label>
+                  <select
+                    value={item.content?.gameType || 'matching'}
+                    onChange={(e) => handleContentChange('gameType', e.target.value)}
+                    className="input-field"
+                  >
+                    <option value="matching">Association de cartes</option>
+                    <option value="column-matching">Association de colonnes</option>
+                  </select>
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Description
@@ -544,6 +559,283 @@ export function AdminItemEdit() {
                     placeholder="Description du jeu"
                   />
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Instructions (optionnel)
+                  </label>
+                  <textarea
+                    value={item.content?.instructions || ''}
+                    onChange={(e) => handleContentChange('instructions', e.target.value)}
+                    rows={2}
+                    className="input-field"
+                    placeholder="Instructions pour jouer au jeu"
+                  />
+                </div>
+
+                {item.content?.gameType === 'matching' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Paires de cartes (Terme / Définition)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentPairs = item.content?.pairs || []
+                          handleContentChange('pairs', [
+                            ...currentPairs,
+                            { term: '', definition: '' }
+                          ])
+                        }}
+                        className="btn-secondary text-sm"
+                      >
+                        + Ajouter une paire
+                      </button>
+                    </div>
+
+                    <div className="space-y-3">
+                      {(item.content?.pairs || []).map((pair: { term: string; definition: string }, index: number) => (
+                        <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium text-gray-700">
+                              Paire {index + 1}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const currentPairs = item.content?.pairs || []
+                                handleContentChange('pairs', currentPairs.filter((_: any, i: number) => i !== index))
+                              }}
+                              className="text-red-600 hover:text-red-800 text-sm"
+                            >
+                              Supprimer
+                            </button>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-xs text-gray-600 mb-1">
+                                Terme / Question
+                              </label>
+                              <input
+                                type="text"
+                                value={pair.term || ''}
+                                onChange={(e) => {
+                                  const currentPairs = item.content?.pairs || []
+                                  const newPairs = [...currentPairs]
+                                  newPairs[index] = { ...newPairs[index], term: e.target.value }
+                                  handleContentChange('pairs', newPairs)
+                                }}
+                                className="input-field text-sm"
+                                placeholder="Ex: JavaScript"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-xs text-gray-600 mb-1">
+                                Définition / Réponse
+                              </label>
+                              <input
+                                type="text"
+                                value={pair.definition || ''}
+                                onChange={(e) => {
+                                  const currentPairs = item.content?.pairs || []
+                                  const newPairs = [...currentPairs]
+                                  newPairs[index] = { ...newPairs[index], definition: e.target.value }
+                                  handleContentChange('pairs', newPairs)
+                                }}
+                                className="input-field text-sm"
+                                placeholder="Ex: Langage de programmation"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {(!item.content?.pairs || item.content.pairs.length === 0) && (
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <p className="text-yellow-800 text-sm">
+                          Aucune paire configurée. Cliquez sur "Ajouter une paire" pour commencer.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {item.content?.gameType === 'column-matching' && (
+                  <div className="space-y-4">
+                    {/* Colonne gauche */}
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Colonne 1 (une idée par ligne)
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentLeft = item.content?.leftColumn || []
+                            handleContentChange('leftColumn', [...currentLeft, ''])
+                          }}
+                          className="btn-secondary text-sm"
+                        >
+                          + Ajouter
+                        </button>
+                      </div>
+                      <textarea
+                        value={(item.content?.leftColumn || []).join('\n')}
+                        onChange={(e) => {
+                          const lines = e.target.value.split('\n').filter(line => line.trim() || e.target.value.endsWith('\n'))
+                          handleContentChange('leftColumn', lines)
+                        }}
+                        rows={6}
+                        className="input-field font-mono text-sm"
+                        placeholder="Idée 1&#10;Idée 2&#10;Idée 3"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        {item.content?.leftColumn?.length || 0} élément(s) dans la colonne 1
+                      </p>
+                    </div>
+
+                    {/* Colonne droite */}
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Colonne 2 (une idée par ligne)
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentRight = item.content?.rightColumn || []
+                            handleContentChange('rightColumn', [...currentRight, ''])
+                          }}
+                          className="btn-secondary text-sm"
+                        >
+                          + Ajouter
+                        </button>
+                      </div>
+                      <textarea
+                        value={(item.content?.rightColumn || []).join('\n')}
+                        onChange={(e) => {
+                          const lines = e.target.value.split('\n').filter(line => line.trim() || e.target.value.endsWith('\n'))
+                          handleContentChange('rightColumn', lines)
+                        }}
+                        rows={6}
+                        className="input-field font-mono text-sm"
+                        placeholder="Idée correspondante 1&#10;Idée correspondante 2&#10;Idée correspondante 3"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        {item.content?.rightColumn?.length || 0} élément(s) dans la colonne 2
+                      </p>
+                    </div>
+
+                    {/* Correspondances */}
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Correspondances (associer colonne 1 → colonne 2)
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentMatches = item.content?.correctMatches || []
+                            handleContentChange('correctMatches', [
+                              ...currentMatches,
+                              { left: 0, right: 0 }
+                            ])
+                          }}
+                          className="btn-secondary text-sm"
+                        >
+                          + Ajouter
+                        </button>
+                      </div>
+                      <div className="space-y-3">
+                        {(item.content?.correctMatches || []).map((match: { left: number; right: number }, index: number) => (
+                          <div key={index} className="border border-gray-200 rounded-lg p-4">
+                            <div className="flex items-center justify-between mb-3">
+                              <span className="text-sm font-medium text-gray-700">
+                                Correspondance {index + 1}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const currentMatches = item.content?.correctMatches || []
+                                  handleContentChange('correctMatches', currentMatches.filter((_: any, i: number) => i !== index))
+                                }}
+                                className="text-red-600 hover:text-red-800 text-sm"
+                              >
+                                Supprimer
+                              </button>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <label className="block text-xs text-gray-600 mb-1">
+                                  Index colonne 1 (0 = premier élément)
+                                </label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max={(item.content?.leftColumn?.length || 1) - 1}
+                                  value={match.left}
+                                  onChange={(e) => {
+                                    const currentMatches = item.content?.correctMatches || []
+                                    const newMatches = [...currentMatches]
+                                    newMatches[index] = { ...newMatches[index], left: parseInt(e.target.value) || 0 }
+                                    handleContentChange('correctMatches', newMatches)
+                                  }}
+                                  className="input-field text-sm"
+                                />
+                                {item.content?.leftColumn?.[match.left] && (
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    "{item.content.leftColumn[match.left]}"
+                                  </p>
+                                )}
+                              </div>
+                              <div>
+                                <label className="block text-xs text-gray-600 mb-1">
+                                  Index colonne 2 (0 = premier élément)
+                                </label>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  max={(item.content?.rightColumn?.length || 1) - 1}
+                                  value={match.right}
+                                  onChange={(e) => {
+                                    const currentMatches = item.content?.correctMatches || []
+                                    const newMatches = [...currentMatches]
+                                    newMatches[index] = { ...newMatches[index], right: parseInt(e.target.value) || 0 }
+                                    handleContentChange('correctMatches', newMatches)
+                                  }}
+                                  className="input-field text-sm"
+                                />
+                                {item.content?.rightColumn?.[match.right] && (
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    "{item.content.rightColumn[match.right]}"
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {(!item.content?.correctMatches || item.content.correctMatches.length === 0) && (
+                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-3">
+                          <p className="text-yellow-800 text-sm">
+                            Aucune correspondance configurée. Ajoutez des correspondances pour définir les bonnes associations.
+                          </p>
+                        </div>
+                      )}
+
+                      {item.content?.leftColumn?.length > 0 && item.content?.rightColumn?.length > 0 && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-3">
+                          <p className="text-blue-800 text-sm">
+                            <strong>Astuce :</strong> Les index commencent à 0. Le premier élément de chaque colonne a l'index 0, le deuxième a l'index 1, etc.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

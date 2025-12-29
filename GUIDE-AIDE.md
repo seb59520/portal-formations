@@ -172,21 +172,59 @@ Un mini-jeu est une activité ludique interactive pour renforcer l'apprentissage
 - Activités ludiques
 - Renforcement de l'apprentissage
 - Évaluation gamifiée
+- Mémorisation de vocabulaire
+- Association de concepts
 
-**Comment créer un mini-jeu ?**
+**Types de jeux disponibles :**
+
+#### 1. Jeu d'association de cartes (Matching)
+
+**Comment créer un jeu d'association ?**
 
 1. **Créer un élément de type "Mini-jeu"**
    - Dans l'édition d'une formation, cliquez sur "+ Élément" dans un module
    - Sélectionnez le type "Mini-jeu"
 
 2. **Configurer le jeu**
+   - **Type de jeu** : Sélectionnez "Association de cartes"
    - **Titre** : Nom du jeu
    - **Description** : Expliquez les règles et l'objectif
+   - **Instructions** : Instructions supplémentaires pour les étudiants (optionnel)
 
-**Fonctionnement :**
-- Les scores sont enregistrés automatiquement
-- Les étudiants peuvent voir leur progression
-- Les meilleurs scores peuvent être affichés (à implémenter)
+3. **Créer les paires de cartes**
+   - Cliquez sur "+ Ajouter une paire"
+   - Pour chaque paire, remplissez :
+     - **Terme / Question** : Le texte qui apparaîtra sur la première carte
+     - **Définition / Réponse** : Le texte qui apparaîtra sur la carte correspondante
+   - Ajoutez autant de paires que nécessaire (minimum 2 paires recommandé)
+
+**Exemples d'utilisation :**
+- **Vocabulaire** : Terme → Définition
+- **Traduction** : Mot français → Mot anglais
+- **Concepts** : Concept → Explication
+- **Questions/Réponses** : Question → Réponse
+- **Formules** : Formule → Description
+
+**Fonctionnement pour les étudiants :**
+1. L'étudiant clique sur "Commencer le jeu"
+2. Les cartes sont mélangées et retournées (face cachée)
+3. L'étudiant clique sur deux cartes pour les retourner
+4. Si les cartes correspondent (même paire), elles restent visibles
+5. Si elles ne correspondent pas, elles se retournent après 1 seconde
+6. Le jeu se termine quand toutes les paires sont trouvées
+7. Le score est calculé automatiquement et enregistré
+
+**Calcul du score :**
+- Le score est basé sur :
+  - **Temps** : Moins de temps = meilleur score (max 1000 points)
+  - **Tentatives** : Moins de tentatives = meilleur score (max 1000 points)
+  - **Score total** : Maximum 2000 points
+
+**Fonctionnalités :**
+- Les scores sont enregistrés automatiquement dans la base de données
+- Les étudiants peuvent rejouer pour améliorer leur score
+- Le temps et le nombre de tentatives sont affichés en temps réel
+- Interface responsive et intuitive
 
 ---
 

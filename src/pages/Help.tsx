@@ -222,12 +222,64 @@ export function Help() {
               <li>Activités ludiques</li>
               <li>Renforcement de l'apprentissage</li>
               <li>Évaluation gamifiée</li>
+              <li>Mémorisation de vocabulaire</li>
+              <li>Association de concepts</li>
             </ul>
           </div>
-          <div className="bg-red-50 p-4 rounded-lg">
-            <p className="text-sm text-red-800">
-              <strong>Note :</strong> Les scores sont enregistrés automatiquement. Les étudiants peuvent voir leur progression.
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <h4 className="font-semibold text-blue-900 mb-2">1. Jeu d'association de cartes</h4>
+            <p className="text-blue-800 text-sm mb-3">
+              Le jeu d'association permet aux étudiants de faire correspondre des paires de cartes (terme/définition, question/réponse, etc.).
             </p>
+            <div className="space-y-2 text-sm text-blue-800">
+              <p><strong>Comment créer un jeu :</strong></p>
+              <ol className="list-decimal list-inside space-y-1 ml-2">
+                <li>Créer un élément de type "Mini-jeu"</li>
+                <li>Sélectionner "Association de cartes" comme type</li>
+                <li>Ajouter des paires de cartes (Terme / Définition)</li>
+                <li>Configurer la description et les instructions</li>
+              </ol>
+              <p className="mt-3"><strong>Exemples d'utilisation :</strong></p>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li>Vocabulaire : Terme → Définition</li>
+                <li>Traduction : Mot français → Mot anglais</li>
+                <li>Concepts : Concept → Explication</li>
+                <li>Questions/Réponses</li>
+              </ul>
+            </div>
+          </div>
+          <div className="bg-purple-50 p-4 rounded-lg mt-3">
+            <h4 className="font-semibold text-purple-900 mb-2">2. Jeu d'association de colonnes</h4>
+            <p className="text-purple-800 text-sm mb-3">
+              Un jeu où l'étudiant doit associer les éléments d'une colonne avec ceux d'une autre colonne.
+            </p>
+            <div className="space-y-2 text-sm text-purple-800">
+              <p><strong>Comment créer un jeu :</strong></p>
+              <ol className="list-decimal list-inside space-y-1 ml-2">
+                <li>Créer un élément de type "Mini-jeu"</li>
+                <li>Sélectionner "Association de colonnes" comme type</li>
+                <li>Ajouter les éléments dans chaque colonne (un par ligne)</li>
+                <li>Définir les correspondances (index colonne 1 → index colonne 2)</li>
+                <li>Configurer la description et les instructions</li>
+              </ol>
+              <p className="mt-3"><strong>Exemples d'utilisation :</strong></p>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li>Vocabulaire : Termes → Définitions</li>
+                <li>Traduction : Mots français → Mots anglais</li>
+                <li>Relations : Causes → Effets</li>
+                <li>Catégories : Éléments → Catégories</li>
+              </ul>
+            </div>
+          </div>
+          <div className="bg-green-50 p-4 rounded-lg">
+            <h4 className="font-semibold text-green-900 mb-2">Fonctionnement</h4>
+            <ul className="list-disc list-inside space-y-1 text-green-800 text-sm">
+              <li>Les cartes sont mélangées et retournées</li>
+              <li>L'étudiant clique sur deux cartes pour les retourner</li>
+              <li>Si elles correspondent, elles restent visibles</li>
+              <li>Le score est calculé selon le temps et le nombre de tentatives</li>
+              <li>Les scores sont enregistrés automatiquement</li>
+            </ul>
           </div>
         </div>
       )

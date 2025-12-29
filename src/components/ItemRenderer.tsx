@@ -5,6 +5,8 @@ import { useAuth } from '../hooks/useAuth'
 import { PdfViewer } from './PdfViewer'
 import { FileUpload } from './FileUpload'
 import { RichTextEditor } from './RichTextEditor'
+import { CardMatchingGame } from './CardMatchingGame'
+import { ColumnMatchingGame } from './ColumnMatchingGame'
 
 interface ItemRendererProps {
   item: Item
@@ -90,7 +92,7 @@ export function ItemRenderer({ item, submission, onSubmissionUpdate }: ItemRende
     }
   }
 
-  const handleGameScore = async (score: number) => {
+  const handleGameScore = async (score: number, metadata?: Record<string, any>) => {
     if (!user?.id) return
 
     try {
@@ -100,7 +102,8 @@ export function ItemRenderer({ item, submission, onSubmissionUpdate }: ItemRende
           user_id: user.id,
           course_id: item.modules?.course_id,
           item_id: item.id,
-          score
+          score,
+          metadata: metadata || null
         })
     } catch (error) {
       console.error('Error saving game score:', error)
@@ -329,22 +332,60 @@ export function ItemRenderer({ item, submission, onSubmissionUpdate }: ItemRende
   }
 
   const renderGame = () => {
+    const gameType = item.content?.gameType || 'matching'
+    
+    if (gameType === 'matching') {
+      const pairs = item.content?.pairs || []
+      return (
+        <div className="space-y-4">
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <h3 className="font-medium text-blue-900 mb-2">Jeu d'association de cartes</h3>
+            {item.content?.description && (
+              <p className="text-blue-800">{item.content.description}</p>
+            )}
+          </div>
+          <CardMatchingGame
+            pairs={pairs}
+            onScore={handleGameScore}
+            description={item.content?.instructions}
+          />
+        </div>
+      )
+    }
+
+    if (gameType === 'column-matching') {
+      const leftColumn = item.content?.leftColumn || []
+      const rightColumn = item.content?.rightColumn || []
+      const correctMatches = item.content?.correctMatches || []
+      
+      return (
+        <div className="space-y-4">
+          <div className="bg-purple-50 p-4 rounded-lg">
+            <h3 className="font-medium text-purple-900 mb-2">Jeu d'association de colonnes</h3>
+            {item.content?.description && (
+              <p className="text-purple-800">{item.content.description}</p>
+            )}
+          </div>
+          <ColumnMatchingGame
+            leftColumn={leftColumn}
+            rightColumn={rightColumn}
+            correctMatches={correctMatches}
+            onScore={handleGameScore}
+            description={item.content?.instructions}
+          />
+        </div>
+      )
+    }
+
+    // Fallback pour d'autres types de jeux
     return (
       <div className="space-y-4">
         <div className="bg-red-50 p-4 rounded-lg">
           <h3 className="font-medium text-red-900 mb-2">Mini-jeu</h3>
           <p className="text-red-800">{item.content?.description}</p>
         </div>
-
-        {/* Placeholder pour le jeu - à implémenter selon le jeu spécifique */}
         <div className="bg-gray-100 p-8 rounded-lg text-center">
-          <p className="text-gray-600 mb-4">Jeu en développement</p>
-          <button
-            onClick={() => handleGameScore(Math.floor(Math.random() * 1000))}
-            className="btn-primary"
-          >
-            Jouer (simulation)
-          </button>
+          <p className="text-gray-600 mb-4">Type de jeu non reconnu</p>
         </div>
       </div>
     )
