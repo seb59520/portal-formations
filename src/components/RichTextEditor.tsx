@@ -7,7 +7,8 @@ import TextAlign from '@tiptap/extension-text-align'
 import { TextStyle } from '@tiptap/extension-text-style'
 import { Color } from '@tiptap/extension-color'
 import { Highlight } from '@tiptap/extension-highlight'
-import { Bold, Italic, List, ListOrdered, Link as LinkIcon, Undo, Redo, AlignLeft, AlignCenter, AlignRight, AlignJustify, Palette } from 'lucide-react'
+import { YouTube } from '../extensions/YouTube'
+import { Bold, Italic, List, ListOrdered, Link as LinkIcon, Undo, Redo, AlignLeft, AlignCenter, AlignRight, AlignJustify, Palette, Youtube } from 'lucide-react'
 
 interface RichTextEditorProps {
   content: Record<string, any> | null
@@ -53,6 +54,13 @@ export function RichTextEditor({
       Color,
       Highlight.configure({
         multicolor: true,
+      }),
+      YouTube.configure({
+        HTMLAttributes: {
+          class: 'youtube-video',
+        },
+        width: 640,
+        height: 360,
       }),
     ],
     content: content || '',
@@ -221,6 +229,20 @@ export function RichTextEditor({
             title="Couleur du texte"
           >
             <Palette className="w-4 h-4" />
+          </button>
+          <div className="w-px bg-gray-300 mx-1" />
+          <button
+            type="button"
+            onClick={() => {
+              const url = window.prompt('Entrez l\'URL de la vidéo YouTube (ex: https://www.youtube.com/watch?v=VIDEO_ID ou juste VIDEO_ID):')
+              if (url) {
+                editor.chain().focus().setYouTube({ src: url }).run()
+              }
+            }}
+            className="p-2 rounded hover:bg-gray-100"
+            title="Ajouter une vidéo YouTube"
+          >
+            <Youtube className="w-4 h-4 text-red-600" />
           </button>
           <div className="w-px bg-gray-300 mx-1" />
           <button

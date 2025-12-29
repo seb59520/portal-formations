@@ -262,6 +262,7 @@ export function Help() {
                   <li>• Alignement (gauche, centre, droite, justifié)</li>
                   <li>• Couleur du texte</li>
                   <li>• Liens</li>
+                  <li>• Vidéos YouTube</li>
                 </ul>
               </div>
               <div className="bg-gray-50 p-3 rounded">
@@ -280,7 +281,28 @@ export function Help() {
               <li>Utilisez le <strong>gras</strong> pour les mots-clés</li>
               <li>Utilisez l'<em>italique</em> pour les termes techniques</li>
               <li>Organisez avec des listes pour énumérer</li>
+              <li>Intégrez des vidéos YouTube pour enrichir le contenu</li>
             </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold text-gray-900 mb-2">Intégrer une vidéo YouTube</h4>
+            <ol className="list-decimal list-inside space-y-1 text-gray-700">
+              <li>Cliquez sur l'icône YouTube (rouge) dans la barre d'outils</li>
+              <li>Entrez l'URL de la vidéo ou juste l'ID de la vidéo</li>
+              <li>Formats acceptés :
+                <ul className="list-disc list-inside ml-6 mt-1">
+                  <li><code>https://www.youtube.com/watch?v=VIDEO_ID</code></li>
+                  <li><code>https://youtu.be/VIDEO_ID</code></li>
+                  <li><code>VIDEO_ID</code> (juste l'ID)</li>
+                </ul>
+              </li>
+            </ol>
+            <div className="bg-blue-50 p-4 rounded-lg mt-3">
+              <p className="text-sm text-blue-800">
+                <strong>Exemple :</strong> Pour la vidéo <code>https://www.youtube.com/watch?v=dQw4w9WgXcQ</code>, 
+                vous pouvez entrer soit l'URL complète, soit juste <code>dQw4w9WgXcQ</code>
+              </p>
+            </div>
           </div>
         </div>
       )

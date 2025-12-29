@@ -209,6 +209,7 @@ L'éditeur de texte riche permet de formater votre contenu avec :
 - **Alignement** : Gauche, centre, droite, justifié
 - **Couleur du texte** : Personnaliser la couleur
 - **Liens** : Ajouter des liens vers d'autres ressources
+- **Vidéos YouTube** : Intégrer des vidéos YouTube directement dans le contenu
 
 #### Navigation
 - **Annuler** : Revenir en arrière
