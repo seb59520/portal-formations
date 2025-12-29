@@ -33,13 +33,47 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     detectSessionInUrl: true,
     storage: window.localStorage,
     storageKey: 'sb-auth-token',
-    flowType: 'pkce'
+    flowType: 'pkce',
+    // Améliorer la gestion du refresh token
+    debug: import.meta.env.DEV,
   },
   global: {
     headers: {
       'apikey': supabaseAnonKey,
     },
+    // Timeout pour les requêtes
+    fetch: (url, options = {}) => {
+      // Ajouter un timeout par défaut de 30 secondes
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30000)
+      
+      return fetch(url, {
+        ...options,
+        signal: controller.signal,
+      }).finally(() => {
+        clearTimeout(timeoutId)
+      })
+    },
   },
+  db: {
+    schema: 'public',
+  },
+  realtime: {
+    params: {
+      eventsPerSecond: 10,
+    },
+  },
+})
+
+// Écouter les erreurs de refresh token
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'TOKEN_REFRESHED') {
+    console.log('Token refreshed successfully')
+  } else if (event === 'SIGNED_OUT') {
+    console.log('User signed out')
+  } else if (event === 'USER_UPDATED') {
+    console.log('User updated')
+  }
 })
 
 // Types helper

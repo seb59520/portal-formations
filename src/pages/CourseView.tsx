@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabaseClient'
+import { withRetry, withTimeout, isAuthError } from '../lib/supabaseHelpers'
 import { Course, Module, Item } from '../types/database'
 import { CourseFeaturesTiles } from '../components/CourseFeaturesTiles'
 import { Progress } from '../components/Progress'
@@ -32,14 +33,27 @@ export function CourseView() {
     try {
       setError('')
 
-      // Récupérer les détails de la formation d'abord
-      const { data: courseData, error: courseError } = await supabase
-        .from('courses')
-        .select('*')
-        .eq('id', courseId)
-        .single()
+      // Récupérer les détails de la formation d'abord avec retry
+      const { data: courseData, error: courseError } = await withRetry(
+        () => withTimeout(
+          supabase
+            .from('courses')
+            .select('*')
+            .eq('id', courseId)
+            .single(),
+          15000,
+          'Course fetch timeout'
+        ),
+        { maxRetries: 2, initialDelay: 1000 }
+      )
 
-      if (courseError) throw courseError
+      if (courseError) {
+        if (isAuthError(courseError)) {
+          setError('Session expirée. Veuillez vous reconnecter.')
+          return
+        }
+        throw courseError
+      }
 
       // Vérifier l'accès à la formation (seulement si pas admin)
       if (profile?.role !== 'admin' && user?.id && courseData) {
@@ -92,17 +106,30 @@ export function CourseView() {
 
       // Continuer le chargement même si on a créé un enrollment
 
-      // Récupérer les modules avec leurs items
-      const { data: modulesData, error: modulesError } = await supabase
-        .from('modules')
-        .select(`
-          *,
-          items (*)
-        `)
-        .eq('course_id', courseId)
-        .order('position', { ascending: true })
+      // Récupérer les modules avec leurs items avec retry
+      const { data: modulesData, error: modulesError } = await withRetry(
+        () => withTimeout(
+          supabase
+            .from('modules')
+            .select(`
+              *,
+              items (*)
+            `)
+            .eq('course_id', courseId)
+            .order('position', { ascending: true }),
+          15000,
+          'Modules fetch timeout'
+        ),
+        { maxRetries: 2, initialDelay: 1000 }
+      )
 
-      if (modulesError) throw modulesError
+      if (modulesError) {
+        if (isAuthError(modulesError)) {
+          setError('Session expirée. Veuillez vous reconnecter.')
+          return
+        }
+        throw modulesError
+      }
 
       // Trier les items dans chaque module
       const sortedModules = modulesData?.map(module => ({
@@ -115,9 +142,15 @@ export function CourseView() {
       // Collecter tous les items pour les tuiles
       const allItemsList = sortedModules.flatMap(module => module.items || [])
       setAllItems(allItemsList)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching course:', error)
-      setError('Erreur lors du chargement de la formation.')
+      if (isAuthError(error)) {
+        setError('Session expirée. Veuillez vous reconnecter.')
+      } else if (error?.message?.includes('timeout')) {
+        setError('Le chargement prend trop de temps. Vérifiez votre connexion Internet.')
+      } else {
+        setError('Erreur lors du chargement de la formation.')
+      }
     } finally {
       setLoading(false)
     }

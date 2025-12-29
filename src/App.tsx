@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './hooks/useAuth'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { NetworkStatus } from './components/NetworkStatus'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { ResetPassword } from './pages/ResetPassword'
@@ -15,6 +16,7 @@ import { AdminItemEdit } from './pages/admin/AdminItemEdit'
 function App() {
   return (
     <AuthProvider>
+      <NetworkStatus />
       <div className="min-h-screen bg-gray-50">
         <Routes>
           {/* Routes publiques */}

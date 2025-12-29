@@ -1,7 +1,8 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, ReactNode, useRef } from 'react'
 import { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabaseClient'
 import { Profile } from '../types/database'
+import { withRetry, withTimeout, isAuthError } from '../lib/supabaseHelpers'
 
 interface AuthContextType {
   user: User | null
@@ -23,6 +24,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const isRefreshingRef = useRef(false)
 
   useEffect(() => {
     let mounted = true
@@ -39,13 +42,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }, 5000) // 5 secondes max
 
-    // Récupérer la session initiale avec timeout
-    const sessionPromise = supabase.auth.getSession()
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Session fetch timeout')), 3000)
+    // Récupérer la session initiale avec retry et timeout
+    withRetry(
+      () => withTimeout(
+        supabase.auth.getSession(),
+        5000,
+        'Session fetch timeout'
+      ),
+      { maxRetries: 2, initialDelay: 1000 }
     )
-
-    Promise.race([sessionPromise, timeoutPromise])
       .then((result: any) => {
         if (!mounted) return
 
@@ -53,6 +58,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (error) {
           console.error('Error getting session:', error)
+          // Si erreur d'auth, nettoyer la session
+          if (isAuthError(error)) {
+            supabase.auth.signOut().catch(() => {})
+            setSession(null)
+            setUser(null)
+            setProfile(null)
+          }
           setLoading(false)
           if (timeoutId) clearTimeout(timeoutId)
           return
@@ -76,9 +88,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error('Error in getSession:', error)
         if (mounted) {
           setLoading(false)
-          setUser(null)
-          setSession(null)
-          setProfile(null)
+          // Si timeout ou erreur réseau, on continue sans session
+          if (error.message?.includes('timeout') || error.message?.includes('network')) {
+            console.warn('Continuing without session due to network issue')
+          } else {
+            setUser(null)
+            setSession(null)
+            setProfile(null)
+          }
           if (timeoutId) clearTimeout(timeoutId)
         }
       })
@@ -89,14 +106,80 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted) return
 
+      console.log('Auth state changed:', event, session?.user?.id)
+
+      // Gérer le refresh token
+      if (event === 'TOKEN_REFRESHED') {
+        console.log('Token refreshed successfully')
+        if (session?.user) {
+          // Rafraîchir le profil après refresh token
+          await fetchProfile(session.user.id)
+        }
+        return
+      }
+
+      // Gérer les erreurs de token
+      if (event === 'SIGNED_OUT' && session === null && user) {
+        console.warn('Session expired or invalid, signing out')
+        setUser(null)
+        setProfile(null)
+        setSession(null)
+        if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
+          window.location.replace('/login')
+        }
+        return
+      }
+
       setSession(session)
       setUser(session?.user ?? null)
 
       if (session?.user) {
         await fetchProfile(session.user.id)
+        
+        // Démarrer un intervalle pour vérifier et rafraîchir le token si nécessaire
+        if (!refreshIntervalRef.current) {
+          refreshIntervalRef.current = setInterval(async () => {
+            if (!mounted || isRefreshingRef.current) return
+            
+            try {
+              const { data: { session: currentSession } } = await supabase.auth.getSession()
+              if (currentSession) {
+                // Vérifier si le token expire bientôt (dans les 5 prochaines minutes)
+                const expiresAt = currentSession.expires_at
+                if (expiresAt) {
+                  const expiresIn = expiresAt - Math.floor(Date.now() / 1000)
+                  if (expiresIn < 300 && expiresIn > 0) {
+                    // Rafraîchir le token
+                    isRefreshingRef.current = true
+                    const { data: { session: refreshedSession }, error } = await supabase.auth.refreshSession()
+                    if (error) {
+                      console.error('Error refreshing session:', error)
+                      if (isAuthError(error)) {
+                        // Session invalide, déconnecter
+                        await supabase.auth.signOut()
+                      }
+                    } else if (refreshedSession) {
+                      console.log('Session refreshed proactively')
+                      setSession(refreshedSession)
+                    }
+                    isRefreshingRef.current = false
+                  }
+                }
+              }
+            } catch (error) {
+              console.error('Error checking session:', error)
+              isRefreshingRef.current = false
+            }
+          }, 60000) // Vérifier toutes les minutes
+        }
       } else {
         setProfile(null)
         setLoading(false)
+        // Arrêter l'intervalle de refresh
+        if (refreshIntervalRef.current) {
+          clearInterval(refreshIntervalRef.current)
+          refreshIntervalRef.current = null
+        }
         // Si l'utilisateur se déconnecte et qu'on n'est pas déjà sur la page de login
         if (event === 'SIGNED_OUT' && !window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
           // Utiliser replace pour éviter d'ajouter à l'historique
@@ -108,27 +191,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       mounted = false
       if (timeoutId) clearTimeout(timeoutId)
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current)
+        refreshIntervalRef.current = null
+      }
       subscription.unsubscribe()
     }
   }, [])
 
-  const fetchProfile = async (userId: string, retries = 1) => {
+  const fetchProfile = async (userId: string) => {
     try {
       console.log('Fetching profile for user:', userId)
       
-      // Utiliser maybeSingle() au lieu de single() pour éviter les erreurs si le profil n'existe pas
-      // Timeout augmenté à 10 secondes pour les connexions lentes
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Profile fetch timeout')), 10000)
+      // Utiliser retry et timeout
+      const result = await withRetry(
+        () => withTimeout(
+          supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', userId)
+            .maybeSingle(),
+          8000,
+          'Profile fetch timeout'
+        ),
+        { maxRetries: 2, initialDelay: 1000 }
       )
-
-      const fetchPromise = supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .maybeSingle() // Utiliser maybeSingle() pour éviter les erreurs si le profil n'existe pas
-
-      const result = await Promise.race([fetchPromise, timeoutPromise]) as any
+      
       const { data, error } = result || { data: null, error: null }
 
       if (error) {
@@ -140,11 +228,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return
         }
         
-        // Retry en cas d'erreur réseau (seulement 1 fois maintenant)
-        if (retries > 0 && (error.message?.includes('network') || error.message?.includes('fetch') || error.message?.includes('timeout'))) {
-          console.warn(`Retrying profile fetch (${retries} retries left):`, error.message)
-          await new Promise(resolve => setTimeout(resolve, 1000))
-          return fetchProfile(userId, retries - 1)
+        // Si erreur d'auth, déconnecter
+        if (isAuthError(error)) {
+          console.error('Auth error fetching profile, signing out')
+          await supabase.auth.signOut()
+          setProfile(null)
+          setUser(null)
+          setSession(null)
+          setLoading(false)
+          return
         }
         
         // En cas d'erreur, on continue quand même
@@ -163,8 +255,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error: any) {
       // Gérer spécifiquement les timeouts
       if (error?.message?.includes('timeout')) {
-        console.error('Profile fetch timeout after 10 seconds for user:', userId)
-        console.warn('Continuing without profile - this may indicate a network issue or RLS policy problem')
+        console.error('Profile fetch timeout for user:', userId)
+        console.warn('Continuing without profile - this may indicate a network issue')
+      } else if (isAuthError(error)) {
+        console.error('Auth error, signing out')
+        await supabase.auth.signOut()
+        setProfile(null)
+        setUser(null)
+        setSession(null)
       } else {
         console.error('Error fetching profile:', error)
       }

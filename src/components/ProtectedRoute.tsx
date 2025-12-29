@@ -1,7 +1,9 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import { useNetworkStatus } from '../hooks/useNetworkStatus'
 import { UserRole } from '../types/database'
+import { WifiOff, Wifi } from 'lucide-react'
 
 interface ProtectedRouteProps {
   children: ReactNode
@@ -15,6 +17,7 @@ export function ProtectedRoute({
   requireAuth = true
 }: ProtectedRouteProps) {
   const { user, profile, loading } = useAuth()
+  const { isOnline, wasOffline } = useNetworkStatus()
   const location = useLocation()
 
   // Timeout de sécurité pour éviter un blocage infini
@@ -35,10 +38,28 @@ export function ProtectedRoute({
   const isOnLoginPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/reset-password'
   const isOnAppPage = location.pathname === '/app'
 
+  // Afficher un message si hors ligne
+  if (!isOnline) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <WifiOff className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Connexion perdue</h2>
+          <p className="text-gray-600 mb-4">Vérifiez votre connexion Internet et réessayez.</p>
+        </div>
+      </div>
+    )
+  }
+
   if (loading && !forceRender) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          {wasOffline && (
+            <p className="text-sm text-gray-600">Reconnexion en cours...</p>
+          )}
+        </div>
       </div>
     )
   }

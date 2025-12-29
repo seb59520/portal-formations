@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../lib/supabaseClient'
+import { withRetry, withTimeout, isAuthError } from '../lib/supabaseHelpers'
 import { Course, Enrollment } from '../types/database'
 
 interface CourseWithEnrollment extends Course {
@@ -26,18 +27,29 @@ export function Dashboard() {
         return
       }
 
-      // Récupérer les formations où l'utilisateur est inscrit
-      const { data: enrollments, error: enrollmentsError } = await supabase
-        .from('enrollments')
-        .select(`
-          *,
-          courses (*)
-        `)
-        .eq('user_id', user.id)
-        .eq('status', 'active')
+      // Récupérer les formations où l'utilisateur est inscrit avec retry
+      const { data: enrollments, error: enrollmentsError } = await withRetry(
+        () => withTimeout(
+          supabase
+            .from('enrollments')
+            .select(`
+              *,
+              courses (*)
+            `)
+            .eq('user_id', user.id)
+            .eq('status', 'active'),
+          15000,
+          'Enrollments fetch timeout'
+        ),
+        { maxRetries: 2, initialDelay: 1000 }
+      )
 
       if (enrollmentsError) {
         console.error('Error fetching enrollments:', enrollmentsError)
+        if (isAuthError(enrollmentsError)) {
+          console.error('Auth error, user may need to reconnect')
+          return
+        }
         // Ne pas bloquer si erreur, juste logger
         if (enrollmentsError.code !== 'PGRST116') {
           throw enrollmentsError
@@ -49,14 +61,27 @@ export function Dashboard() {
         enrollment: e
       })) || []
 
-      // Si admin, récupérer aussi toutes les formations (pour gestion)
+      // Si admin, récupérer aussi toutes les formations (pour gestion) avec retry
       if (profile?.role === 'admin') {
-        const { data: allCourses, error: coursesError } = await supabase
-          .from('courses')
-          .select('*')
-          .order('created_at', { ascending: false })
+        const { data: allCourses, error: coursesError } = await withRetry(
+          () => withTimeout(
+            supabase
+              .from('courses')
+              .select('*')
+              .order('created_at', { ascending: false }),
+            15000,
+            'Courses fetch timeout'
+          ),
+          { maxRetries: 2, initialDelay: 1000 }
+        )
 
-        if (coursesError) throw coursesError
+        if (coursesError) {
+          if (isAuthError(coursesError)) {
+            console.error('Auth error fetching courses')
+            return
+          }
+          throw coursesError
+        }
 
         // Fusionner les formations (éviter les doublons)
         const courseMap = new Map()
