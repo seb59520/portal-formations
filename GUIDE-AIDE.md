@@ -215,6 +215,27 @@ L'éditeur de texte riche permet de formater votre contenu avec :
 - **Annuler** : Revenir en arrière
 - **Refaire** : Avancer à nouveau
 
+### Intégrer une vidéo YouTube
+
+1. **Dans l'éditeur de texte riche**
+   - Cliquez sur l'icône YouTube (rouge) dans la barre d'outils
+   - Entrez l'URL de la vidéo ou juste l'ID de la vidéo
+
+2. **Formats d'URL acceptés**
+   - `https://www.youtube.com/watch?v=VIDEO_ID`
+   - `https://youtu.be/VIDEO_ID`
+   - `https://www.youtube.com/embed/VIDEO_ID`
+   - `VIDEO_ID` (juste l'ID de la vidéo)
+
+3. **Exemple**
+   - URL complète : `https://www.youtube.com/watch?v=dQw4w9WgXcQ`
+   - Ou juste l'ID : `dQw4w9WgXcQ`
+
+**Affichage :**
+- La vidéo s'affiche dans un lecteur YouTube intégré
+- Format responsive (s'adapte à la largeur de l'écran)
+- Ratio 16:9 automatique
+
 ### Conseils d'utilisation
 
 1. **Structurez votre contenu**
