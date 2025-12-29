@@ -33,6 +33,8 @@ export function ColumnMatchingGame({
   const [startTime, setStartTime] = useState<number | null>(null)
   const [elapsedTime, setElapsedTime] = useState(0)
   const [feedback, setFeedback] = useState<{ left: string; right: string; correct: boolean } | null>(null)
+  const [draggedItemId, setDraggedItemId] = useState<string | null>(null)
+  const [dragOverItemId, setDragOverItemId] = useState<string | null>(null)
 
   // Initialiser les items
   useEffect(() => {
@@ -118,6 +120,105 @@ export function ColumnMatchingGame({
         checkMatch(selectedLeft, itemId)
       }
     }
+  }
+
+  // Handlers pour drag and drop
+  const handleDragStart = (e: React.DragEvent, itemId: string, isLeft: boolean) => {
+    if (!gameStarted || gameFinished) return
+    if (isLeft && matchedPairs.has(itemId)) return // Déjà associé
+    if (!isLeft && rightItems.find(item => item.id === itemId)?.matchedId) return // Déjà associé
+
+    setDraggedItemId(itemId)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', JSON.stringify({ itemId, isLeft }))
+    
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.style.opacity = '0.5'
+    }
+  }
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    setDraggedItemId(null)
+    setDragOverItemId(null)
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.style.opacity = '1'
+    }
+  }
+
+  const handleDragOver = (e: React.DragEvent, itemId: string, isLeft: boolean) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    
+    if (!draggedItemId) return
+    
+    try {
+      const dragData = JSON.parse(e.dataTransfer.getData('text/plain'))
+      // Ne permettre le drop que si on drag depuis l'autre colonne
+      if (dragData.isLeft !== isLeft) {
+        setDragOverItemId(itemId)
+      }
+    } catch {
+      // Si pas de données, vérifier avec draggedItemId
+      const draggedIsLeft = draggedItemId.startsWith('left-')
+      if (draggedIsLeft !== isLeft) {
+        setDragOverItemId(itemId)
+      }
+    }
+  }
+
+  const handleDragLeave = () => {
+    setDragOverItemId(null)
+  }
+
+  const handleDrop = (e: React.DragEvent, targetItemId: string, isLeft: boolean) => {
+    e.preventDefault()
+    setDragOverItemId(null)
+
+    if (!draggedItemId) return
+
+    try {
+      const dragData = JSON.parse(e.dataTransfer.getData('text/plain'))
+      const draggedItemId = dragData.itemId
+      const draggedIsLeft = dragData.isLeft
+
+      // Vérifier que le drop est sur l'autre colonne
+      if (draggedIsLeft === isLeft) {
+        setDraggedItemId(null)
+        return
+      }
+
+      // Vérifier que les éléments ne sont pas déjà associés
+      if (draggedIsLeft) {
+        if (matchedPairs.has(draggedItemId)) {
+          setDraggedItemId(null)
+          return
+        }
+      } else {
+        if (rightItems.find(item => item.id === draggedItemId)?.matchedId) {
+          setDraggedItemId(null)
+          return
+        }
+      }
+
+      // Vérifier la correspondance
+      if (draggedIsLeft) {
+        checkMatch(draggedItemId, targetItemId)
+      } else {
+        checkMatch(targetItemId, draggedItemId)
+      }
+    } catch {
+      // Fallback si les données ne sont pas disponibles
+      const draggedIsLeft = draggedItemId.startsWith('left-')
+      if (draggedIsLeft !== isLeft) {
+        if (draggedIsLeft) {
+          checkMatch(draggedItemId, targetItemId)
+        } else {
+          checkMatch(targetItemId, draggedItemId)
+        }
+      }
+    }
+
+    setDraggedItemId(null)
   }
 
   const checkMatch = (leftId: string, rightId: string) => {
@@ -356,23 +457,35 @@ export function ColumnMatchingGame({
               const isMatched = matchedPairs.has(item.id)
               const isSelected = selectedLeft === item.id
               const isFeedback = feedback?.left === item.id
+              const isDragged = draggedItemId === item.id
+              const isDragOver = dragOverItemId === item.id && draggedItemId && draggedItemId.startsWith('right-')
               
               return (
                 <button
                   key={item.id}
+                  draggable={!isMatched && gameStarted && !gameFinished}
+                  onDragStart={(e) => handleDragStart(e, item.id, true)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={(e) => handleDragOver(e, item.id, true)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, item.id, true)}
                   onClick={() => handleLeftClick(item.id)}
                   disabled={isMatched || gameFinished}
                   className={`
                     w-full p-4 rounded-lg text-left transition-all duration-200
                     ${isMatched
                       ? 'bg-green-200 text-green-900 border-2 border-green-400 cursor-default'
+                      : isDragged
+                      ? 'opacity-50 scale-95'
+                      : isDragOver
+                      ? 'bg-blue-200 text-blue-900 border-2 border-blue-500 shadow-lg scale-105'
                       : isSelected
                       ? 'bg-blue-200 text-blue-900 border-2 border-blue-500 shadow-md'
                       : isFeedback
                       ? feedback?.correct
                         ? 'bg-green-100 text-green-900 border-2 border-green-400'
                         : 'bg-red-100 text-red-900 border-2 border-red-400'
-                      : 'bg-white text-gray-900 border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+                      : 'bg-white text-gray-900 border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50 cursor-move'
                     }
                     disabled:opacity-50 disabled:cursor-not-allowed
                   `}
@@ -400,23 +513,35 @@ export function ColumnMatchingGame({
               const isMatched = item.matchedId !== null
               const isSelected = selectedRight === item.id
               const isFeedback = feedback?.right === item.id
+              const isDragged = draggedItemId === item.id
+              const isDragOver = dragOverItemId === item.id && draggedItemId && draggedItemId.startsWith('left-')
               
               return (
                 <button
                   key={item.id}
+                  draggable={!isMatched && gameStarted && !gameFinished}
+                  onDragStart={(e) => handleDragStart(e, item.id, false)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={(e) => handleDragOver(e, item.id, false)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, item.id, false)}
                   onClick={() => handleRightClick(item.id)}
                   disabled={isMatched || gameFinished}
                   className={`
                     w-full p-4 rounded-lg text-left transition-all duration-200
                     ${isMatched
                       ? 'bg-green-200 text-green-900 border-2 border-green-400 cursor-default'
+                      : isDragged
+                      ? 'opacity-50 scale-95'
+                      : isDragOver
+                      ? 'bg-blue-200 text-blue-900 border-2 border-blue-500 shadow-lg scale-105'
                       : isSelected
                       ? 'bg-blue-200 text-blue-900 border-2 border-blue-500 shadow-md'
                       : isFeedback
                       ? feedback?.correct
                         ? 'bg-green-100 text-green-900 border-2 border-green-400'
                         : 'bg-red-100 text-red-900 border-2 border-red-400'
-                      : 'bg-white text-gray-900 border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+                      : 'bg-white text-gray-900 border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50 cursor-move'
                     }
                     disabled:opacity-50 disabled:cursor-not-allowed
                   `}
@@ -441,7 +566,7 @@ export function ColumnMatchingGame({
       {gameStarted && !gameFinished && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
           <p className="text-sm text-gray-700 text-center">
-            <strong>Instructions :</strong> Cliquez sur un élément de la colonne 1, puis sur l'élément correspondant de la colonne 2.
+            <strong>Instructions :</strong> Cliquez sur un élément de la colonne 1, puis sur l'élément correspondant de la colonne 2, ou <strong>glissez-déposez</strong> un élément d'une colonne vers l'élément correspondant de l'autre colonne.
           </p>
         </div>
       )}

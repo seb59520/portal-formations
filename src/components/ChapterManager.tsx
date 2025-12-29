@@ -14,6 +14,8 @@ export function ChapterManager({ itemId, onChaptersChange }: ChapterManagerProps
   const [loading, setLoading] = useState(true)
   const [expandedChapters, setExpandedChapters] = useState<Set<string>>(new Set())
   const [saving, setSaving] = useState<Set<string>>(new Set())
+  const [draggedChapterId, setDraggedChapterId] = useState<string | null>(null)
+  const [dragOverChapterId, setDragOverChapterId] = useState<string | null>(null)
 
   useEffect(() => {
     if (itemId && !itemId.startsWith('temp-')) {
@@ -167,6 +169,71 @@ export function ChapterManager({ itemId, onChaptersChange }: ChapterManagerProps
     onChaptersChange?.(updatedChapters)
   }
 
+  const handleDragStart = (e: React.DragEvent, chapterId: string) => {
+    setDraggedChapterId(chapterId)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/html', chapterId)
+    // Ajouter un style pour l'élément en cours de drag
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.style.opacity = '0.5'
+    }
+  }
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    setDraggedChapterId(null)
+    setDragOverChapterId(null)
+    // Restaurer l'opacité
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.style.opacity = '1'
+    }
+  }
+
+  const handleDragOver = (e: React.DragEvent, chapterId: string) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    if (draggedChapterId && draggedChapterId !== chapterId) {
+      setDragOverChapterId(chapterId)
+    }
+  }
+
+  const handleDragLeave = () => {
+    setDragOverChapterId(null)
+  }
+
+  const handleDrop = (e: React.DragEvent, targetChapterId: string) => {
+    e.preventDefault()
+    setDragOverChapterId(null)
+
+    if (!draggedChapterId || draggedChapterId === targetChapterId) {
+      setDraggedChapterId(null)
+      return
+    }
+
+    const draggedIndex = chapters.findIndex(c => c.id === draggedChapterId)
+    const targetIndex = chapters.findIndex(c => c.id === targetChapterId)
+
+    if (draggedIndex === -1 || targetIndex === -1) {
+      setDraggedChapterId(null)
+      return
+    }
+
+    const updatedChapters = [...chapters]
+    const [moved] = updatedChapters.splice(draggedIndex, 1)
+    updatedChapters.splice(targetIndex, 0, moved)
+
+    // Mettre à jour les positions
+    updatedChapters.forEach((c, i) => {
+      c.position = i
+      if (!c.id.startsWith('temp-')) {
+        saveChapter({ ...c })
+      }
+    })
+
+    setChapters(updatedChapters)
+    onChaptersChange?.(updatedChapters)
+    setDraggedChapterId(null)
+  }
+
   const toggleChapter = (chapterId: string) => {
     const newExpanded = new Set(expandedChapters)
     if (newExpanded.has(chapterId)) {
@@ -203,11 +270,23 @@ export function ChapterManager({ itemId, onChaptersChange }: ChapterManagerProps
           {chapters.map((chapter, index) => (
             <div
               key={chapter.id}
-              className="border border-gray-200 rounded-lg bg-white"
+              draggable
+              onDragStart={(e) => handleDragStart(e, chapter.id)}
+              onDragEnd={handleDragEnd}
+              onDragOver={(e) => handleDragOver(e, chapter.id)}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, chapter.id)}
+              className={`border rounded-lg bg-white transition-all cursor-move ${
+                draggedChapterId === chapter.id
+                  ? 'opacity-50 border-blue-400 scale-95'
+                  : dragOverChapterId === chapter.id
+                  ? 'border-blue-500 bg-blue-50 shadow-lg scale-105'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
             >
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <div className="flex items-center space-x-2 flex-1">
-                  <GripVertical className="w-5 h-5 text-gray-400" />
+                  <GripVertical className="w-5 h-5 text-gray-400 cursor-move hover:text-gray-600" />
                   <input
                     type="text"
                     value={chapter.title}
