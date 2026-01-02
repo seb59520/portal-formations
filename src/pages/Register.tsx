@@ -73,8 +73,11 @@ export function Register() {
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="space-y-4">
             <div>
+              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
+                Nom complet
+              </label>
               <input
                 id="fullName"
                 name="fullName"
@@ -82,11 +85,14 @@ export function Register() {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="input-field rounded-t-md"
-                placeholder="Nom complet"
+                className="input-field w-full"
+                placeholder="Votre nom complet"
               />
             </div>
             <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Adresse email <span className="text-red-500">*</span>
+              </label>
               <input
                 id="email"
                 name="email"
@@ -94,11 +100,15 @@ export function Register() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input-field"
-                placeholder="Adresse email"
+                className="input-field w-full"
+                placeholder="exemple@email.com"
+                autoComplete="email"
               />
             </div>
             <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                Mot de passe <span className="text-red-500">*</span>
+              </label>
               <input
                 id="password"
                 name="password"
@@ -107,8 +117,9 @@ export function Register() {
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input-field rounded-b-md"
-                placeholder="Mot de passe (min. 6 caractères)"
+                className="input-field w-full"
+                placeholder="Minimum 6 caractères"
+                autoComplete="new-password"
               />
             </div>
           </div>

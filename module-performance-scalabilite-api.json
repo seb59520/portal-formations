@@ -1,0 +1,1228 @@
+{
+  "title": "Performance & Scalabilité des APIs – Conception pour la charge et la résilience",
+  "description": "Formation professionnelle niveau AVANCÉ / MAÎTRISE sur la performance et la scalabilité des APIs : concevoir des APIs capables de supporter la charge, la montée en puissance et les pics d'activité. Ce module couvre l'optimisation, le cache, la gestion de charge, le monitoring et les stratégies de résilience.",
+  "status": "draft",
+  "access_type": "free",
+  "theme": {
+    "primaryColor": "#F59E0B",
+    "secondaryColor": "#D97706",
+    "fontFamily": "Inter"
+  },
+  "modules": [
+    {
+      "title": "Performance & Scalabilité des APIs – Conception pour la charge et la résilience",
+      "position": 3,
+      "items": [
+        {
+          "type": "slide",
+          "title": "Performance vs Scalabilité",
+          "position": 0,
+          "published": true,
+          "content": {
+            "description": "Comprendre les différences fondamentales entre performance et scalabilité, les types de scaling (vertical/horizontal), et identifier les bottlenecks classiques dans les architectures API."
+          },
+          "chapters": [
+            {
+              "title": "Différences conceptuelles",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Performance vs Scalabilité : deux concepts distincts" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "La " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "performance" },
+                      { "type": "text", "text": " mesure la vitesse d'exécution d'une requête unique (latence, throughput). La " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "scalabilité" },
+                      { "type": "text", "text": " mesure la capacité d'un système à gérer une augmentation de charge en maintenant les performances." }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Performance" }, { "type": "text", "text": " : temps de réponse < 200ms pour 1 requête" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Scalabilité" }, { "type": "text", "text": " : maintenir < 200ms même avec 10x plus de requêtes simultanées" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Exemple concret" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Une API qui répond en 50ms pour 100 req/s est performante. Si elle répond en 2s pour 1000 req/s, elle n'est pas scalable. Une API scalable maintient 50ms même à 1000 req/s grâce à l'ajout de ressources." }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Scaling vertical vs horizontal",
+              "position": 1,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Deux approches complémentaires" }]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Scaling vertical (Scale Up)" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Augmenter les ressources d'une seule machine (CPU, RAM, disque)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Avantages" }, { "type": "text", "text": " : simple, pas de changement d'architecture, cohérence des données garantie" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Limites" }, { "type": "text", "text": " : plafond physique, coût exponentiel, point de défaillance unique" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Scaling horizontal (Scale Out)" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Ajouter plusieurs machines/instances pour répartir la charge" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Avantages" }, { "type": "text", "text": " : scalabilité théoriquement illimitée, résilience (pas de SPOF), coût linéaire" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Défis" }, { "type": "text", "text": " : partage d'état, load balancing, cohérence des données, complexité opérationnelle" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Stratégie hybride" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "En production, on combine souvent les deux : scaling vertical pour les bases de données (jusqu'à une limite), scaling horizontal pour les serveurs d'application (stateless)." }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Bottlenecks classiques",
+              "position": 2,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Identifier les goulots d'étranglement" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Les bottlenecks sont les composants qui limitent le débit global du système. Identifier et résoudre ces points est critique pour la scalabilité." }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Bottlenecks fréquents" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Base de données" }, { "type": "text", "text": " : requêtes N+1, absence d'index, connexions non poolées, transactions longues" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Réseau" }, { "type": "text", "text": " : bande passante limitée, latence élevée, payloads volumineux" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "CPU/Mémoire" }, { "type": "text", "text": " : algorithmes inefficaces, fuites mémoire, traitement synchrone bloquant" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Services externes" }, { "type": "text", "text": " : dépendances lentes, timeouts non configurés, pas de circuit breaker" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Méthode d'identification" }]
+                  },
+                  {
+                    "type": "orderedList",
+                    "attrs": { "start": 1 },
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Profiling avec APM (Application Performance Monitoring)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Analyse des métriques (CPU, mémoire, I/O, latence)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Load testing progressif pour identifier le point de rupture" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Analyse des logs et traces distribuées" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Optimisation des APIs",
+          "position": 1,
+          "published": true,
+          "content": {
+            "description": "Techniques d'optimisation des APIs : pagination cursor-based, filtrage et projection, compression HTTP, et réduction des payloads pour améliorer les performances."
+          },
+          "chapters": [
+            {
+              "title": "Pagination cursor-based",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Pourquoi cursor-based plutôt qu'offset-based ?" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "La pagination " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "offset-based" },
+                      { "type": "text", "text": " (LIMIT/OFFSET) devient lente sur de grandes tables : pour récupérer la page 1000, la base doit scanner 999 pages précédentes." }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Principe cursor-based" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Utiliser un identifiant unique (timestamp, UUID, clé composite) comme curseur. La requête devient :" }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "sql" },
+                    "content": [
+                      { "type": "text", "text": "-- Offset-based (lent)\nSELECT * FROM orders ORDER BY id LIMIT 20 OFFSET 1000;\n\n-- Cursor-based (rapide)\nSELECT * FROM orders WHERE id > 'last_cursor_id' ORDER BY id LIMIT 20;" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Avantages" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Performance constante O(log n) avec index" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Pas de duplication si données ajoutées pendant la pagination" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Scalable à des millions d'enregistrements" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Exemple API" }]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// GET /api/orders?cursor=abc123&limit=20\nconst orders = await db.orders.findMany({\n  where: { id: { gt: cursor } },\n  take: limit,\n  orderBy: { id: 'asc' }\n});\n\nreturn {\n  data: orders,\n  nextCursor: orders[orders.length - 1]?.id || null\n};" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Filtrage et projection",
+              "position": 1,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Réduire les données transférées" }]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Filtrage côté serveur" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Ne jamais transférer toutes les données pour filtrer côté client. Toujours filtrer en base de données avec des index appropriés." }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// ❌ Mauvais : récupère tout puis filtre\nconst allOrders = await db.orders.findMany();\nconst filtered = allOrders.filter(o => o.status === 'pending');\n\n// ✅ Bon : filtre en base\nconst filtered = await db.orders.findMany({\n  where: { status: 'pending' },\n  // Index sur 'status' requis\n});" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Projection (sélection de champs)" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Ne retourner que les champs nécessaires. Réduit la bande passante et le temps de sérialisation." }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// ❌ Retourne tous les champs (y compris relations lourdes)\nconst order = await db.orders.findUnique({ where: { id } });\n\n// ✅ Retourne uniquement les champs nécessaires\nconst order = await db.orders.findUnique({\n  where: { id },\n  select: { id: true, total: true, status: true }\n});\n\n// GraphQL : projection automatique\nquery { order(id: \"123\") { id total status } }" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Impact réel" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Sur une API retournant 10 000 commandes :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Sans projection : 5 MB de JSON, 800ms de sérialisation" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Avec projection (3 champs) : 200 KB, 50ms" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Compression HTTP et payload minimal",
+              "position": 2,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Réduire la taille des réponses" }]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Compression HTTP (gzip, brotli)" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Activer la compression côté serveur réduit la bande passante de 70-90% pour les réponses JSON/HTML." }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// Express avec compression\nconst compression = require('compression');\napp.use(compression({ level: 6 }));\n\n// Nginx\n# gzip on;\n# gzip_types application/json application/javascript;\n# gzip_min_length 1000;" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Payload minimal" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Éviter les structures imbriquées profondes" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Utiliser des IDs plutôt que des objets complets pour les relations" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Format de date compact (ISO 8601 ou timestamp)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Éviter les champs null inutiles" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Exemple d'optimisation" }]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "json" },
+                    "content": [
+                      { "type": "text", "text": "// ❌ Lourd (2.5 KB)\n{\n  \"order\": {\n    \"id\": \"123\",\n    \"user\": {\n      \"id\": \"456\",\n      \"name\": \"John\",\n      \"email\": \"john@example.com\",\n      \"address\": { ... }\n    },\n    \"items\": [ ... ]\n  }\n}\n\n// ✅ Optimisé (800 bytes)\n{\n  \"id\": \"123\",\n  \"userId\": \"456\",\n  \"total\": 99.99,\n  \"status\": \"pending\"\n}" }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Cache et accélération",
+          "position": 2,
+          "published": true,
+          "content": {
+            "description": "Stratégies de cache pour améliorer les performances : cache HTTP, cache Redis, invalidation et cohérence des données."
+          },
+          "chapters": [
+            {
+              "title": "Cache HTTP (CDN, reverse proxy)",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Mise en cache côté client et serveur" }]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Headers HTTP de cache" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Cache-Control" }, { "type": "text", "text": " : max-age=3600 (durée de vie), public/private, no-cache" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "ETag" }, { "type": "text", "text": " : validation conditionnelle (304 Not Modified)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Last-Modified" }, { "type": "text", "text": " : date de dernière modification" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// Express\napp.get('/api/products/:id', (req, res) => {\n  res.set('Cache-Control', 'public, max-age=3600');\n  res.set('ETag', generateETag(product));\n  res.json(product);\n});\n\n// Validation conditionnelle\nif (req.headers['if-none-match'] === etag) {\n  return res.status(304).end();\n}" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Stratégies selon le type de données" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Données statiques (catalogue produits) : max-age=86400 (24h)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Données semi-dynamiques (listes) : max-age=300 (5min) + ETag" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Données dynamiques (commandes utilisateur) : no-cache ou max-age=0" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Cache Redis",
+              "position": 1,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Cache applicatif en mémoire" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Redis permet de mettre en cache les résultats de requêtes coûteuses (base de données, calculs, appels API externes) pour réduire la latence et la charge sur les ressources." }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Patterns de cache" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Cache-aside" }, { "type": "text", "text": " : l'application vérifie le cache, si absent, charge depuis la DB puis met en cache" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Write-through" }, { "type": "text", "text": " : écriture simultanée en DB et cache" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Write-behind" }, { "type": "text", "text": " : écriture asynchrone en DB après mise en cache" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// Cache-aside pattern\nasync function getProduct(id) {\n  // 1. Vérifier le cache\n  const cached = await redis.get(`product:${id}`);\n  if (cached) return JSON.parse(cached);\n  \n  // 2. Charger depuis la DB\n  const product = await db.products.findUnique({ where: { id } });\n  \n  // 3. Mettre en cache (TTL 1h)\n  await redis.setex(`product:${id}`, 3600, JSON.stringify(product));\n  \n  return product;\n}" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Impact performance" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Requête DB : 50-200ms. Requête Redis : 1-5ms. Gain de latence : 95-98% pour les données en cache." }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Invalidation et cohérence",
+              "position": 2,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Gérer la cohérence des données" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "L'invalidation du cache est critique pour éviter de servir des données obsolètes." }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Stratégies d'invalidation" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "TTL (Time To Live)" }, { "type": "text", "text": " : expiration automatique après X secondes. Simple mais peut servir des données obsolètes." }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Invalidation explicite" }, { "type": "text", "text": " : supprimer le cache lors des mises à jour. Cohérent mais complexe." }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Versioning" }, { "type": "text", "text": " : utiliser des clés versionnées (product:123:v2). Permet plusieurs versions en parallèle." }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// Invalidation explicite\nasync function updateProduct(id, data) {\n  // 1. Mettre à jour la DB\n  const product = await db.products.update({ where: { id }, data });\n  \n  // 2. Invalider le cache\n  await redis.del(`product:${id}`);\n  \n  // 3. Optionnel : précharger le nouveau cache\n  await redis.setex(`product:${id}`, 3600, JSON.stringify(product));\n  \n  return product;\n}\n\n// Invalidation par pattern (tous les produits)\nawait redis.del('product:*'); // ⚠️ Coûteux, éviter si possible" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Erreurs fréquentes" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Oublier d'invalider le cache après une mise à jour" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "TTL trop long pour des données critiques" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Cache stampede : plusieurs requêtes simultanées remplissent le cache en parallèle" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Gestion de la charge",
+          "position": 3,
+          "published": true,
+          "content": {
+            "description": "Techniques de gestion de la charge : rate limiting, backpressure, circuit breakers pour protéger l'API contre la surcharge."
+          },
+          "chapters": [
+            {
+              "title": "Rate limiting",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Limiter le nombre de requêtes par client" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Le rate limiting protège l'API contre les abus, les attaques DDoS et garantit une utilisation équitable des ressources." }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Algorithmes de rate limiting" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Token bucket" }, { "type": "text", "text": " : seau de tokens qui se remplit à un taux fixe. Permet des rafales." }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Sliding window" }, { "type": "text", "text": " : fenêtre glissante sur X secondes. Plus strict, pas de rafales." }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Fixed window" }, { "type": "text", "text": " : fenêtre fixe (ex: 1 minute). Simple mais peut avoir des effets de bord." }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// Express avec express-rate-limit\nconst rateLimit = require('express-rate-limit');\n\nconst limiter = rateLimit({\n  windowMs: 15 * 60 * 1000, // 15 minutes\n  max: 100, // 100 requêtes par fenêtre\n  message: 'Too many requests',\n  standardHeaders: true, // X-RateLimit-* headers\n  legacyHeaders: false\n});\n\napp.use('/api/', limiter);\n\n// Redis pour rate limiting distribué\nconst RedisStore = require('rate-limit-redis');\nconst limiter = rateLimit({\n  store: new RedisStore({ client: redis }),\n  windowMs: 60 * 1000,\n  max: 100\n});" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Headers de réponse" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Informer le client de ses limites : X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Backpressure",
+              "position": 1,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Gérer la surcharge en amont" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Le backpressure est un mécanisme qui ralentit ou arrête l'émission de données quand le récepteur est surchargé." }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Stratégies" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Queue avec limite" }, { "type": "text", "text": " : rejeter les requêtes si la queue est pleine (HTTP 503)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Throttling" }, { "type": "text", "text": " : ralentir progressivement le traitement" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Load shedding" }, { "type": "text", "text": " : abandonner les requêtes non critiques en cas de surcharge" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// Queue avec limite (Bull/Redis)\nconst Queue = require('bull');\nconst queue = new Queue('api-requests', {\n  redis: { host: 'localhost', port: 6379 },\n  limiter: { max: 100, duration: 1000 } // 100 req/s\n});\n\n// Rejeter si queue pleine\nqueue.on('error', (error) => {\n  if (error.code === 'ECONNREFUSED') {\n    return res.status(503).json({ error: 'Service unavailable' });\n  }\n});\n\n// Middleware de backpressure\napp.use((req, res, next) => {\n  if (queue.length > 1000) {\n    return res.status(503).json({ \n      error: 'Service overloaded',\n      retryAfter: 60\n    });\n  }\n  next();\n});" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Circuit breakers",
+              "position": 2,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Protéger contre les cascades de défaillances" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Le circuit breaker interrompt temporairement les appels à un service défaillant pour éviter de surcharger un système déjà en difficulté." }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "États du circuit breaker" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Closed (fermé)" }, { "type": "text", "text": " : fonctionnement normal, requêtes passent" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Open (ouvert)" }, { "type": "text", "text": " : trop d'erreurs, requêtes rejetées immédiatement" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Half-open (semi-ouvert)" }, { "type": "text", "text": " : test périodique pour vérifier la récupération" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// opossum (circuit breaker pour Node.js)\nconst CircuitBreaker = require('opossum');\n\nconst options = {\n  timeout: 3000, // 3s timeout\n  errorThresholdPercentage: 50, // Ouvrir si 50% d'erreurs\n  resetTimeout: 30000 // Réessayer après 30s\n};\n\nconst breaker = new CircuitBreaker(callExternalService, options);\n\nbreaker.on('open', () => console.log('Circuit OPEN'));\nbreaker.on('halfOpen', () => console.log('Circuit HALF-OPEN'));\nbreaker.on('close', () => console.log('Circuit CLOSED'));\n\n// Utilisation\napp.get('/api/data', async (req, res) => {\n  try {\n    const data = await breaker.fire();\n    res.json(data);\n  } catch (error) {\n    if (breaker.opened) {\n      // Circuit ouvert : retourner une réponse dégradée\n      return res.status(503).json({ \n        error: 'Service temporarily unavailable',\n        fallback: getCachedData()\n      });\n    }\n    throw error;\n  }\n});" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Impact en production" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Sans circuit breaker : un service externe lent peut bloquer tous les threads/workers, provoquant un déni de service. Avec circuit breaker : échec rapide (timeout) puis rejet immédiat, permettant de servir d'autres requêtes." }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Mesure et monitoring",
+          "position": 4,
+          "published": true,
+          "content": {
+            "description": "Métriques clés pour le monitoring des APIs : latence, throughput, erreurs, intégration avec Prometheus, alerting et SLO."
+          },
+          "chapters": [
+            {
+              "title": "Métriques clés (latence, throughput, erreurs)",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Les 4 métriques d'or (Golden Signals)" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Latence" }, { "type": "text", "text": " : temps de réponse (p50, p95, p99). Mesure l'expérience utilisateur." }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Throughput" }, { "type": "text", "text": " : nombre de requêtes par seconde (RPS). Mesure la capacité." }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Erreurs" }, { "type": "text", "text": " : taux d'erreur (4xx, 5xx). Mesure la fiabilité." }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Saturation" }, { "type": "text", "text": " : utilisation CPU, mémoire, disque. Mesure la capacité restante." }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Métriques de latence" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Ne jamais utiliser uniquement la moyenne (moyenne). Toujours mesurer les percentiles :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "p50 (médiane) : 50% des requêtes sont plus rapides" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "p95 : 95% des requêtes sont plus rapides (SLA utilisateur)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "p99 : 99% des requêtes sont plus rapides (SLA strict)" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// Mesure de latence avec prom-client\nconst promClient = require('prom-client');\n\nconst httpRequestDuration = new promClient.Histogram({\n  name: 'http_request_duration_seconds',\n  help: 'Duration of HTTP requests in seconds',\n  labelNames: ['method', 'route', 'status'],\n  buckets: [0.1, 0.5, 1, 2, 5] // buckets pour percentiles\n});\n\napp.use((req, res, next) => {\n  const start = Date.now();\n  res.on('finish', () => {\n    const duration = (Date.now() - start) / 1000;\n    httpRequestDuration\n      .labels(req.method, req.route?.path || 'unknown', res.statusCode)\n      .observe(duration);\n  });\n  next();\n});" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Prometheus et métriques",
+              "position": 1,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Collecte et stockage des métriques" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Prometheus est un système de monitoring open-source qui collecte des métriques via pull (scraping) et les stocke dans une base de données temporelle." }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Types de métriques Prometheus" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Counter" }, { "type": "text", "text": " : valeur qui ne fait qu'augmenter (nombre de requêtes total)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Gauge" }, { "type": "text", "text": " : valeur qui monte et descend (CPU usage, queue length)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Histogram" }, { "type": "text", "text": " : distribution de valeurs (latence, taille de réponse)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Summary" }, { "type": "text", "text": " : similaire à Histogram mais avec quantiles calculés côté client" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// Exporter les métriques\nconst register = new promClient.Registry();\nregister.setDefaultLabels({ app: 'api' });\n\n// Endpoint /metrics\napp.get('/metrics', async (req, res) => {\n  res.set('Content-Type', register.contentType);\n  res.end(await register.metrics());\n});\n\n// Exemple de métriques\nconst httpRequestsTotal = new promClient.Counter({\n  name: 'http_requests_total',\n  help: 'Total number of HTTP requests',\n  labelNames: ['method', 'status']\n});\n\nconst cpuUsage = new promClient.Gauge({\n  name: 'cpu_usage_percent',\n  help: 'CPU usage percentage'\n});\n\n// Mise à jour\nhttpRequestsTotal.inc({ method: 'GET', status: '200' });\ncpuUsage.set(process.cpuUsage().user / 1000000);" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Visualisation avec Grafana" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Grafana se connecte à Prometheus pour créer des dashboards visuels : graphiques de latence, taux d'erreur, throughput, etc." }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Alerting et SLO",
+              "position": 2,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Définir et surveiller les objectifs de service" }]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "SLO (Service Level Objective)" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Un SLO définit un objectif mesurable de performance ou de disponibilité. Exemples :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "99.9% des requêtes répondent en moins de 200ms (p99 < 200ms)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "99.95% de disponibilité (downtime < 4.38h/an)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Taux d'erreur < 0.1% (erreurs 5xx)" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Alerting avec Prometheus" }]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "yaml" },
+                    "content": [
+                      { "type": "text", "text": "# prometheus.yml - Règles d'alerte\ngroups:\n  - name: api_alerts\n    rules:\n      - alert: HighLatency\n        expr: histogram_quantile(0.99, http_request_duration_seconds_bucket) > 0.5\n        for: 5m\n        annotations:\n          summary: \"p99 latency > 500ms\"\n          description: \"API p99 latency is {{ $value }}s\"\n      \n      - alert: HighErrorRate\n        expr: rate(http_requests_total{status=~\"5..\"}[5m]) > 0.01\n        for: 2m\n        annotations:\n          summary: \"Error rate > 1%\"\n          description: \"Error rate is {{ $value }}\"\n      \n      - alert: ServiceDown\n        expr: up{job=\"api\"} == 0\n        for: 1m\n        annotations:\n          summary: \"API service is down\"" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Erreurs fréquentes" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Trop d'alertes (alert fatigue) : définir des seuils réalistes" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Alertes sans action claire : chaque alerte doit avoir un runbook" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Ignorer les métriques de saturation (CPU, mémoire)" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "exercise",
+          "title": "Identifier les goulets d'étranglement d'une API lente",
+          "position": 5,
+          "published": true,
+          "content": {
+            "instruction": "**Contexte :**\n\nVous êtes responsable performance d'une API de gestion de commandes en production. L'API subit des ralentissements importants lors des pics de trafic (Black Friday, promotions). Les utilisateurs se plaignent de temps de réponse > 2 secondes.\n\n**Données fournies :**\n\n```typescript\n// Endpoint problématique : GET /api/orders\nasync function getOrders(req: Request, res: Response) {\n  const { userId, status, page = 1, limit = 20 } = req.query;\n  \n  // Récupération des commandes\n  const orders = await db.orders.findMany({\n    where: { userId, status },\n    skip: (page - 1) * limit,\n    take: limit,\n    include: {\n      user: { include: { address: true } },\n      items: { include: { product: { include: { category: true } } } }\n    }\n  });\n  \n  // Enrichissement avec données externes\n  for (const order of orders) {\n    order.shippingInfo = await shippingService.getShipping(order.id);\n    order.paymentStatus = await paymentService.getStatus(order.id);\n  }\n  \n  res.json({ orders, total: orders.length });\n}\n\n// Métriques observées :\n// - Latence p95 : 2.5s\n// - Latence p99 : 5s\n// - Throughput : 50 req/s max\n// - CPU : 80-90%\n// - Mémoire : constante (pas de fuite)\n// - DB connections : 95% du pool utilisé\n```\n\n**Consignes :**\n\n1. Identifiez au moins 5 bottlenecks dans ce code\n2. Proposez des solutions concrètes pour chaque bottleneck\n3. Estimez l'impact attendu de chaque optimisation (gain de latence, throughput)\n4. Priorisez les optimisations selon leur impact/effort\n5. Proposez un plan d'action avec ordre d'implémentation\n\n**Livrables attendus :**\n\n- Document d'analyse des bottlenecks (format Markdown)\n- Tableau récapitulatif : Bottleneck → Solution → Impact estimé\n- Code optimisé pour l'endpoint (avec commentaires expliquant les changements)\n- Plan d'action priorisé avec justification",
+            "criteria": [
+              "Identification d'au moins 5 bottlenecks clairement expliqués (N+1 queries, pagination offset-based, appels synchrones, sur-chargement de données, etc.)",
+              "Solutions concrètes et implémentables pour chaque bottleneck avec justification technique",
+              "Estimation réaliste de l'impact de chaque optimisation (gain de latence, amélioration du throughput)",
+              "Priorisation cohérente basée sur l'impact/effort (quick wins vs optimisations long terme)",
+              "Code optimisé fonctionnel avec pagination cursor-based, eager loading, parallélisation, projection de champs",
+              "Plan d'action structuré avec ordre d'implémentation et justification des choix"
+            ],
+            "deliverables": [
+              "Document d'analyse des bottlenecks (format Markdown) avec explication détaillée de chaque problème",
+              "Tableau récapitulatif : Bottleneck → Solution → Impact estimé → Priorité",
+              "Code optimisé de l'endpoint avec commentaires expliquant chaque optimisation",
+              "Plan d'action priorisé avec ordre d'implémentation et justification technique"
+            ]
+          }
+        },
+        {
+          "type": "exercise",
+          "title": "Choisir les bonnes stratégies de cache selon le contexte",
+          "position": 6,
+          "published": true,
+          "content": {
+            "instruction": "**Objectif :** Choisir et justifier une stratégie de cache adaptée à différents contextes d'API.\n\n**Scénarios :**\n\n### Scénario 1 : API de catalogue produits e-commerce\n- 10 millions de produits\n- Données mises à jour 1x par jour (nuit)\n- Trafic : 10 000 req/s en pic\n- Besoin : latence < 100ms\n- Contraintes : cohérence acceptable avec délai de 1h\n\n### Scénario 2 : API de commandes utilisateur\n- Données spécifiques à chaque utilisateur\n- Mises à jour fréquentes (statut, paiement)\n- Trafic : 500 req/s\n- Besoin : latence < 200ms\n- Contraintes : cohérence stricte requise\n\n### Scénario 3 : API de calculs financiers\n- Calculs complexes (simulations, scoring)\n- Données d'entrée variables\n- Trafic : 100 req/s\n- Besoin : latence < 500ms acceptable\n- Contraintes : résultats doivent être exacts, pas de cache obsolète\n\n**Consignes :**\n\nPour chaque scénario :\n1. Identifiez le type de cache approprié (HTTP, Redis, application-level)\n2. Définissez la stratégie d'invalidation (TTL, explicite, versioning)\n3. Choisissez la granularité du cache (par produit, par utilisateur, par requête)\n4. Estimez le gain de performance attendu\n5. Identifiez les risques et limitations\n\n**Livrables attendus :**\n\n- Tableau comparatif des stratégies de cache pour les 3 scénarios\n- Schéma d'architecture pour chaque scénario (avec cache)\n- Code d'exemple implémentant la stratégie choisie pour au moins un scénario\n- Document de justification avec explication des compromis (cohérence vs performance)",
+            "criteria": [
+              "Choix de stratégie de cache adapté à chaque contexte avec justification claire (HTTP pour catalogue, Redis pour commandes, pas de cache pour calculs)",
+              "Stratégie d'invalidation cohérente avec les contraintes de chaque scénario (TTL long pour catalogue, invalidation explicite pour commandes)",
+              "Granularité de cache appropriée (cache global pour catalogue, cache par utilisateur pour commandes)",
+              "Estimation réaliste du gain de performance avec justification (réduction latence, augmentation throughput)",
+              "Identification des risques et limitations pour chaque stratégie (cohérence, mémoire, complexité)",
+              "Code d'exemple fonctionnel implémentant la stratégie avec commentaires expliquant les choix"
+            ],
+            "deliverables": [
+              "Tableau comparatif des stratégies de cache pour les 3 scénarios avec justification",
+              "Schéma d'architecture pour chaque scénario montrant l'emplacement du cache",
+              "Code d'exemple implémentant la stratégie de cache choisie pour au moins un scénario",
+              "Document de justification avec explication des compromis (cohérence vs performance, mémoire vs latence)"
+            ]
+          }
+        },
+        {
+          "type": "game",
+          "title": "Latency Hunter",
+          "position": 7,
+          "published": true,
+          "content": {
+            "description": "Jeu interactif pour identifier la cause principale de latence dans différents scénarios d'API."
+          },
+          "game_content": {
+            "gameType": "column-matching",
+            "description": "Associez chaque scénario de latence élevée à sa cause principale et à la solution appropriée",
+            "instructions": "Glissez chaque élément de la colonne de gauche vers les deux colonnes de droite correspondantes. Vous pouvez réessayer jusqu'à obtenir toutes les bonnes associations.",
+            "leftColumn": [
+              "API retourne 5s pour lister 10 000 commandes",
+              "Requête DB prend 800ms pour récupérer un produit",
+              "Appel API externe bloque toutes les requêtes",
+              "Latence p95 = 2s mais p50 = 50ms",
+              "Temps de réponse augmente linéairement avec le nombre de requêtes"
+            ],
+            "rightColumn": [
+              "Cause principale",
+              "Solution appropriée",
+              "Pagination offset-based sur grande table",
+              "Pagination cursor-based avec index",
+              "Requête N+1 ou absence d'index",
+              "Eager loading et index sur colonnes filtrées",
+              "Pas de circuit breaker ni timeout",
+              "Circuit breaker + timeout + fallback",
+              "Quelques requêtes lentes (outliers)",
+              "Optimisation des requêtes lentes (profiling)",
+              "Saturation CPU/mémoire ou queue pleine",
+              "Scaling horizontal + load balancing"
+            ],
+            "correctMatches": [
+              { "left": 0, "right": 2 },
+              { "left": 0, "right": 3 },
+              { "left": 1, "right": 4 },
+              { "left": 1, "right": 5 },
+              { "left": 2, "right": 6 },
+              { "left": 2, "right": 7 },
+              { "left": 3, "right": 8 },
+              { "left": 3, "right": 9 },
+              { "left": 4, "right": 10 },
+              { "left": 4, "right": 11 }
+            ]
+          }
+        },
+        {
+          "type": "game",
+          "title": "Cache Master",
+          "position": 8,
+          "published": true,
+          "content": {
+            "description": "Jeu interactif pour choisir la bonne stratégie de cache selon le contexte."
+          },
+          "game_content": {
+            "gameType": "column-matching",
+            "description": "Associez chaque type de données à la stratégie de cache appropriée et à la méthode d'invalidation",
+            "instructions": "Glissez chaque élément de la colonne de gauche vers les deux colonnes de droite correspondantes. Vous pouvez réessayer jusqu'à obtenir toutes les bonnes associations.",
+            "leftColumn": [
+              "Catalogue produits (mise à jour quotidienne)",
+              "Commandes utilisateur (mises à jour fréquentes)",
+              "Résultats de calculs complexes",
+              "Données de session utilisateur",
+              "Listes publiques (actualités, articles)"
+            ],
+            "rightColumn": [
+              "Stratégie de cache",
+              "Méthode d'invalidation",
+              "Cache HTTP avec TTL long (24h)",
+              "Invalidation par TTL + purge manuelle",
+              "Cache Redis avec invalidation explicite",
+              "Invalidation à chaque mise à jour",
+              "Pas de cache (données variables)",
+              "N/A (pas de cache)",
+              "Cache Redis avec TTL court (5-15min)",
+              "Expiration automatique par TTL",
+              "Cache HTTP avec TTL moyen (1h)",
+              "Invalidation par TTL + ETag"
+            ],
+            "correctMatches": [
+              { "left": 0, "right": 2 },
+              { "left": 0, "right": 3 },
+              { "left": 1, "right": 4 },
+              { "left": 1, "right": 5 },
+              { "left": 2, "right": 6 },
+              { "left": 2, "right": 7 },
+              { "left": 3, "right": 8 },
+              { "left": 3, "right": 9 },
+              { "left": 4, "right": 10 },
+              { "left": 4, "right": 11 }
+            ]
+          }
+        },
+        {
+          "type": "tp",
+          "title": "TP – Mise à l'échelle d'une API sous charge",
+          "position": 9,
+          "published": true,
+          "content": {
+            "instruction": "**Contexte :**\n\nVous êtes architecte backend d'une startup e-commerce. L'API de gestion de produits et commandes est exposée à un fort trafic avec des pics imprévisibles (promotions flash, événements médiatiques). L'API doit respecter un SLA strict : p95 latence < 200ms, disponibilité 99.9%.\n\n**API existante :**\n\n```typescript\n// Endpoints principaux\nGET    /api/v1/products           // Liste produits (pagination)\nGET    /api/v1/products/:id       // Détail produit\nPOST   /api/v1/orders             // Créer commande\nGET    /api/v1/orders/:id         // Détail commande\nGET    /api/v1/orders             // Liste commandes utilisateur\n\n// Problèmes actuels :\n// - Latence p95 : 800ms (objectif : 200ms)\n// - Throughput max : 200 req/s (besoin : 2000 req/s)\n// - Pics de trafic provoquent des timeouts\n// - Pas de monitoring opérationnel\n// - Base de données surchargée lors des pics\n```\n\n**Objectifs :**\n\n1. Optimiser l'API pour supporter 2000 req/s avec latence p95 < 200ms\n2. Implémenter une stratégie de cache efficace\n3. Mettre en place la résilience (rate limiting, circuit breakers)\n4. Configurer le monitoring avec métriques et alertes\n5. Documenter les choix d'architecture et justifier les optimisations\n\n**Contraintes techniques :**\n\n- Stack : Node.js/Express, PostgreSQL, Redis disponible\n- Budget limité : privilégier l'optimisation logicielle avant le scaling horizontal\n- Pas de changement de stack autorisé\n- Compatibilité ascendante requise (pas de breaking changes)\n\n**Livrables attendus :**\n\n- Code optimisé de l'API avec toutes les optimisations (pagination cursor-based, cache, rate limiting, etc.)\n- Configuration Redis pour le cache avec stratégie d'invalidation\n- Middleware de rate limiting et circuit breakers\n- Configuration Prometheus avec métriques clés (latence, throughput, erreurs)\n- Règles d'alerting Prometheus pour SLO\n- Rapport de performance avec métriques avant/après optimisation\n- Dashboards Grafana (ou équivalent) pour visualiser les métriques\n- Plan de montée en charge avec stratégie de scaling\n- Documentation d'architecture expliquant les choix et compromis",
+            "criteria": [
+              "Pagination cursor-based implémentée pour tous les endpoints de liste avec performance O(log n) vérifiée",
+              "Stratégie de cache efficace (Redis) avec invalidation appropriée, gain de latence mesuré > 70% pour données en cache",
+              "Rate limiting configuré et fonctionnel (distribué avec Redis), protection contre les pics de trafic validée",
+              "Circuit breakers implémentés pour les appels externes avec fallback, résistance aux défaillances validée",
+              "Monitoring opérationnel avec Prometheus : métriques de latence (p50, p95, p99), throughput, erreurs, collectées et exposées",
+              "Règles d'alerting Prometheus configurées pour SLO (p95 < 200ms, erreur rate < 0.1%), tests d'alerte validés",
+              "Rapport de performance avec métriques avant/après (latence, throughput, utilisation CPU/mémoire), objectifs SLA atteints",
+              "Code optimisé fonctionnel avec commentaires expliquant les optimisations, tests de charge validant les objectifs",
+              "Documentation d'architecture complète expliquant les choix techniques, compromis, et stratégie de scaling"
+            ],
+            "deliverables": [
+              "Repository Git avec code optimisé de l'API (structure claire, README avec instructions de déploiement)",
+              "Configuration Redis pour cache avec stratégie d'invalidation documentée",
+              "Middleware de rate limiting et circuit breakers avec configuration et tests",
+              "Configuration Prometheus complète (métriques, règles d'alerting) avec documentation",
+              "Rapport de performance (format PDF ou Markdown) avec métriques avant/après, analyse des résultats, validation des objectifs SLA",
+              "Dashboards Grafana (ou fichiers JSON d'export) pour visualiser les métriques clés",
+              "Plan de montée en charge documenté avec stratégie de scaling (vertical puis horizontal), seuils de déclenchement",
+              "Documentation d'architecture (format Markdown) expliquant les choix techniques, compromis, limitations, et roadmap d'amélioration"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
+

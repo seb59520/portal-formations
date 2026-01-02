@@ -2,6 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Optimisation des performances de scroll */
+* {
+  /* Améliorer les performances de scroll sur mobile */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optimiser les conteneurs avec scroll */
+.overflow-y-auto,
+.overflow-x-auto,
+.overflow-auto {
+  /* Améliorer les performances de scroll */
+  will-change: scroll-position;
+  /* Utiliser l'accélération matérielle */
+  transform: translateZ(0);
+}
+
+/* Forcer la largeur complète pour le mode cours */
+html, body, #root {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden;
+}
+
+/* S'assurer que CourseView utilise toute la largeur */
+.course-view-container {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 @layer components {
   .btn-primary {
     @apply bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors;
@@ -26,14 +55,91 @@
 
 /* Styles pour les vidéos YouTube */
 .youtube-video-container {
-  @apply my-4 mx-auto;
+  @apply my-6 mx-auto;
   position: relative;
   padding-bottom: 56.25%; /* Ratio 16:9 */
   height: 0;
   overflow: hidden;
   max-width: 100%;
+  max-height: calc(100vh - 200px);
+  width: 100%;
   background: #000;
   border-radius: 8px;
+}
+
+/* Tailles de widgets en mode normal */
+.prose .widget-size-1,
+.prose .youtube-video-container.widget-size-1,
+.prose .tiptap-carousel.widget-size-1 {
+  max-width: 40% !important;
+}
+
+.prose .widget-size-2,
+.prose .youtube-video-container.widget-size-2,
+.prose .tiptap-carousel.widget-size-2 {
+  max-width: 70% !important;
+}
+
+.prose .widget-size-3,
+.prose .youtube-video-container.widget-size-3,
+.prose .tiptap-carousel.widget-size-3 {
+  max-width: 85% !important;
+}
+
+.prose .widget-size-4,
+.prose .youtube-video-container.widget-size-4,
+.prose .tiptap-carousel.widget-size-4 {
+  max-width: 95% !important;
+}
+
+/* Rendre les widgets cliquables en mode édition */
+.prose .youtube-video-container[data-youtube-video="true"] {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.prose .youtube-video-container[data-youtube-video="true"]:hover {
+  opacity: 0.9;
+}
+
+.prose img[data-size] {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.prose img[data-size]:hover {
+  opacity: 0.9;
+}
+
+/* Rendre les carrousels cliquables en mode édition */
+.prose .tiptap-carousel[data-carousel="true"] {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.prose .tiptap-carousel[data-carousel="true"]:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 1024px) {
+  .youtube-video-container {
+    max-height: calc(100vh - 150px);
+  }
+}
+
+/* Vidéos plus grandes sur les grands écrans */
+@media (min-width: 1024px) {
+  .youtube-video-container {
+    max-width: 90%;
+    max-height: calc(100vh - 200px);
+  }
+}
+
+@media (min-width: 1280px) {
+  .youtube-video-container {
+    max-width: 85%;
+    max-height: calc(100vh - 200px);
+  }
 }
 
 .youtube-video-container iframe {
@@ -51,5 +157,1426 @@
 
 /* Responsive pour les vidéos YouTube dans l'éditeur */
 .prose .youtube-video-container {
-  @apply my-6;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+/* Améliorer l'affichage du contenu prose sur grands écrans */
+.prose {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* Élargir les conteneurs de cours pour utiliser plus d'espace */
+.rich-text-editor-content .prose {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* Assurer une cohérence de style entre l'éditeur et le mode cours */
+.item-renderer .prose,
+.course-renderer .prose,
+.prose.prose-sm,
+.prose.lg\:prose-lg,
+.prose.xl\:prose-2xl {
+  max-width: 100% !important;
+  width: 100% !important;
+  font-size: 1rem !important;
+  line-height: 1.75 !important;
+}
+
+/* Styles cohérents pour les titres */
+.item-renderer .prose h1,
+.course-renderer .prose h1 {
+  font-size: 2.25em !important;
+  margin-top: 0 !important;
+  margin-bottom: 0.8888889em !important;
+  line-height: 1.1111111 !important;
+}
+
+.item-renderer .prose h2,
+.course-renderer .prose h2 {
+  font-size: 1.5em !important;
+  margin-top: 2em !important;
+  margin-bottom: 1em !important;
+  line-height: 1.3333333 !important;
+  padding-bottom: 0.5em !important;
+  border-bottom: 2px solid #3B82F6 !important;
+}
+
+.item-renderer .prose h3,
+.course-renderer .prose h3 {
+  font-size: 1.25em !important;
+  margin-top: 1.6em !important;
+  margin-bottom: 0.6em !important;
+  line-height: 1.6 !important;
+  padding-bottom: 0.4em !important;
+  border-bottom: 2px solid #3B82F6 !important;
+}
+
+.item-renderer .prose h4,
+.course-renderer .prose h4 {
+  padding-bottom: 0.3em !important;
+  border-bottom: 1px solid #3B82F6 !important;
+}
+
+.item-renderer .prose h5,
+.course-renderer .prose h5 {
+  padding-bottom: 0.3em !important;
+  border-bottom: 1px solid #3B82F6 !important;
+}
+
+.item-renderer .prose h6,
+.course-renderer .prose h6 {
+  padding-bottom: 0.3em !important;
+  border-bottom: 1px solid #3B82F6 !important;
+}
+
+.item-renderer .prose p,
+.course-renderer .prose p {
+  margin-top: 1.25em !important;
+  margin-bottom: 1.25em !important;
+}
+
+.item-renderer .prose ul,
+.item-renderer .prose ol,
+.course-renderer .prose ul,
+.course-renderer .prose ol {
+  margin-top: 1.25em !important;
+  margin-bottom: 1.25em !important;
+  padding-left: 1.625em !important;
+}
+
+.item-renderer .prose li,
+.course-renderer .prose li {
+  margin-top: 0.5em !important;
+  margin-bottom: 0.5em !important;
+}
+
+.item-renderer .prose code,
+.course-renderer .prose code {
+  font-size: 0.875em !important;
+  font-weight: 400 !important;
+}
+
+.item-renderer .prose pre,
+.course-renderer .prose pre {
+  font-size: 0.875em !important;
+  line-height: 1.7142857 !important;
+  margin-top: 1.7142857em !important;
+  margin-bottom: 1.7142857em !important;
+  border-radius: 0.375rem !important;
+  padding-top: 0.8571429em !important;
+  padding-right: 1.1428571em !important;
+  padding-bottom: 0.8571429em !important;
+  padding-left: 1.1428571em !important;
+}
+
+.item-renderer .prose blockquote,
+.course-renderer .prose blockquote {
+  font-weight: 500 !important;
+  font-style: italic !important;
+  color: #1f2937 !important;
+  border-left-width: 0.25rem !important;
+  border-left-color: #e5e7eb !important;
+  quotes: "\201C""\201D""\2018""\2019" !important;
+  margin-top: 1.6em !important;
+  margin-bottom: 1.6em !important;
+  padding-left: 1em !important;
+}
+
+.item-renderer .prose table,
+.course-renderer .prose table {
+  width: 100% !important;
+  table-layout: auto !important;
+  text-align: left !important;
+  margin-top: 2em !important;
+  margin-bottom: 2em !important;
+  font-size: 0.875em !important;
+  line-height: 1.7142857 !important;
+}
+
+/* Styles pour le mode présentation des chapitres */
+.prose-invert {
+  color: white;
+}
+
+.prose-invert h1,
+.prose-invert h2,
+.prose-invert h3,
+.prose-invert h4,
+.prose-invert h5,
+.prose-invert h6 {
+  color: white;
+}
+
+.prose-invert p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.prose-invert strong {
+  color: white;
+  font-weight: 700;
+}
+
+.prose-invert a {
+  color: #60a5fa;
+}
+
+.prose-invert a:hover {
+  color: #93c5fd;
+}
+
+.prose-invert ul,
+.prose-invert ol {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.prose-invert li {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.prose-invert code {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+.prose-invert pre {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.prose-invert blockquote {
+  border-left-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.prose-invert table {
+  color: white;
+}
+
+.prose-invert th {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.prose-invert td {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Vidéos YouTube en mode présentation */
+.prose-invert .youtube-video-container {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Styles spécifiques pour le mode présentation des chapitres */
+.chapter-presentation-content {
+  background: transparent !important;
+  width: 100% !important;
+}
+
+.chapter-presentation-content > div {
+  background: transparent !important;
+  border: none !important;
+  width: 100% !important;
+}
+
+.chapter-presentation-content .border {
+  border: none !important;
+}
+
+.chapter-presentation-content .bg-white {
+  background: transparent !important;
+}
+
+.chapter-presentation-content .ProseMirror {
+  background: transparent !important;
+  color: white !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+}
+
+/* Forcer la taille du texte dans le mode présentation */
+.presentation-text {
+  font-size: var(--text-size) !important;
+}
+
+.presentation-text .ProseMirror,
+.presentation-text .ProseMirror *,
+.presentation-text .ProseMirror p,
+.presentation-text .ProseMirror li,
+.presentation-text .ProseMirror span,
+.presentation-text .ProseMirror div,
+.presentation-text .ProseMirror h1,
+.presentation-text .ProseMirror h2,
+.presentation-text .ProseMirror h3,
+.presentation-text .ProseMirror h4,
+.presentation-text .ProseMirror h5,
+.presentation-text .ProseMirror h6 {
+  font-size: inherit !important;
+}
+
+/* Forcer la taille du titre */
+.presentation-title {
+  font-size: calc(var(--title-size) * clamp(1.5rem, 4vw, 3.75rem)) !important;
+}
+
+.chapter-presentation-content .ProseMirror p {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.chapter-presentation-content .ProseMirror h1,
+.chapter-presentation-content .ProseMirror h2,
+.chapter-presentation-content .ProseMirror h3,
+.chapter-presentation-content .ProseMirror h4,
+.chapter-presentation-content .ProseMirror h5,
+.chapter-presentation-content .ProseMirror h6 {
+  color: white !important;
+}
+
+.chapter-presentation-content .ProseMirror strong {
+  color: white !important;
+  font-weight: 700;
+}
+
+.chapter-presentation-content .ProseMirror em {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.chapter-presentation-content .ProseMirror ul,
+.chapter-presentation-content .ProseMirror ol {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.chapter-presentation-content .ProseMirror li {
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.chapter-presentation-content .ProseMirror a {
+  color: #60a5fa !important;
+  text-decoration: underline;
+}
+
+.chapter-presentation-content .ProseMirror a:hover {
+  color: #93c5fd !important;
+}
+
+.chapter-presentation-content .ProseMirror code {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+.chapter-presentation-content .ProseMirror pre {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.chapter-presentation-content .ProseMirror pre code {
+  background-color: transparent !important;
+}
+
+.chapter-presentation-content .ProseMirror blockquote {
+  border-left-color: rgba(255, 255, 255, 0.3) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.chapter-presentation-content .ProseMirror table {
+  color: white !important;
+}
+
+.chapter-presentation-content .ProseMirror th {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.chapter-presentation-content .ProseMirror td {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.chapter-presentation-content .ProseMirror img {
+  opacity: 0.95;
+}
+
+.chapter-presentation-content .youtube-video-container {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Forcer tous les éléments à être transparents dans le mode présentation */
+.chapter-presentation-content * {
+  background-color: transparent !important;
+}
+
+.chapter-presentation-content .ProseMirror,
+.chapter-presentation-content .ProseMirror * {
+  background-color: transparent !important;
+}
+
+/* Exception pour les éléments qui doivent avoir un fond (code, pre, etc.) */
+.chapter-presentation-content .ProseMirror code {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.chapter-presentation-content .ProseMirror pre {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.chapter-presentation-content .ProseMirror th {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Tableaux adaptés à l'écran en mode présentation */
+.chapter-presentation-content .ProseMirror table {
+  max-width: min(95%, 90vw) !important;
+  width: 100% !important;
+  margin: 1rem auto !important;
+  font-size: 1.25rem !important;
+  overflow-x: auto !important;
+  display: block !important;
+}
+
+.chapter-presentation-content .ProseMirror table thead,
+.chapter-presentation-content .ProseMirror table tbody {
+  display: table !important;
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .chapter-presentation-content .ProseMirror table {
+    max-width: 98% !important;
+    font-size: 1rem !important;
+  }
+}
+
+/* Taille de texte adaptée pour le mode présentation */
+.chapter-presentation-content .ProseMirror p {
+  font-size: 1.25rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 1rem !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.chapter-presentation-content .ProseMirror h1 {
+  font-size: 2rem !important;
+  line-height: 1.2 !important;
+  margin-bottom: 1.5rem !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.chapter-presentation-content .ProseMirror h2 {
+  font-size: 1.75rem !important;
+  line-height: 1.3 !important;
+  margin-bottom: 1.25rem !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.chapter-presentation-content .ProseMirror h3 {
+  font-size: 1.5rem !important;
+  line-height: 1.4 !important;
+  margin-bottom: 1rem !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.chapter-presentation-content .ProseMirror ul,
+.chapter-presentation-content .ProseMirror ol {
+  font-size: 1.25rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 1rem !important;
+}
+
+.chapter-presentation-content .ProseMirror li {
+  font-size: 1.25rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 0.5rem !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Images adaptées à l'écran en mode présentation */
+.chapter-presentation-content .ProseMirror img {
+  width: auto !important;
+  height: auto !important;
+  margin: 1.5rem auto !important;
+  object-fit: contain !important;
+  display: block !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Adaptation responsive des images */
+@media (max-width: 768px) {
+  .chapter-presentation-content .ProseMirror img {
+    max-width: 95% !important;
+    max-height: min(calc(100vh - 18rem), 45vh) !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .chapter-presentation-content .ProseMirror img {
+    max-width: 70% !important;
+    max-height: min(calc(100vh - 22rem), 55vh) !important;
+  }
+}
+
+/* Système de tailles pour les widgets en mode présentation */
+/* Taille 1 - Petite */
+.chapter-presentation-content .widget-size-1,
+.chapter-presentation-content .youtube-video-container.widget-size-1,
+.chapter-presentation-content .ProseMirror img.widget-size-1 {
+  max-width: min(50%, 45vw) !important;
+  max-height: min(calc(100vh - 22rem), 30vh) !important;
+}
+
+/* Taille 2 - Moyenne (par défaut) */
+.chapter-presentation-content .widget-size-2,
+.chapter-presentation-content .youtube-video-container.widget-size-2,
+.chapter-presentation-content .ProseMirror img.widget-size-2 {
+  max-width: min(70%, 65vw) !important;
+  max-height: min(calc(100vh - 20rem), 45vh) !important;
+}
+
+/* Taille 3 - Grande */
+.chapter-presentation-content .widget-size-3,
+.chapter-presentation-content .youtube-video-container.widget-size-3,
+.chapter-presentation-content .ProseMirror img.widget-size-3 {
+  max-width: min(85%, 80vw) !important;
+  max-height: min(calc(100vh - 18rem), 60vh) !important;
+}
+
+/* Taille 4 - Très grande */
+.chapter-presentation-content .widget-size-4,
+.chapter-presentation-content .youtube-video-container.widget-size-4,
+.chapter-presentation-content .ProseMirror img.widget-size-4 {
+  max-width: min(95%, 90vw) !important;
+  max-height: min(calc(100vh - 16rem), 75vh) !important;
+}
+
+/* Vidéos YouTube adaptées à l'écran en mode présentation */
+.chapter-presentation-content .youtube-video-container {
+  width: 100% !important;
+  margin: 1.5rem auto !important;
+  aspect-ratio: 16/9 !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+  position: relative !important;
+}
+
+.chapter-presentation-content .youtube-video-container iframe {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0.5rem !important;
+  border: none !important;
+}
+
+/* Adaptation responsive des vidéos */
+@media (max-width: 768px) {
+  .chapter-presentation-content .youtube-video-container {
+    max-width: 95% !important;
+    max-height: min(calc(100vh - 18rem), 45vh) !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .chapter-presentation-content .youtube-video-container {
+    max-width: 70% !important;
+    max-height: min(calc(100vh - 22rem), 55vh) !important;
+  }
+}
+
+/* Carrousels adaptés à l'écran en mode présentation avec tailles */
+.chapter-presentation-content .tiptap-carousel {
+  margin: 1.5rem auto !important;
+  width: 100% !important;
+}
+
+.chapter-presentation-content .carousel-container {
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+
+.chapter-presentation-content .carousel-item {
+  width: 100% !important;
+}
+
+.chapter-presentation-content .carousel-item-image {
+  width: 100% !important;
+}
+
+.chapter-presentation-content .carousel-item-image img {
+  max-width: 100% !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+.chapter-presentation-content .carousel-item-video {
+  max-width: 100% !important;
+  aspect-ratio: 16/9 !important;
+}
+
+.chapter-presentation-content .carousel-item-video iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+}
+
+/* Tailles de carrousels en mode présentation */
+.chapter-presentation-content .tiptap-carousel.widget-size-1 .carousel-container {
+  max-width: min(50%, 45vw) !important;
+  max-height: min(calc(100vh - 22rem), 30vh) !important;
+}
+
+.chapter-presentation-content .tiptap-carousel.widget-size-2 .carousel-container {
+  max-width: min(70%, 65vw) !important;
+  max-height: min(calc(100vh - 20rem), 45vh) !important;
+}
+
+.chapter-presentation-content .tiptap-carousel.widget-size-3 .carousel-container {
+  max-width: min(85%, 80vw) !important;
+  max-height: min(calc(100vh - 18rem), 60vh) !important;
+}
+
+.chapter-presentation-content .tiptap-carousel.widget-size-4 .carousel-container {
+  max-width: min(95%, 90vw) !important;
+  max-height: min(calc(100vh - 16rem), 75vh) !important;
+}
+
+/* Adaptation responsive des carrousels */
+@media (max-width: 768px) {
+  .chapter-presentation-content .tiptap-carousel.widget-size-1 .carousel-container {
+    max-width: 95% !important;
+    max-height: min(calc(100vh - 20rem), 25vh) !important;
+  }
+  
+  .chapter-presentation-content .tiptap-carousel.widget-size-2 .carousel-container {
+    max-width: 95% !important;
+    max-height: min(calc(100vh - 18rem), 40vh) !important;
+  }
+  
+  .chapter-presentation-content .tiptap-carousel.widget-size-3 .carousel-container {
+    max-width: 95% !important;
+    max-height: min(calc(100vh - 16rem), 50vh) !important;
+  }
+  
+  .chapter-presentation-content .tiptap-carousel.widget-size-4 .carousel-container {
+    max-width: 98% !important;
+    max-height: min(calc(100vh - 14rem), 60vh) !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .chapter-presentation-content .tiptap-carousel.widget-size-1 .carousel-container {
+    max-width: 45% !important;
+    max-height: min(calc(100vh - 24rem), 35vh) !important;
+  }
+  
+  .chapter-presentation-content .tiptap-carousel.widget-size-2 .carousel-container {
+    max-width: 65% !important;
+    max-height: min(calc(100vh - 22rem), 50vh) !important;
+  }
+  
+  .chapter-presentation-content .tiptap-carousel.widget-size-3 .carousel-container {
+    max-width: 80% !important;
+    max-height: min(calc(100vh - 20rem), 65vh) !important;
+  }
+  
+  .chapter-presentation-content .tiptap-carousel.widget-size-4 .carousel-container {
+    max-width: 90% !important;
+    max-height: min(calc(100vh - 18rem), 80vh) !important;
+  }
+}
+
+/* Mise en évidence du titre du chapitre */
+.chapter-title-highlight {
+  color: #ffffff !important;
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.8),
+    0 0 40px rgba(255, 255, 255, 0.5),
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    0 8px 16px rgba(0, 0, 0, 0.2);
+  letter-spacing: -0.02em;
+  line-height: 1.1 !important;
+  position: relative;
+  padding: 1rem 0;
+  margin-bottom: 2rem !important;
+  display: block;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+.chapter-title-highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  border-radius: 1px;
+}
+
+.chapter-title-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive pour très grands écrans */
+@media (min-width: 1920px) {
+  .chapter-presentation-content .ProseMirror p {
+    font-size: 1.75rem !important;
+  }
+  
+  .chapter-presentation-content .ProseMirror h1 {
+    font-size: 3.5rem !important;
+  }
+  
+  .chapter-presentation-content .ProseMirror h2 {
+    font-size: 3rem !important;
+  }
+  
+  .chapter-presentation-content .ProseMirror h3 {
+    font-size: 2.5rem !important;
+  }
+  
+  .chapter-title-highlight {
+    font-size: 8rem !important;
+  }
+}
+
+.prose img {
+  max-width: 100%;
+  max-height: calc(100vh - 200px);
+  height: auto;
+  object-fit: contain;
+}
+
+.prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.prose code {
+  word-break: break-word;
+}
+
+/* Améliorer les tableaux sur grands écrans */
+.prose .tiptap-table {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+/* Styles pour les tableaux dans l'éditeur riche */
+.rich-text-editor-content .tiptap-table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  table-layout: fixed;
+  width: 100%;
+  overflow: hidden;
+}
+
+.rich-text-editor-content .tiptap-table td,
+.rich-text-editor-content .tiptap-table th {
+  min-width: 1em;
+  border: 1px solid #ced4da;
+  padding: 8px;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.rich-text-editor-content .tiptap-table th {
+  font-weight: bold;
+  text-align: left;
+  background-color: #f1f3f5;
+}
+
+.rich-text-editor-content .tiptap-table .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(200, 200, 255, 0.4);
+  pointer-events: none;
+}
+
+.rich-text-editor-content .tiptap-table .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -2px;
+  width: 4px;
+  background-color: #adf;
+  pointer-events: none;
+}
+
+.rich-text-editor-content .tiptap-table p {
+  margin: 0;
+}
+
+.rich-text-editor-content .ProseMirror {
+  outline: none;
+}
+
+.rich-text-editor-content .ProseMirror u {
+  text-decoration: underline;
+}
+
+/* Styles pour les tableaux dans le contenu rendu */
+.prose .tiptap-table {
+  border-collapse: collapse;
+  margin: 1rem 0;
+  table-layout: fixed;
+  width: 100%;
+  overflow: hidden;
+}
+
+.prose .tiptap-table td,
+.prose .tiptap-table th {
+  min-width: 1em;
+  border: 1px solid #ced4da;
+  padding: 8px;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.prose .tiptap-table th {
+  font-weight: bold;
+  text-align: left;
+  background-color: #f1f3f5;
+}
+
+.prose .tiptap-table p {
+  margin: 0;
+}
+
+/* Styles pour les blocs interactifs (mini-jeux/TP) */
+.interactive-block-placeholder {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 2px dashed #93c5fd;
+  border-radius: 0.5rem;
+  background-color: #eff6ff;
+  display: inline-block;
+  min-width: 200px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.interactive-block-placeholder:hover {
+  background-color: #dbeafe;
+  border-color: #60a5fa;
+}
+
+/* En mode lecture seule, rendre les blocs interactifs plus visibles et cliquables */
+.prose .interactive-block-placeholder {
+  cursor: pointer;
+}
+
+.prose .interactive-block-placeholder:not(.editable) {
+  cursor: pointer;
+}
+
+.interactive-block-content {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.interactive-block-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.interactive-block-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.interactive-block-description {
+  margin-bottom: 1rem;
+  color: #374151;
+}
+
+.interactive-block-note {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 0.25rem;
+}
+
+.interactive-block-loading {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: #f9fafb;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4b5563;
+}
+
+.interactive-block-error {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+/* Styles pour les carrousels - Design moderne et amélioré */
+.carousel-wrapper {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+/* Style pour les carrousels éditables */
+.carousel-editable {
+  position: relative;
+}
+
+.carousel-editable::before {
+  content: '✏️ Cliquez pour éditer';
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 30;
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.carousel-editable:hover::before {
+  opacity: 1;
+}
+
+.carousel-editable:hover {
+  outline: 2px dashed #3b82f6;
+  outline-offset: 2px;
+}
+
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  width: 100%;
+  min-height: 400px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease;
+}
+
+.carousel-container:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  height: 100%;
+}
+
+.carousel-item {
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 4rem 3rem 5.5rem; /* Padding gauche augmenté pour éviter la superposition avec le bouton (48px bouton + 16px marge + 24px espace) */
+  position: relative;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  box-sizing: border-box;
+}
+
+.carousel-item-content {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeInUp 0.5s ease-out;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.carousel-item-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.carousel-item-body {
+  color: #374151;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.carousel-item-body p {
+  margin-bottom: 1rem;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.carousel-item-body p:last-child {
+  margin-bottom: 0;
+}
+
+.carousel-item-image {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.carousel-item-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  max-height: calc(100vh - 200px);
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.carousel-item-image:hover img {
+  transform: scale(1.02);
+}
+
+.carousel-item-video {
+  width: 100%;
+  max-width: 100%;
+  max-height: calc(100vh - 200px);
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.carousel-item-video iframe {
+  width: 100%;
+  border-radius: 0.75rem;
+  aspect-ratio: 16 / 9;
+  max-height: calc(100vh - 200px);
+  min-height: 250px;
+  border: none;
+}
+
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  padding: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #374151;
+}
+
+.carousel-button:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  color: #2563eb;
+}
+
+.carousel-button:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-button:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.carousel-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: translateY(-50%);
+}
+
+.carousel-button-prev {
+  left: 1rem;
+}
+
+.carousel-button-next {
+  right: 1rem;
+}
+
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 2rem;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.carousel-indicator {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: #d1d5db;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+}
+
+.carousel-indicator:hover {
+  background-color: #9ca3af;
+  transform: scale(1.2);
+}
+
+.carousel-indicator.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 2.5rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px -1px rgba(102, 126, 234, 0.4), 0 2px 4px -1px rgba(102, 126, 234, 0.2);
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .carousel-container {
+    min-height: 300px;
+    border-radius: 0.75rem;
+  }
+
+  .carousel-item {
+    min-height: 300px;
+    padding: 2rem 2.5rem 2rem 3.5rem; /* Padding gauche augmenté sur mobile aussi */
+  }
+
+  .carousel-item-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .carousel-item-body {
+    font-size: 1rem;
+  }
+
+  .carousel-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .carousel-button-prev {
+    left: 0.5rem;
+  }
+
+  .carousel-button-next {
+    right: 0.5rem;
+  }
+
+  .carousel-item-video iframe {
+    min-height: 250px;
+  }
+
+  .carousel-item-image img {
+    max-height: calc(100vh - 150px);
+  }
+}
+
+/* Styles pour les carrousels dans le contenu rendu */
+.prose .carousel-wrapper {
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.prose .carousel-item-content {
+  max-width: none;
+}
+
+/* Compteur de slides */
+.carousel-counter {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 15;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.carousel-counter-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animation de chargement */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.carousel-loading {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0px,
+    #e0e0e0 40px,
+    #f0f0f0 80px
+  );
+  background-size: 1000px;
+  animation: shimmer 2s infinite;
+}
+
+/* Amélioration de l'affichage des titres dans les images/vidéos */
+.carousel-item-image .carousel-item-content,
+.carousel-item-video .carousel-item-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  padding: 2rem 1.5rem 1.5rem;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.carousel-item-image .carousel-item-title,
+.carousel-item-video .carousel-item-title {
+  color: white;
+  -webkit-text-fill-color: white;
+  background: none;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Amélioration responsive pour très petits écrans */
+@media (max-width: 640px) {
+  .carousel-counter {
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  .carousel-counter-text {
+    font-size: 0.75rem;
+  }
+
+  .carousel-indicators {
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .carousel-indicator {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  .carousel-indicator.active {
+    width: 1.5rem;
+  }
+}
+
+/* Styles pour les blocs HTML bruts */
+.html-block-wrapper {
+  @apply my-4 border border-gray-300 rounded-lg bg-white;
+  position: relative;
+  overflow: visible;
+  width: 100%;
+  max-width: 100%;
+}
+
+.html-block-content {
+  width: 100%;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  /* Réinitialiser les styles prose qui pourraient interférer */
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* S'assurer que le HTML dans le bloc est bien rendu */
+.html-block-content * {
+  max-width: 100%;
+}
+
+/* Styles pour les éléments HTML dans le bloc */
+.html-block-content h1,
+.html-block-content h2,
+.html-block-content h3 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.html-block-content ul,
+.html-block-content ol {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+.html-block-content code {
+  background-color: #f4f4f4;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+}
+
+.html-block-edit-btn {
+  @apply mt-2 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700 transition-colors;
+  border: none;
+  cursor: pointer;
+}
+
+.html-block-edit-btn:hover {
+  @apply bg-blue-700;
+}
+
+/* En mode lecture seule, masquer le bouton d'édition */
+.prose:not(.editable) .html-block-edit-btn,
+.course-renderer .html-block-edit-btn,
+.item-container .html-block-edit-btn,
+[contenteditable="false"] .html-block-edit-btn,
+[data-readonly] .html-block-edit-btn {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* S'assurer que le bouton est visible en mode édition (uniquement si l'éditeur est éditable) */
+.ProseMirror[contenteditable="true"]:not([data-readonly]) .html-block-wrapper .html-block-edit-btn,
+.ProseMirror[contenteditable="true"]:not([data-readonly]) .html-block-wrapper button[data-html-edit-btn="true"],
+.prose.editable .html-block-wrapper .html-block-edit-btn,
+.prose.editable .html-block-wrapper button[data-html-edit-btn="true"] {
+  display: block !important;
+  z-index: 10000 !important;
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin-top: 16px !important;
+  margin-bottom: 12px !important;
+}
+
+/* S'assurer que le wrapper HTML est visible */
+.html-block-wrapper {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+.html-block-wrapper[data-html-block="true"] {
+  border: 2px dashed #cbd5e1 !important;
+  padding: 16px !important;
+  background-color: #f8fafc !important;
 }

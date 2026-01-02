@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { supabase } from '../../lib/supabaseClient'
 import { Course, Module, Item } from '../../types/database'
-import { Save, Plus, Edit, Trash2, GripVertical } from 'lucide-react'
+import { Save, Plus, Edit, Trash2, GripVertical, ChevronUp, ChevronDown, Code } from 'lucide-react'
 
 interface ModuleWithItems extends Module {
   items: Item[]
@@ -29,6 +29,9 @@ export function AdminCourseEdit() {
   const [loading, setLoading] = useState(!isNew)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const [draggedItemId, setDraggedItemId] = useState<string | null>(null)
+  const [dragOverItemId, setDragOverItemId] = useState<string | null>(null)
+  const [draggedItemModuleId, setDraggedItemModuleId] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isNew && courseId) {
@@ -213,6 +216,7 @@ export function AdminCourseEdit() {
             .update({
               title: item.title,
               type: item.type,
+              module_id: item.module_id,
               position: item.position,
               published: item.published
             })
@@ -454,6 +458,203 @@ export function AdminCourseEdit() {
     }
   }
 
+  // Handlers pour le drag & drop des éléments
+  const handleItemDragStart = (e: React.DragEvent, moduleId: string, itemId: string) => {
+    // Ne pas permettre le drag si on clique sur un bouton ou un input
+    const target = e.target as HTMLElement
+    if (target.closest('button') || target.closest('input') || target.closest('a')) {
+      e.preventDefault()
+      return
+    }
+    
+    setDraggedItemId(itemId)
+    setDraggedItemModuleId(moduleId)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/html', JSON.stringify({ moduleId, itemId }))
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.style.opacity = '0.5'
+    }
+  }
+
+  const handleItemDragEnd = (e: React.DragEvent) => {
+    setDraggedItemId(null)
+    setDragOverItemId(null)
+    setDraggedItemModuleId(null)
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.style.opacity = '1'
+    }
+  }
+
+  const handleItemDragOver = (e: React.DragEvent, itemId: string) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    if (draggedItemId && draggedItemId !== itemId) {
+      setDragOverItemId(itemId)
+    }
+  }
+
+  const handleItemDragLeave = () => {
+    setDragOverItemId(null)
+  }
+
+  const handleItemDrop = async (e: React.DragEvent, targetModuleId: string, targetItemId: string) => {
+    e.preventDefault()
+    setDragOverItemId(null)
+
+    if (!draggedItemId || !draggedItemModuleId) return
+
+    const sourceModuleId = draggedItemModuleId
+    const sourceItemId = draggedItemId
+
+    // Si c'est le même élément, ne rien faire
+    if (sourceModuleId === targetModuleId && sourceItemId === targetItemId) {
+      setDraggedItemId(null)
+      setDraggedItemModuleId(null)
+      return
+    }
+
+    // Trouver les modules source et cible
+    const sourceModule = modules.find(m => m.id === sourceModuleId)
+    const targetModule = modules.find(m => m.id === targetModuleId)
+
+    if (!sourceModule || !targetModule) return
+
+    // Trouver l'élément source
+    const sourceItem = sourceModule.items.find(item => item.id === sourceItemId)
+    if (!sourceItem) return
+
+    // Trouver l'index de l'élément cible
+    const targetIndex = targetModule.items.findIndex(item => item.id === targetItemId)
+    if (targetIndex === -1) return
+
+    // Créer les nouveaux tableaux d'éléments
+    let newSourceItems = [...sourceModule.items]
+    let newTargetItems = [...targetModule.items]
+
+    // Retirer l'élément source de son module
+    const sourceIndex = newSourceItems.findIndex(item => item.id === sourceItemId)
+    if (sourceIndex !== -1) {
+      newSourceItems.splice(sourceIndex, 1)
+    }
+
+    // Insérer l'élément à la nouvelle position
+    const updatedItem = {
+      ...sourceItem,
+      module_id: targetModuleId,
+      position: targetIndex
+    }
+    newTargetItems.splice(targetIndex, 0, updatedItem)
+
+    // Mettre à jour les positions de tous les éléments dans les deux modules
+    newSourceItems = newSourceItems.map((item, index) => ({
+      ...item,
+      position: index
+    }))
+    newTargetItems = newTargetItems.map((item, index) => ({
+      ...item,
+      position: index
+    }))
+
+    // Mettre à jour l'état
+    setModules(modules.map(module => {
+      if (module.id === sourceModuleId) {
+        return { ...module, items: newSourceItems }
+      }
+      if (module.id === targetModuleId) {
+        return { ...module, items: newTargetItems }
+      }
+      return module
+    }))
+
+    // Sauvegarder les nouvelles positions dans la base de données
+    try {
+      // Si l'élément existe déjà dans la base de données, mettre à jour sa position et son module
+      if (!sourceItemId.startsWith('temp-')) {
+        await supabase
+          .from('items')
+          .update({
+            module_id: targetModuleId,
+            position: targetIndex
+          })
+          .eq('id', sourceItemId)
+
+        // Mettre à jour les positions des autres éléments dans le module source
+        const sourceUpdatePromises = newSourceItems
+          .filter(item => !item.id.startsWith('temp-'))
+          .map((item, index) =>
+            supabase
+              .from('items')
+              .update({ position: index })
+              .eq('id', item.id)
+          )
+
+        // Mettre à jour les positions des autres éléments dans le module cible
+        const targetUpdatePromises = newTargetItems
+          .filter(item => !item.id.startsWith('temp-') && item.id !== sourceItemId)
+          .map((item, index) =>
+            supabase
+              .from('items')
+              .update({ position: index })
+              .eq('id', item.id)
+          )
+
+        await Promise.all([...sourceUpdatePromises, ...targetUpdatePromises])
+      }
+    } catch (error) {
+      console.error('Error updating item positions:', error)
+      setError('Erreur lors de la mise à jour des positions.')
+    }
+
+    setDraggedItemId(null)
+    setDraggedItemModuleId(null)
+  }
+
+  // Fonction pour déplacer un élément vers le haut ou le bas
+  const moveItem = async (moduleId: string, itemId: string, direction: 'up' | 'down') => {
+    const module = modules.find(m => m.id === moduleId)
+    if (!module) return
+
+    const index = module.items.findIndex(item => item.id === itemId)
+    if (index === -1) return
+
+    const newIndex = direction === 'up' ? index - 1 : index + 1
+    if (newIndex < 0 || newIndex >= module.items.length) return
+
+    // Créer une copie des éléments
+    const updatedItems = [...module.items]
+    const [moved] = updatedItems.splice(index, 1)
+    updatedItems.splice(newIndex, 0, moved)
+
+    // Mettre à jour les positions
+    updatedItems.forEach((item, i) => {
+      item.position = i
+    })
+
+    // Mettre à jour l'état
+    setModules(modules.map(m =>
+      m.id === moduleId
+        ? { ...m, items: updatedItems }
+        : m
+    ))
+
+    // Sauvegarder les nouvelles positions dans la base de données
+    try {
+      const updatePromises = updatedItems
+        .filter(item => !item.id.startsWith('temp-'))
+        .map((item, index) =>
+          supabase
+            .from('items')
+            .update({ position: index })
+            .eq('id', item.id)
+        )
+
+      await Promise.all(updatePromises)
+    } catch (error) {
+      console.error('Error updating item positions:', error)
+      setError('Erreur lors de la mise à jour des positions.')
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -627,13 +828,13 @@ export function AdminCourseEdit() {
                 {modules.map((module, moduleIndex) => (
                   <div key={module.id} className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2">
-                        <GripVertical className="w-5 h-5 text-gray-400" />
+                      <div className="flex items-center space-x-2 flex-1 min-w-0">
+                        <GripVertical className="w-5 h-5 text-gray-400 flex-shrink-0" />
                         <input
                           type="text"
                           value={module.title}
                           onChange={(e) => updateModule(module.id, { title: e.target.value })}
-                          className="text-lg font-medium text-gray-900 bg-transparent border-none focus:outline-none focus:ring-0"
+                          className="text-lg font-medium text-gray-900 bg-transparent border-none focus:outline-none focus:ring-0 flex-1 min-w-0 w-full"
                           placeholder="Titre du module"
                         />
                       </div>
@@ -659,56 +860,180 @@ export function AdminCourseEdit() {
                       </p>
                     ) : (
                       <div className="space-y-3 ml-7">
-                        {module.items.map((item) => (
-                          <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded">
-                            <div className="flex items-center space-x-3 flex-1 min-w-0">
-                              <span className={`w-3 h-3 rounded-full flex-shrink-0 ${
-                                item.type === 'resource' ? 'bg-blue-500' :
-                                item.type === 'slide' ? 'bg-green-500' :
-                                item.type === 'exercise' ? 'bg-yellow-500' :
-                                item.type === 'tp' ? 'bg-purple-500' :
-                                'bg-red-500'
-                              }`} />
-                              <input
-                                type="text"
-                                value={item.title}
-                                onChange={(e) => updateItem(module.id, item.id, { title: e.target.value })}
-                                className="text-sm font-medium text-gray-900 bg-transparent border-none focus:outline-none focus:ring-0 flex-1 min-w-0 w-full"
-                                placeholder="Titre de l'élément"
-                              />
-                              <span className="text-xs text-gray-500 capitalize flex-shrink-0">
-                                {item.type}
-                              </span>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              {item.id.startsWith('temp-') ? (
-                                <button
-                                  onClick={() => saveAndEditItem(module.id, item)}
-                                  disabled={saving || module.id.startsWith('temp-')}
-                                  className="text-blue-600 hover:text-blue-800 disabled:text-gray-400 disabled:cursor-not-allowed"
-                                  title={module.id.startsWith('temp-') 
-                                    ? "Sauvegardez d'abord le module" 
-                                    : "Sauvegarder et modifier cet élément"}
+                        {module.items.map((item) => {
+                          const isDragged = draggedItemId === item.id
+                          const isDragOver = dragOverItemId === item.id
+                          
+                          return (
+                            <div
+                              key={item.id}
+                              onDragOver={(e) => {
+                                // Permettre le drop uniquement si on est en train de dragger un élément
+                                if (draggedItemId) {
+                                  handleItemDragOver(e, item.id)
+                                }
+                              }}
+                              onDragLeave={handleItemDragLeave}
+                              onDrop={(e) => {
+                                if (draggedItemId) {
+                                  handleItemDrop(e, module.id, item.id)
+                                }
+                              }}
+                              className={`flex items-center justify-between p-3 bg-gray-50 rounded-lg transition-all border-2 ${
+                                isDragged 
+                                  ? 'opacity-50 border-blue-400 shadow-lg scale-95' 
+                                  : 'border-transparent'
+                              } ${
+                                isDragOver 
+                                  ? 'ring-2 ring-blue-500 bg-blue-50 border-blue-400 shadow-md' 
+                                  : 'hover:bg-gray-100 hover:border-gray-300'
+                              }`}
+                            >
+                              <div className="flex items-center space-x-3 flex-1 min-w-0">
+                                <div
+                                  draggable
+                                  onDragStart={(e) => {
+                                    e.stopPropagation()
+                                    handleItemDragStart(e, module.id, item.id)
+                                  }}
+                                  onDragEnd={handleItemDragEnd}
+                                  className="cursor-move"
+                                  title="Glisser-déposer pour réorganiser"
                                 >
-                                  <Edit className="w-4 h-4" />
-                                </button>
-                              ) : (
-                                <Link
-                                  to={`/admin/items/${item.id}/edit`}
-                                  className="text-blue-600 hover:text-blue-800"
-                                >
-                                  <Edit className="w-4 h-4" />
-                                </Link>
-                              )}
-                              <button
-                                onClick={() => deleteItem(module.id, item.id)}
-                                className="text-red-600 hover:text-red-800"
+                                  <GripVertical className="w-5 h-5 text-gray-400 hover:text-gray-600 flex-shrink-0 transition-colors" />
+                                </div>
+                                <span className={`w-3 h-3 rounded-full flex-shrink-0 ${
+                                  item.type === 'resource' ? 'bg-blue-500' :
+                                  item.type === 'slide' ? 'bg-green-500' :
+                                  item.type === 'exercise' ? 'bg-yellow-500' :
+                                  item.type === 'tp' ? 'bg-purple-500' :
+                                  'bg-red-500'
+                                }`} />
+                                <input
+                                  type="text"
+                                  value={item.title}
+                                  onChange={(e) => updateItem(module.id, item.id, { title: e.target.value })}
+                                  className="text-sm font-medium text-gray-900 bg-transparent border-none focus:outline-none focus:ring-0 flex-1 min-w-0 w-full"
+                                  placeholder="Titre de l'élément"
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                                <span className="text-xs text-gray-500 capitalize flex-shrink-0">
+                                  {item.type}
+                                </span>
+                              </div>
+                              <div 
+                                className="flex items-center space-x-2" 
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  e.preventDefault()
+                                }}
+                                onMouseDown={(e) => {
+                                  e.stopPropagation()
+                                }}
                               >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                                {/* Boutons de déplacement */}
+                                <div className="flex flex-col space-y-0.5 mr-2 border-r border-gray-300 pr-2">
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      e.preventDefault()
+                                      moveItem(module.id, item.id, 'up')
+                                    }}
+                                    onMouseDown={(e) => {
+                                      e.stopPropagation()
+                                    }}
+                                    disabled={module.items.findIndex(i => i.id === item.id) === 0}
+                                    className="text-gray-600 hover:text-blue-600 hover:bg-blue-50 disabled:text-gray-300 disabled:cursor-not-allowed disabled:hover:bg-transparent p-1 rounded transition-colors"
+                                    title="Monter"
+                                  >
+                                    <ChevronUp className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      e.preventDefault()
+                                      moveItem(module.id, item.id, 'down')
+                                    }}
+                                    onMouseDown={(e) => {
+                                      e.stopPropagation()
+                                    }}
+                                    disabled={module.items.findIndex(i => i.id === item.id) === module.items.length - 1}
+                                    className="text-gray-600 hover:text-blue-600 hover:bg-blue-50 disabled:text-gray-300 disabled:cursor-not-allowed disabled:hover:bg-transparent p-1 rounded transition-colors"
+                                    title="Descendre"
+                                  >
+                                    <ChevronDown className="w-4 h-4" />
+                                  </button>
+                                </div>
+                                {item.id.startsWith('temp-') ? (
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      e.preventDefault()
+                                      saveAndEditItem(module.id, item)
+                                    }}
+                                    onMouseDown={(e) => {
+                                      e.stopPropagation()
+                                    }}
+                                    disabled={saving || module.id.startsWith('temp-')}
+                                    className="text-blue-600 hover:text-blue-800 disabled:text-gray-400 disabled:cursor-not-allowed"
+                                    title={module.id.startsWith('temp-') 
+                                      ? "Sauvegardez d'abord le module" 
+                                      : "Sauvegarder et modifier cet élément"}
+                                  >
+                                    <Edit className="w-4 h-4" />
+                                  </button>
+                                ) : (
+                                  <>
+                                    <Link
+                                      to={`/admin/items/${item.id}/json`}
+                                      className="text-purple-600 hover:text-purple-800"
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                      }}
+                                      onMouseDown={(e) => {
+                                        e.stopPropagation()
+                                      }}
+                                      title="Éditer en JSON"
+                                    >
+                                      <Code className="w-4 h-4" />
+                                    </Link>
+                                    <Link
+                                      to={`/admin/items/${item.id}/edit`}
+                                      className="text-blue-600 hover:text-blue-800"
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                      }}
+                                      onMouseDown={(e) => {
+                                        e.stopPropagation()
+                                      }}
+                                      title="Éditer"
+                                    >
+                                      <Edit className="w-4 h-4" />
+                                    </Link>
+                                  </>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    e.preventDefault()
+                                    deleteItem(module.id, item.id)
+                                  }}
+                                  onMouseDown={(e) => {
+                                    e.stopPropagation()
+                                  }}
+                                  className="text-red-600 hover:text-red-800"
+                                  title="Supprimer cet élément"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          )
+                        })}
                       </div>
                     )}
                   </div>

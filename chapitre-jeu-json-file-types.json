@@ -1,0 +1,119 @@
+{
+  "title": "Jeu : Types de fichiers JSON",
+  "position": 0,
+  "type": "game",
+  "game_content": {
+    "gameType": "json-file-types",
+    "description": "Apprenez à reconnaître les différents types de fichiers JSON couramment utilisés dans les projets web",
+    "instructions": "Glissez le type de fichier approprié pour chaque exemple de contenu JSON",
+    "fileTypes": [
+      {
+        "id": "package.json",
+        "name": "package.json",
+        "description": "Gestion des dépendances et scripts npm",
+        "color": "bg-red-500"
+      },
+      {
+        "id": "tsconfig.json",
+        "name": "tsconfig.json",
+        "description": "Configuration TypeScript",
+        "color": "bg-blue-500"
+      },
+      {
+        "id": "eslintrc.json",
+        "name": ".eslintrc.json",
+        "description": "Configuration ESLint",
+        "color": "bg-purple-500"
+      },
+      {
+        "id": "package-lock.json",
+        "name": "package-lock.json",
+        "description": "Verrouillage des versions npm",
+        "color": "bg-orange-500"
+      },
+      {
+        "id": "tsconfig.node.json",
+        "name": "tsconfig.node.json",
+        "description": "Configuration TypeScript pour Node.js",
+        "color": "bg-cyan-500"
+      },
+      {
+        "id": "vite.config.json",
+        "name": "vite.config.json",
+        "description": "Configuration Vite",
+        "color": "bg-green-500"
+      },
+      {
+        "id": "tailwind.config.json",
+        "name": "tailwind.config.json",
+        "description": "Configuration Tailwind CSS",
+        "color": "bg-teal-500"
+      },
+      {
+        "id": "netlify.toml",
+        "name": "netlify.toml",
+        "description": "Configuration Netlify (peut être JSON)",
+        "color": "bg-pink-500"
+      }
+    ],
+    "examples": [
+      {
+        "id": 1,
+        "content": "{\n  \"name\": \"mon-projet\",\n  \"version\": \"1.0.0\",\n  \"scripts\": {\n    \"dev\": \"vite\"\n  },\n  \"dependencies\": {\n    \"react\": \"^18.0.0\"\n  }\n}",
+        "correctType": "package.json",
+        "explanation": "Ce fichier contient les métadonnées du projet (name, version), les scripts et les dépendances. C'est un package.json.",
+        "context": "Fichier à la racine d'un projet Node.js"
+      },
+      {
+        "id": 2,
+        "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2020\",\n    \"module\": \"ESNext\",\n    \"strict\": true\n  },\n  \"include\": [\"src\"]\n}",
+        "correctType": "tsconfig.json",
+        "explanation": "Ce fichier configure le compilateur TypeScript avec les options du compilateur et les fichiers à inclure. C'est un tsconfig.json.",
+        "context": "Fichier de configuration TypeScript"
+      },
+      {
+        "id": 3,
+        "content": "{\n  \"extends\": [\"eslint:recommended\"],\n  \"rules\": {\n    \"no-console\": \"warn\"\n  },\n  \"env\": {\n    \"browser\": true\n  }\n}",
+        "correctType": "eslintrc.json",
+        "explanation": "Ce fichier configure ESLint avec des règles et un environnement. C'est un .eslintrc.json.",
+        "context": "Fichier de configuration du linter"
+      },
+      {
+        "id": 4,
+        "content": "{\n  \"name\": \"mon-projet\",\n  \"lockfileVersion\": 3,\n  \"packages\": {\n    \"\": {\n      \"name\": \"mon-projet\",\n      \"version\": \"1.0.0\"\n    }\n  }\n}",
+        "correctType": "package-lock.json",
+        "explanation": "Ce fichier verrouille les versions exactes des dépendances installées. C'est un package-lock.json.",
+        "context": "Généré automatiquement par npm"
+      },
+      {
+        "id": 5,
+        "content": "{\n  \"compilerOptions\": {\n    \"composite\": true,\n    \"module\": \"CommonJS\"\n  },\n  \"include\": [\"vite.config.ts\"]\n}",
+        "correctType": "tsconfig.node.json",
+        "explanation": "Configuration TypeScript spécifique pour les fichiers Node.js (comme vite.config.ts). C'est un tsconfig.node.json.",
+        "context": "Configuration TypeScript pour Node.js"
+      },
+      {
+        "id": 6,
+        "content": "{\n  \"build\": {\n    \"command\": \"npm run build\",\n    \"publish\": \"dist\"\n  },\n  \"redirects\": [\n    { \"from\": \"/*\", \"to\": \"/index.html\" }\n  ]\n}",
+        "correctType": "netlify.toml",
+        "explanation": "Configuration pour le déploiement Netlify avec commandes de build et redirections. C'est un netlify.toml (peut être en JSON).",
+        "context": "Fichier de configuration de déploiement"
+      },
+      {
+        "id": 7,
+        "content": "{\n  \"plugins\": [\"@tailwindcss/forms\"],\n  \"theme\": {\n    \"extend\": {\n      \"colors\": {\n        \"brand\": \"#3B82F6\"\n      }\n    }\n  }\n}",
+        "correctType": "tailwind.config.json",
+        "explanation": "Configuration Tailwind CSS avec plugins et thème personnalisé. C'est un tailwind.config.json.",
+        "context": "Fichier de configuration CSS"
+      },
+      {
+        "id": 8,
+        "content": "{\n  \"build\": {\n    \"outDir\": \"dist\",\n    \"rollupOptions\": {\n      \"input\": \"./index.html\"\n    }\n  },\n  \"server\": {\n    \"port\": 3000\n  }\n}",
+        "correctType": "vite.config.json",
+        "explanation": "Configuration Vite avec options de build et serveur. C'est un vite.config.json.",
+        "context": "Fichier de configuration du bundler"
+      }
+    ]
+  }
+}
+

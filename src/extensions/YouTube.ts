@@ -9,7 +9,8 @@ export interface YouTubeOptions {
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     youtube: {
-      setYouTube: (options: { src: string }) => ReturnType
+      setYouTube: (options: { src: string; size?: number }) => ReturnType
+      updateYouTubeSize: (options: { size: number }) => ReturnType
     }
   }
 }
@@ -39,6 +40,21 @@ export const YouTube = Node.create<YouTubeOptions>({
       },
       height: {
         default: this.options.height,
+      },
+      size: {
+        default: 2, // Taille par défaut : 2 (moyenne)
+        parseHTML: element => {
+          const size = element.getAttribute('data-size')
+          return size ? parseInt(size) : 2
+        },
+        renderHTML: attributes => {
+          if (!attributes.size) {
+            return {}
+          }
+          return {
+            'data-size': attributes.size.toString(),
+          }
+        },
       },
     }
   },
@@ -71,9 +87,14 @@ export const YouTube = Node.create<YouTubeOptions>({
     const width = HTMLAttributes.width || this.options.width
     const height = HTMLAttributes.height || this.options.height
 
+    const size = HTMLAttributes.size || 2
     return [
       'div',
-      { 'data-youtube-video': 'true', class: 'youtube-video-container' },
+      { 
+        'data-youtube-video': 'true', 
+        'data-size': size.toString(),
+        class: `youtube-video-container widget-size-${size}` 
+      },
       [
         'iframe',
         mergeAttributes(
@@ -94,12 +115,28 @@ export const YouTube = Node.create<YouTubeOptions>({
   addCommands() {
     return {
       setYouTube:
-        (options: { src: string }) =>
+        (options: { src: string; size?: number }) =>
         ({ commands }) => {
           return commands.insertContent({
             type: this.name,
-            attrs: options,
+            attrs: {
+              ...options,
+              size: options.size || 2,
+            },
           })
+        },
+      updateYouTubeSize:
+        (options: { size: number }) =>
+        ({ chain, state }) => {
+          const { selection } = state
+          const node = state.doc.nodeAt(selection.anchor - 1)
+          if (node && node.type.name === this.name) {
+            return chain()
+              .focus()
+              .updateAttributes(this.name, { size: options.size })
+              .run()
+          }
+          return false
         },
     }
   },
@@ -113,8 +150,10 @@ export const YouTube = Node.create<YouTubeOptions>({
 
       const embedUrl = `https://www.youtube.com/embed/${videoId}`
       const container = document.createElement('div')
-      container.className = 'youtube-video-container'
+      const size = node.attrs.size || 2
+      container.className = `youtube-video-container widget-size-${size}`
       container.setAttribute('data-youtube-video', 'true')
+      container.setAttribute('data-size', size.toString())
 
       const iframe = document.createElement('iframe')
       iframe.src = embedUrl

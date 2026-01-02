@@ -1,0 +1,4903 @@
+{
+  "title": "Architecture Micro-services & Event-Driven – Résilience et Asynchronisme",
+  "description": "Module avancé sur la conception d'architectures distribuées résilientes et évolutives, couvrant les micro-services, l'architecture événementielle, la messagerie asynchrone et les patterns de résilience.",
+  "status": "draft",
+  "access_type": "free",
+  "theme": {
+    "primaryColor": "#8B5CF6",
+    "secondaryColor": "#6366F1",
+    "fontFamily": "Inter"
+  },
+  "modules": [
+    {
+      "title": "Architecture Micro-services & Event-Driven – Résilience et Asynchronisme",
+      "position": 4,
+      "items": [
+        {
+          "type": "slide",
+          "title": "Micro-services : Découplage et Autonomie",
+          "position": 0,
+          "published": true,
+          "content": {
+            "description": "Micro-services : Découplage et Autonomie"
+          },
+          "chapters": [
+            {
+              "title": "Micro-services : Découplage et Autonomie",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Micro-services : Découplage et Autonomie"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Les micro-services reposent sur trois piliers fondamentaux :"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Découplage : Chaque service possède sa propre base de données et expose une API claire"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Autonomie : Un service peut être déployé, mis à jour et mis à l'échelle indépendamment"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Responsabilité unique : Un service gère un domaine métier ou une capacité technique spécifique"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Avantages du découplage :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Équipes autonomes et parallélisation du développement"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Technologies hétérogènes (chaque service peut utiliser sa stack optimale)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Mise à l'échelle granulaire (scale-out par service)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Résilience locale (une panne n'affecte qu'un service)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Exemple de découplage :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "yaml"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "services:\n  user-service:\n    database: PostgreSQL\n    api: REST\n  order-service:\n    database: MongoDB\n    api: GraphQL\n  payment-service:\n    database: Redis\n    api: gRPC"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Autonomie des Services",
+          "position": 1,
+          "published": true,
+          "content": {
+            "description": "Autonomie des Services"
+          },
+          "chapters": [
+            {
+              "title": "Autonomie des Services",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Autonomie des Services"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "L'autonomie signifie qu'un service ne dépend pas d'autres services pour fonctionner en production."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Principes d'autonomie :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Database per Service : Chaque service possède sa propre base de données (pas de partage)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "API Gateway : Point d'entrée unique qui route vers les services appropriés"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Service Discovery : Les services se découvrent dynamiquement (Consul, Eureka, Kubernetes)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Configuration externalisée : Config Server (Spring Cloud Config, etcd)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Anti-patterns à éviter :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Base de données partagée entre services"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Appels synchrones en chaîne (Service A → B → C)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Couplage temporel (dépendance aux délais de réponse)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Couplage de version (changement dans un service casse les autres)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Quand NE PAS faire du micro-service",
+          "position": 2,
+          "published": true,
+          "content": {
+            "description": "Quand NE PAS faire du micro-service"
+          },
+          "chapters": [
+            {
+              "title": "Quand NE PAS faire du micro-service",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Quand NE PAS faire du micro-service"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Les micro-services ne sont pas une solution universelle. Voici les cas où ils sont "
+                      },
+                      {
+                        "type": "text",
+                        "text": "contre-productifs",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " :"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "❌ Équipe trop petite",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Moins de 5-8 développeurs : la complexité opérationnelle dépasse les bénéfices"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Pas d'expertise DevOps : besoin de CI/CD, monitoring, orchestration"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "❌ Domaine métier simple et stable",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "CRUD simple sans logique métier complexe"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Pas de besoins de scale indépendant"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Monolithe modulaire (modular monolith) suffit"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "❌ Transactions distribuées complexes",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Saga pattern complexe à implémenter"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Cohérence forte requise (ACID distribué = très coûteux)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Préférer un monolithe transactionnel"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "✅ Quand utiliser les micro-services :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Équipes nombreuses (≥10 développeurs) avec domaines distincts"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Besoins de scale indépendant (ex: service de notifications vs service de paiement)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Technologies hétérogènes nécessaires"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Organisation en domaines métiers clairement séparés (DDD)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Communication Synchrone : REST",
+          "position": 3,
+          "published": true,
+          "content": {
+            "description": "Communication Synchrone : REST"
+          },
+          "chapters": [
+            {
+              "title": "Communication Synchrone : REST",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Communication Synchrone : REST"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "REST (Representational State Transfer) est le pattern dominant pour les APIs synchrones."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Caractéristiques :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Requête-réponse immédiate"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Client attend la réponse avant de continuer"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "HTTP/HTTPS comme transport"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Stateless (chaque requête contient toutes les infos nécessaires)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Avantages :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Simplicité de compréhension et débogage"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Cohérence immédiate (le client sait si l'opération a réussi)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Standards bien établis (HTTP, JSON)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Cacheable (HTTP cache headers)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Inconvénients :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Couplage temporel (le client doit attendre)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Propagation des pannes (si un service est lent, tous les appels en chaîne le sont)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Pas de buffer (si le service est down, la requête échoue immédiatement)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Difficile de scaler pour des charges irrégulières"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Exemple d'appel REST synchrone\nasync function createOrder(userId, items) {\n  // Appel bloquant - on attend la réponse\n  const user = await fetch(`/api/users/${userId}`);\n  const inventory = await fetch(`/api/inventory/check`, { \n    method: 'POST', \n    body: JSON.stringify(items) \n  });\n  const order = await fetch(`/api/orders`, {\n    method: 'POST',\n    body: JSON.stringify({ userId, items })\n  });\n  return order.json();\n}"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Communication Asynchrone : Events",
+          "position": 4,
+          "published": true,
+          "content": {
+            "description": "Communication Asynchrone : Events"
+          },
+          "chapters": [
+            {
+              "title": "Communication Asynchrone : Events",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Communication Asynchrone : Events"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "L'architecture événementielle permet le découplage temporel et spatial entre services."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Caractéristiques :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Producteur publie un événement sans connaître les consommateurs"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Consommateurs s'abonnent aux événements qui les intéressent"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Pas de couplage direct entre services"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Buffer naturel (message broker stocke les événements)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Avantages :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Découplage fort (producteur et consommateur ne se connaissent pas)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Résilience (si un consommateur est down, les événements sont en attente)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Scalabilité (plusieurs consommateurs peuvent traiter en parallèle)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Évolutivité (ajouter un nouveau consommateur sans modifier le producteur)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Inconvénients :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Complexité opérationnelle (message broker à gérer)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Cohérence éventuelle (pas de garantie de traitement immédiat)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Debugging plus difficile (tracing distribué nécessaire)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Gestion des erreurs plus complexe (DLQ, retry policies)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Exemple d'événement asynchrone\n// Service Order publie un événement\nawait eventBus.publish('order.created', {\n  orderId: '123',\n  userId: '456',\n  items: [...],\n  timestamp: new Date().toISOString()\n});\n\n// Service Inventory écoute l'événement\neventBus.subscribe('order.created', async (event) => {\n  await inventoryService.reserveItems(event.items);\n});\n\n// Service Notification écoute aussi\neventBus.subscribe('order.created', async (event) => {\n  await notificationService.sendEmail(event.userId);\n});"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Trade-offs : REST vs Events",
+          "position": 5,
+          "published": true,
+          "content": {
+            "description": "Trade-offs : REST vs Events"
+          },
+          "chapters": [
+            {
+              "title": "Trade-offs : REST vs Events",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Trade-offs : REST vs Events"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Quand utiliser REST (synchrone) :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Requête-réponse naturelle (ex: GET /user/123)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Cohérence immédiate requise (ex: paiement, validation)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Opérations simples et rapides (< 100ms)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Pas de besoin de buffer ou de retry complexe"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Quand utiliser Events (asynchrone) :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Notification/notification (ex: email après commande)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Traitement long (ex: génération de rapport)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Plusieurs consommateurs pour un même événement"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Découplage fort souhaité"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Charge irrégulière (buffer nécessaire)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Pattern hybride recommandé :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "REST pour les opérations critiques nécessitant une réponse immédiate"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Events pour les effets de bord et notifications"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Exemple : Créer une commande (REST) → publier OrderCreated (Event) → notifications, logs, analytics"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Matrice de décision :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Critère | REST | Events\\nTemps de réponse requis | < 100ms | Quelques secondes OK\\nCohérence | Immédiate | Éventuelle\\nCouplage | Faible à moyen | Très faible\\nComplexité opérationnelle | Faible | Élevée\\nScalabilité | Moyenne | Très élevée"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Events Métiers",
+          "position": 6,
+          "published": true,
+          "content": {
+            "description": "Events Métiers"
+          },
+          "chapters": [
+            {
+              "title": "Events Métiers",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Events Métiers"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Un événement métier représente quelque chose qui s'est "
+                      },
+                      {
+                        "type": "text",
+                        "text": "déjà produit",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " dans le système."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Caractéristiques d'un bon événement métier :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Nom au passé : OrderCreated, PaymentProcessed, UserRegistered (pas CreateOrder)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Immutable : Un événement ne peut pas être modifié après publication"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Idempotent : Traiter plusieurs fois le même événement doit avoir le même effet"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Self-contained : Contient toutes les données nécessaires pour le traitement"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Structure d'un événement :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "json"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "{\n  \"eventId\": \"evt-123-456\",\n  \"eventType\": \"OrderCreated\",\n  \"aggregateId\": \"order-789\",\n  \"aggregateType\": \"Order\",\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"version\": 1,\n  \"data\": {\n    \"orderId\": \"order-789\",\n    \"userId\": \"user-123\",\n    \"items\": [...],\n    \"totalAmount\": 99.99\n  },\n  \"metadata\": {\n    \"correlationId\": \"req-abc\",\n    \"causationId\": \"evt-122-455\",\n    \"userId\": \"user-123\"\n  }\n}"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Domain Events vs Integration Events :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Domain Events : Événements internes au bounded context (ex: OrderItemAdded)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Integration Events : Événements publiés vers d'autres services (ex: OrderCreated)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Souvent, un Domain Event déclenche un Integration Event"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Event Sourcing",
+          "position": 7,
+          "published": true,
+          "content": {
+            "description": "Event Sourcing"
+          },
+          "chapters": [
+            {
+              "title": "Event Sourcing",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Event Sourcing"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Event Sourcing stocke l'"
+                      },
+                      {
+                        "type": "text",
+                        "text": "historique complet",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " des événements plutôt que l'état actuel."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Principe :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Au lieu de mettre à jour un enregistrement, on ajoute un nouvel événement"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "L'état actuel est reconstruit en rejouant tous les événements"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "L'event store est la source de vérité unique"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Exemple : Commande",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Au lieu de :\nUPDATE orders SET status = 'paid' WHERE id = '123';\n\n// On fait :\neventStore.append('order-123', {\n  type: 'OrderPaid',\n  data: { paymentId: 'pay-456' },\n  timestamp: '2024-01-15T10:30:00Z'\n});\n\n// L'état est reconstruit :\nconst events = eventStore.getEvents('order-123');\n// [OrderCreated, OrderItemAdded, OrderItemAdded, OrderPaid]\nconst currentState = events.reduce((state, event) => \n  applyEvent(state, event), \n  initialState\n);"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Avantages :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Audit trail complet (on sait exactement ce qui s'est passé)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Time travel (reconstruire l'état à n'importe quel moment)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Debugging facilité (rejouer les événements)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Évolutivité (nouveaux consommateurs peuvent rejouer l'historique)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Inconvénients :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Complexité (besoin de snapshots pour performance)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Eventual consistency (l'état n'est pas immédiat)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Migration difficile (changer la structure des événements)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Quand utiliser Event Sourcing :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Audit et conformité critiques (finances, santé)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Besoin de reconstruire l'historique"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Domaines complexes avec beaucoup d'états"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "CQRS (Command Query Responsibility Segregation)",
+          "position": 8,
+          "published": true,
+          "content": {
+            "description": "CQRS (Command Query Responsibility Segregation)"
+          },
+          "chapters": [
+            {
+              "title": "CQRS (Command Query Responsibility Segregation)",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "CQRS (Command Query Responsibility Segregation)"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "CQRS sépare les opérations de "
+                      },
+                      {
+                        "type": "text",
+                        "text": "lecture",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " (Query) et d'"
+                      },
+                      {
+                        "type": "text",
+                        "text": "écriture",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " (Command)."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Principe :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Command Side (Write) : Modifie l'état, publie des événements"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Query Side (Read) : Optimisé pour la lecture, peut être dénormalisé"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Les deux côtés peuvent avoir des modèles de données différents"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Architecture CQRS :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Command Side (Write Model)\nasync function handleCreateOrder(command) {\n  // Validation\n  const order = new Order(command.data);\n  \n  // Persist dans l'event store\n  await eventStore.append(order.id, order.getUncommittedEvents());\n  \n  // Publier l'événement\n  await eventBus.publish('OrderCreated', order.toEvent());\n}\n\n// Query Side (Read Model)\n// Optimisé pour les lectures, peut être une vue dénormalisée\nasync function getOrderView(orderId) {\n  // Lecture depuis une table optimisée pour les requêtes\n  return await readDb.query(\n    'SELECT * FROM order_view WHERE id = ?', \n    [orderId]\n  );\n}"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Avantages :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Optimisation indépendante (write vs read)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Scalabilité (scale read et write séparément)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Modèles adaptés (normalisé pour write, dénormalisé pour read)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Compatible avec Event Sourcing"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "CQRS + Event Sourcing :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Command Side : Event Store (source de vérité)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Query Side : Projections (vues matérialisées depuis les événements)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Les projections sont mises à jour de manière asynchrone"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Quand utiliser CQRS :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Modèles de lecture et écriture très différents"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Besoin de performance de lecture élevée"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Systèmes avec beaucoup plus de lectures que d'écritures"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "RabbitMQ : Message Broker",
+          "position": 9,
+          "published": true,
+          "content": {
+            "description": "RabbitMQ : Message Broker"
+          },
+          "chapters": [
+            {
+              "title": "RabbitMQ : Message Broker",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "RabbitMQ : Message Broker"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "RabbitMQ est un "
+                      },
+                      {
+                        "type": "text",
+                        "text": "message broker",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " basé sur le protocole AMQP (Advanced Message Queuing Protocol)."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Concepts clés :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Exchange : Route les messages vers les queues selon des règles (direct, topic, fanout, headers)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Queue : Stocke les messages en attente de traitement"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Binding : Lien entre un exchange et une queue avec un routing key"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Consumer : Service qui consomme les messages"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Patterns RabbitMQ :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Work Queue : Distribution de tâches entre plusieurs workers"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Pub/Sub : Un message à plusieurs consommateurs (fanout exchange)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Routing : Messages filtrés par routing key (direct/topic exchange)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "RPC : Request-Reply pattern (temporary queues)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Exemple : Publier un événement\nconst channel = await connection.createChannel();\nawait channel.assertExchange('orders', 'topic', { durable: true });\n\nawait channel.publish('orders', 'order.created', Buffer.from(JSON.stringify({\n  orderId: '123',\n  userId: '456'\n})), {\n  persistent: true,\n  messageId: 'msg-123'\n});\n\n// Consommer\nawait channel.assertQueue('order-notifications', { durable: true });\nawait channel.bindQueue('order-notifications', 'orders', 'order.created');\n\nchannel.consume('order-notifications', (msg) => {\n  const event = JSON.parse(msg.content.toString());\n  // Traiter l'événement\n  channel.ack(msg);\n}, { noAck: false });"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Garanties RabbitMQ :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "At-least-once delivery (avec acknowledgments)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Durabilité (messages persistés sur disque)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Priorité des messages"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "TTL (Time To Live) pour les messages"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Apache Kafka : Event Streaming",
+          "position": 10,
+          "published": true,
+          "content": {
+            "description": "Apache Kafka : Event Streaming"
+          },
+          "chapters": [
+            {
+              "title": "Apache Kafka : Event Streaming",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Apache Kafka : Event Streaming"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Kafka est une plateforme de "
+                      },
+                      {
+                        "type": "text",
+                        "text": "streaming d'événements",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " conçue pour de hauts débits et la rétention longue durée."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Concepts clés :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Topic : Flux d'événements (équivalent à une queue, mais avec rétention)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Partition : Un topic est divisé en partitions pour le parallélisme"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Producer : Publie des événements dans un topic"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Consumer : Lit des événements depuis un topic"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Consumer Group : Plusieurs consumers partagent le travail (load balancing)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Avantages de Kafka :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Haut débit (millions de messages/seconde)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Rétention longue (jours/semaines, pas juste en mémoire)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Replay : Les consumers peuvent relire l'historique"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Scalabilité horizontale (ajouter des partitions)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Event sourcing natif (log immuable)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Producer\nconst producer = kafka.producer();\nawait producer.connect();\n\nawait producer.send({\n  topic: 'orders',\n  messages: [{\n    key: 'order-123',\n    value: JSON.stringify({\n      orderId: '123',\n      userId: '456',\n      timestamp: new Date().toISOString()\n    })\n  }],\n  acks: 'all' // Attendre confirmation de tous les replicas\n});\n\n// Consumer\nconst consumer = kafka.consumer({ groupId: 'order-processors' });\nawait consumer.subscribe({ topic: 'orders' });\n\nawait consumer.run({\n  eachMessage: async ({ topic, partition, message }) => {\n    const event = JSON.parse(message.value.toString());\n    await processOrder(event);\n  }\n});"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Kafka vs RabbitMQ :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Critère | RabbitMQ | Kafka\\nDébit | Moyen (10k-100k msg/s) | Très élevé (1M+ msg/s)\\nRétention | Court terme (mémoire) | Long terme (disque)\\nReplay | Non | Oui (log immuable)\\nComplexité | Faible | Élevée\\nUse case | Messaging | Event streaming, analytics"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Garanties de Livraison",
+          "position": 11,
+          "published": true,
+          "content": {
+            "description": "Garanties de Livraison"
+          },
+          "chapters": [
+            {
+              "title": "Garanties de Livraison",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Garanties de Livraison"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Dans un système distribué, il existe trois niveaux de garanties de livraison :"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "1. At-most-once (≤1 fois)",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Le message peut être perdu, mais jamais dupliqué"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Fire and forget (pas d'acknowledgment)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Use case : Métriques, logs (perte acceptable)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "2. At-least-once (≥1 fois)",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Le message sera livré au moins une fois (peut être dupliqué)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Avec acknowledgment et retry en cas d'échec"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Use case : La plupart des événements métiers"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Important : Le traitement doit être idempotent !"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "3. Exactly-once (exactement 1 fois)",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Le message sera livré exactement une fois"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Très complexe à implémenter (transactions distribuées)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Kafka : Exactly-once semantics (idempotent producer + transactions)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Use case : Transactions financières critiques"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Recommandation :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Préférer at-least-once avec idempotence côté traitement"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Plus simple, plus performant, et suffisant pour 99% des cas"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Exactly-once seulement si vraiment nécessaire (coût élevé)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Exemple : Idempotence avec at-least-once\nasync function processOrderCreated(event) {\n  // Vérifier si déjà traité (idempotence)\n  const processed = await db.query(\n    'SELECT id FROM processed_events WHERE event_id = ?',\n    [event.eventId]\n  );\n  \n  if (processed.length > 0) {\n    console.log('Event already processed, skipping');\n    return; // Idempotent : traiter plusieurs fois = même effet\n  }\n  \n  // Traiter l'événement\n  await updateInventory(event.items);\n  \n  // Marquer comme traité\n  await db.query(\n    'INSERT INTO processed_events (event_id, processed_at) VALUES (?, ?)',\n    [event.eventId, new Date()]\n  );\n}"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Idempotence",
+          "position": 12,
+          "published": true,
+          "content": {
+            "description": "Idempotence"
+          },
+          "chapters": [
+            {
+              "title": "Idempotence",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Idempotence"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Une opération est "
+                      },
+                      {
+                        "type": "text",
+                        "text": "idempotente",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " si l'exécuter plusieurs fois produit le même résultat qu'une seule exécution."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Pourquoi l'idempotence est cruciale :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "At-least-once delivery peut dupliquer les messages"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Les retries peuvent réexécuter une opération"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Les pannes réseau peuvent causer des doubles envois"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Sans idempotence : facturation double, stock négatif, etc."
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Techniques d'idempotence :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Idempotency Key : Identifiant unique par opération (ex: requestId)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Check avant traitement : Vérifier si l'opération a déjà été effectuée"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "ETags / Versioning : Optimistic locking pour éviter les mises à jour concurrentes"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Exemple : Idempotence avec clé d'idempotence\nasync function processPayment(paymentRequest) {\n  const idempotencyKey = paymentRequest.idempotencyKey;\n  \n  // Vérifier si déjà traité\n  const existing = await db.query(\n    'SELECT * FROM payments WHERE idempotency_key = ?',\n    [idempotencyKey]\n  );\n  \n  if (existing.length > 0) {\n    // Retourner le résultat existant (idempotent)\n    return existing[0];\n  }\n  \n  // Traiter le paiement\n  const payment = await chargeCard(paymentRequest);\n  \n  // Enregistrer avec la clé d'idempotence\n  await db.query(\n    'INSERT INTO payments (id, idempotency_key, amount, status) VALUES (?, ?, ?, ?)',\n    [payment.id, idempotencyKey, payment.amount, payment.status]\n  );\n  \n  return payment;\n}"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Opérations naturellement idempotentes :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "GET (lecture)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "PUT avec ID complet (remplacement)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "DELETE (supprimer plusieurs fois = même effet)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Opérations NON idempotentes (à rendre idempotentes) :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "POST (création) → utiliser idempotency key"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "PATCH (mise à jour partielle) → utiliser version/ETag"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Opérations avec effets de bord (ex: envoi email) → vérifier avant d'envoyer"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Retry Strategies",
+          "position": 13,
+          "published": true,
+          "content": {
+            "description": "Retry Strategies"
+          },
+          "chapters": [
+            {
+              "title": "Retry Strategies",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Retry Strategies"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Les stratégies de retry permettent de gérer les pannes temporaires dans un système distribué."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Types d'erreurs :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Transitoires : Réseau, timeout, service temporairement indisponible → RETRY"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Permanentes : Erreur de validation, ressource non trouvée → NO RETRY"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Inconnues : Erreur inattendue → RETRY avec limite"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Stratégies de retry :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Fixed Delay : Attendre un délai fixe entre chaque retry"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Exponential Backoff : Délai croissant (1s, 2s, 4s, 8s...)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Jitter : Ajouter de l'aléatoire pour éviter le thundering herd"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Max Retries : Limiter le nombre de tentatives"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Exemple : Retry avec exponential backoff et jitter\nasync function retryWithBackoff(fn, maxRetries = 3) {\n  for (let attempt = 0; attempt <= maxRetries; attempt++) {\n    try {\n      return await fn();\n    } catch (error) {\n      // Ne pas retry sur les erreurs permanentes\n      if (error.status === 400 || error.status === 404) {\n        throw error;\n      }\n      \n      // Dernière tentative échouée\n      if (attempt === maxRetries) {\n        throw error;\n      }\n      \n      // Exponential backoff avec jitter\n      const baseDelay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s\n      const jitter = Math.random() * 1000; // 0-1s aléatoire\n      const delay = baseDelay + jitter;\n      \n      await sleep(delay);\n    }\n  }\n}\n\n// Utilisation\nawait retryWithBackoff(async () => {\n  return await httpClient.post('/api/orders', orderData);\n});"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Circuit Breaker Pattern :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Si un service échoue trop souvent, ouvrir le circuit (arrêter les appels)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Après un délai, essayer à nouveau (half-open state)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Si ça marche, fermer le circuit (normal)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Libraries : resilience4j, Polly, Hystrix"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Dead Letter Queues (DLQ)",
+          "position": 14,
+          "published": true,
+          "content": {
+            "description": "Dead Letter Queues (DLQ)"
+          },
+          "chapters": [
+            {
+              "title": "Dead Letter Queues (DLQ)",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Dead Letter Queues (DLQ)"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Une "
+                      },
+                      {
+                        "type": "text",
+                        "text": "Dead Letter Queue",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "text": " stocke les messages qui n'ont pas pu être traités après plusieurs tentatives."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Pourquoi une DLQ ?",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Éviter de bloquer la queue principale avec des messages en échec"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Permettre l'analyse manuelle des erreurs"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Réessayer plus tard après correction"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Alertes pour les opérateurs"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Workflow DLQ :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "1. Message arrive dans la queue principale"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "2. Tentative de traitement → échec"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "3. Retry (jusqu'à N tentatives)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "4. Si toujours en échec → déplacer vers DLQ"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "5. Alerting + analyse manuelle"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "6. Correction + replay depuis DLQ si possible"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Exemple : Gestion DLQ avec RabbitMQ\nasync function processMessage(msg) {\n  try {\n    await handleEvent(JSON.parse(msg.content.toString()));\n    channel.ack(msg); // Succès\n  } catch (error) {\n    // Incrémenter le compteur de retry\n    const retryCount = (msg.properties.headers['x-retry-count'] || 0) + 1;\n    \n    if (retryCount < MAX_RETRIES) {\n      // Republier avec retry count\n      msg.properties.headers['x-retry-count'] = retryCount;\n      channel.nack(msg, false, true); // Requeue\n    } else {\n      // Déplacer vers DLQ\n      await channel.sendToQueue('dlq', msg.content, {\n        headers: {\n          ...msg.properties.headers,\n          'x-original-queue': 'orders',\n          'x-failure-reason': error.message,\n          'x-failed-at': new Date().toISOString()\n        }\n      });\n      channel.ack(msg); // Retirer de la queue principale\n      \n      // Alerting\n      await sendAlert(`Message moved to DLQ: ${error.message}`);\n    }\n  }\n}"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Bonnes pratiques DLQ :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Limiter la taille de la DLQ (alert si > seuil)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Mettre en place un processus de review régulier"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Logger les raisons d'échec pour faciliter le debug"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Considérer une DLQ par type d'erreur (validation, système, etc.)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Observabilité Distribuée",
+          "position": 15,
+          "published": true,
+          "content": {
+            "description": "Observabilité Distribuée"
+          },
+          "chapters": [
+            {
+              "title": "Observabilité Distribuée",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": {
+                      "level": 1
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Observabilité Distribuée"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "L'observabilité dans un système distribué nécessite de tracer les requêtes à travers plusieurs services."
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Les trois piliers de l'observabilité :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Logs : Événements discrets avec timestamp (ELK, Loki, CloudWatch)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Metrics : Mesures agrégées dans le temps (Prometheus, Datadog, New Relic)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Traces : Parcours d'une requête à travers les services (Jaeger, Zipkin, OpenTelemetry)"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Distributed Tracing :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Trace ID : Identifiant unique pour une requête complète"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Span : Une opération dans un service (avec parent/child)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Correlation ID : Lier les logs d'un même flow"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Permet de visualiser le chemin d'une requête : API Gateway → Service A → Service B → DB"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": {
+                      "language": "javascript"
+                    },
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "// Exemple : Distributed Tracing avec OpenTelemetry\nconst { trace } = require('@opentelemetry/api');\n\nasync function createOrder(orderData) {\n  const tracer = trace.getTracer('order-service');\n  const span = tracer.startSpan('createOrder');\n  \n  try {\n    span.setAttribute('order.userId', orderData.userId);\n    span.setAttribute('order.itemsCount', orderData.items.length);\n    \n    // Appel à un autre service (propagation du trace context)\n    const user = await getUser(orderData.userId);\n    span.addEvent('user.validated');\n    \n    const order = await saveOrder(orderData);\n    span.setAttribute('order.id', order.id);\n    \n    // Publier un événement (inclure trace ID)\n    await eventBus.publish('order.created', {\n      ...order,\n      traceId: span.spanContext().traceId\n    });\n    \n    span.setStatus({ code: SpanStatusCode.OK });\n    return order;\n  } catch (error) {\n    span.setStatus({ \n      code: SpanStatusCode.ERROR, \n      message: error.message \n    });\n    span.recordException(error);\n    throw error;\n  } finally {\n    span.end();\n  }\n}"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Structured Logging :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Utiliser JSON pour les logs (pas de texte libre)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Inclure correlationId, traceId, userId dans chaque log"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Niveaux : DEBUG, INFO, WARN, ERROR"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Exemple : { level: 'INFO', traceId: 'abc123', service: 'order', message: 'Order created', orderId: '123' }"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Metrics clés à surveiller :",
+                        "marks": [
+                          {
+                            "type": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Latence (p50, p95, p99)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Taux d'erreur (4xx, 5xx)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Throughput (requêtes/seconde)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Taille des queues (messages en attente)"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Taux de retry"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [
+                          {
+                            "type": "paragraph",
+                            "content": [
+                              {
+                                "type": "text",
+                                "text": "Taille de la DLQ"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "exercise",
+          "title": "Exercice",
+          "position": 16,
+          "published": true,
+          "content": {
+            "instruction": "Analysez l'architecture suivante et identifiez les couplages dangereux. Pour chaque couplage identifié, proposez une solution de découplage.\n\n**Architecture actuelle :**\n- Service A (Orders) appelle directement Service B (Inventory) via REST synchrone\n- Service B appelle Service C (Payments) pour valider le paiement avant de réserver le stock\n- Service C appelle Service D (Notifications) pour envoyer un email de confirmation\n- Tous les services partagent la même base de données PostgreSQL\n- Service A attend la réponse de B, qui attend C, qui attend D (chaîne synchrone)\n\n**Questions :**\n1. Quels sont les 3 principaux types de couplage présents dans cette architecture ?\n2. Quels sont les risques en cas de panne d'un service dans la chaîne ?\n3. Proposez une architecture découplée utilisant des événements asynchrones.\n4. Comment garantir la cohérence des données sans transactions distribuées ?",
+            "criteria": [
+              {
+                "id": "crit-1",
+                "description": "Identification correcte des couplages (temporel, de données, de version)"
+              },
+              {
+                "id": "crit-2",
+                "description": "Analyse des risques de propagation de pannes"
+              },
+              {
+                "id": "crit-3",
+                "description": "Proposition d'architecture event-driven cohérente"
+              },
+              {
+                "id": "crit-4",
+                "description": "Solution pour la cohérence éventuelle (Saga pattern, compensation)"
+              },
+              {
+                "id": "crit-5",
+                "description": "Considération des garanties de livraison et idempotence"
+              }
+            ],
+            "solution": "**Réponses attendues :**\n\n1. **Couplages identifiés :**\n   - Couplage temporel : Service A doit attendre toute la chaîne\n   - Couplage de données : Base de données partagée\n   - Couplage de version : Changement dans un service casse les autres\n\n2. **Risques :**\n   - Si Service D est lent/down, toute la chaîne est bloquée\n   - Timeout en cascade\n   - Pas de buffer, perte de requêtes\n\n3. **Architecture event-driven :**\n   - Service A publie OrderCreated\n   - Service B écoute OrderCreated, réserve le stock, publie StockReserved\n   - Service C écoute StockReserved, traite le paiement, publie PaymentProcessed\n   - Service D écoute PaymentProcessed, envoie l'email\n   - Chaque service traite de manière asynchrone\n\n4. **Cohérence éventuelle :**\n   - Saga pattern : Si PaymentProcessed échoue, publier StockReleased (compensation)\n   - Idempotence : Vérifier si l'opération a déjà été effectuée\n   - Eventual consistency : Acceptable pour ce use case (commande validée en quelques secondes)"
+          }
+        },
+        {
+          "type": "exercise",
+          "title": "Exercice",
+          "position": 17,
+          "published": true,
+          "content": {
+            "instruction": "Pour chaque scénario métier suivant, déterminez si REST (synchrone) ou Events (asynchrone) est le meilleur choix. Justifiez votre réponse.\n\n**Scénarios :**\n\n1. **Validation de paiement** : Un utilisateur clique sur \"Payer\". Le système doit vérifier la carte bancaire et confirmer immédiatement le paiement.\n\n2. **Envoi d'email de bienvenue** : Après l'inscription d'un nouvel utilisateur, envoyer un email de bienvenue.\n\n3. **Génération de rapport** : Un manager demande un rapport d'analyse des ventes du dernier trimestre (peut prendre 2-3 minutes).\n\n4. **Mise à jour du stock** : Lorsqu'une commande est créée, mettre à jour le stock disponible.\n\n5. **Affichage du profil utilisateur** : Un utilisateur consulte sa page de profil.\n\n**Questions :**\n1. Pour chaque scénario, REST ou Events ? Pourquoi ?\n2. Y a-t-il des cas où un pattern hybride serait préférable ?\n3. Quels sont les compromis à accepter dans chaque cas ?",
+            "criteria": [
+              {
+                "id": "crit-1",
+                "description": "Choix approprié REST vs Events pour chaque scénario"
+              },
+              {
+                "id": "crit-2",
+                "description": "Justification claire basée sur les besoins métier (cohérence, temps de réponse, découplage)"
+              },
+              {
+                "id": "crit-3",
+                "description": "Identification des cas nécessitant un pattern hybride"
+              },
+              {
+                "id": "crit-4",
+                "description": "Analyse des compromis (performance, complexité, cohérence)"
+              },
+              {
+                "id": "crit-5",
+                "description": "Considération des patterns complémentaires (CQRS, Saga)"
+              }
+            ],
+            "solution": "**Réponses attendues :**\n\n1. **Validation de paiement** → REST\n   - Besoin de cohérence immédiate\n   - L'utilisateur doit savoir si le paiement a réussi\n   - Temps de réponse critique (< 2s)\n\n2. **Email de bienvenue** → Events\n   - Pas besoin de réponse immédiate\n   - Effet de bord (notification)\n   - Peut être traité de manière asynchrone\n\n3. **Génération de rapport** → Events (ou REST avec polling)\n   - Traitement long (2-3 min)\n   - REST : timeout, mauvaise UX\n   - Events : Publier ReportRequested, traiter, publier ReportReady, notifier\n\n4. **Mise à jour du stock** → Events (ou REST selon contexte)\n   - Si cohérence forte requise : REST\n   - Si cohérence éventuelle OK : Events (OrderCreated → UpdateStock)\n   - Events préférable pour découplage\n\n5. **Affichage profil** → REST\n   - Lecture simple\n   - Besoin de réponse immédiate\n   - Pas d'effet de bord\n\n**Pattern hybride :**\n- Scénario 4 : REST pour créer la commande (cohérence), Events pour les effets de bord (notifications, analytics)\n\n**Compromis :**\n- REST : Simplicité vs Couplage\n- Events : Découplage vs Complexité opérationnelle"
+          }
+        },
+        {
+          "type": "game",
+          "gameType": "column_matching",
+          "title": "Micro-service Architect",
+          "position": 18,
+          "published": true,
+          "content": {
+            "title": "Micro-service Architect",
+            "instruction": "Associez chaque système à la meilleure stratégie d'architecture (Monolithe modulaire, Micro-services, ou Event-driven).",
+            "leftColumn": {
+              "title": "Système",
+              "items": [
+                {
+                  "id": "sys-1",
+                  "content": "Application CRUD simple pour gérer les contacts clients (5 développeurs)"
+                },
+                {
+                  "id": "sys-2",
+                  "content": "Plateforme e-commerce avec 50+ développeurs, besoins de scale indépendant (catalogue vs paiement)"
+                },
+                {
+                  "id": "sys-3",
+                  "content": "Système de facturation avec transactions financières complexes et audit trail strict"
+                },
+                {
+                  "id": "sys-4",
+                  "content": "Application de monitoring IoT recevant 1M+ événements/seconde de capteurs"
+                },
+                {
+                  "id": "sys-5",
+                  "content": "SaaS B2B avec modules distincts (CRM, comptabilité, RH) mais équipe de 8 développeurs"
+                }
+              ]
+            },
+            "rightColumn": {
+              "title": "Architecture",
+              "items": [
+                {
+                  "id": "arch-1",
+                  "content": "Monolithe modulaire"
+                },
+                {
+                  "id": "arch-2",
+                  "content": "Micro-services avec REST"
+                },
+                {
+                  "id": "arch-3",
+                  "content": "Micro-services Event-driven"
+                },
+                {
+                  "id": "arch-4",
+                  "content": "Event-driven avec Event Sourcing"
+                },
+                {
+                  "id": "arch-5",
+                  "content": "Hybride : Monolithe + Event streaming pour analytics"
+                }
+              ]
+            },
+            "correctMatches": [
+              {
+                "leftId": "sys-1",
+                "rightId": "arch-1"
+              },
+              {
+                "leftId": "sys-2",
+                "rightId": "arch-2"
+              },
+              {
+                "leftId": "sys-3",
+                "rightId": "arch-4"
+              },
+              {
+                "leftId": "sys-4",
+                "rightId": "arch-3"
+              },
+              {
+                "id": "sys-5",
+                "rightId": "arch-1"
+              }
+            ],
+            "feedback": {
+              "correct": "Excellent choix ! Vous avez bien identifié les besoins de chaque système.",
+              "incorrect": "Réfléchissez aux contraintes : taille d'équipe, besoins de scale, complexité métier."
+            }
+          }
+        },
+        {
+          "type": "game",
+          "gameType": "card_matching",
+          "title": "Event Storming Lite",
+          "position": 19,
+          "published": true,
+          "content": {
+            "title": "Event Storming Lite",
+            "instruction": "Identifiez si chaque élément est un ÉVÉNEMENT (quelque chose qui s'est passé), une COMMANDE (action à effectuer), ou une VUE (lecture de données).",
+            "cards": [
+              {
+                "id": "card-1",
+                "content": "OrderCreated",
+                "correctType": "event"
+              },
+              {
+                "id": "card-2",
+                "content": "CreateOrder",
+                "correctType": "command"
+              },
+              {
+                "id": "card-3",
+                "content": "GetUserProfile",
+                "correctType": "view"
+              },
+              {
+                "id": "card-4",
+                "content": "PaymentProcessed",
+                "correctType": "event"
+              },
+              {
+                "id": "card-5",
+                "content": "ReserveInventory",
+                "correctType": "command"
+              },
+              {
+                "id": "card-6",
+                "content": "OrderView",
+                "correctType": "view"
+              },
+              {
+                "id": "card-7",
+                "content": "UserRegistered",
+                "correctType": "event"
+              },
+              {
+                "id": "card-8",
+                "content": "SendNotification",
+                "correctType": "command"
+              },
+              {
+                "id": "card-9",
+                "content": "InventoryReserved",
+                "correctType": "event"
+              },
+              {
+                "id": "card-10",
+                "content": "GetOrderHistory",
+                "correctType": "view"
+              }
+            ],
+            "categories": [
+              {
+                "id": "cat-event",
+                "title": "ÉVÉNEMENT",
+                "description": "Quelque chose qui s'est déjà produit (passé)"
+              },
+              {
+                "id": "cat-command",
+                "title": "COMMANDE",
+                "description": "Action à effectuer (impératif)"
+              },
+              {
+                "id": "cat-view",
+                "title": "VUE",
+                "description": "Lecture de données (query)"
+              }
+            ],
+            "feedback": {
+              "correct": "Parfait ! Vous maîtrisez la distinction entre événements, commandes et vues.",
+              "incorrect": "Rappel : Événement = passé (OrderCreated), Commande = action (CreateOrder), Vue = lecture (GetOrder)."
+            }
+          }
+        },
+        {
+          "type": "tp",
+          "title": "TP – Conception d'une architecture micro-services event-driven",
+          "position": 20,
+          "published": true,
+          "content": {
+            "instruction": "**CONTEXTE :**\n\nVous devez concevoir l'architecture d'un système de gestion de commandes en ligne (e-commerce) avec les caractéristiques suivantes :\n\n**Exigences fonctionnelles :**\n- Gestion des utilisateurs et authentification\n- Catalogue de produits avec recherche\n- Panier d'achat\n- Création de commande\n- Gestion des stocks (inventaire)\n- Traitement des paiements\n- Envoi de notifications (email, SMS)\n- Génération de rapports d'analyse\n- Système de recommandations basé sur l'historique\n\n**Exigences non-fonctionnelles :**\n- **Haute disponibilité** : 99.9% uptime\n- **Scalabilité** : Support de 10 000 commandes/heure avec pics à 50 000/heure\n- **Résilience** : Tolérance aux pannes (un service peut être down sans affecter les autres)\n- **Performance** : Temps de réponse < 2s pour les opérations critiques (création commande, paiement)\n- **Cohérence** : Les stocks ne doivent jamais être négatifs\n- **Audit** : Traçabilité complète des opérations critiques\n\n**Contraintes techniques :**\n- Équipe de 25 développeurs répartis en 5 équipes (5 dev/équipe)\n- Budget limité pour l'infrastructure\n- Besoin de déploiements indépendants par service\n\n**LIVRABLE 1 : Diagramme d'architecture**\n\nCréez un diagramme d'architecture montrant :\n1. Les services identifiés (découpage par domaine métier)\n2. Les communications entre services (REST vs Events)\n3. Les bases de données par service\n4. Le message broker (choix : RabbitMQ ou Kafka, justifiez)\n5. L'API Gateway\n6. Les patterns de résilience (retry, circuit breaker, DLQ)\n\n**LIVRABLE 2 : Schémas d'événements**\n\nDéfinissez les événements métiers principaux avec leur structure JSON :\n1. Liste des événements (nom, description, producteur, consommateurs)\n2. Structure JSON de 3 événements clés (ex: OrderCreated, PaymentProcessed, StockReserved)\n3. Garanties de livraison pour chaque événement (at-least-once, exactly-once)\n4. Stratégie d'idempotence pour chaque événement\n\n**LIVRABLE 3 : POC technique**\n\nImplémentez un POC minimal avec 2 services :\n1. **Order Service** : Crée une commande et publie l'événement OrderCreated\n2. **Notification Service** : Écoute OrderCreated et envoie un email (simulé)\n\nTechnologies : Node.js/Express ou Python/FastAPI, RabbitMQ ou Kafka, PostgreSQL\n\nLe POC doit démontrer :\n- Publication/consommation d'événements\n- Gestion des erreurs (retry, DLQ)\n- Idempotence\n- Logging structuré avec correlation ID\n\n**LIVRABLE 4 : Analyse des compromis**\n\nRédigez un document (2-3 pages) analysant :\n1. **Découpage des services** : Justification du découpage choisi, alternatives considérées\n2. **Choix REST vs Events** : Pour chaque communication, justification du choix\n3. **Gestion de la cohérence** : Comment garantir que les stocks ne sont jamais négatifs sans transactions distribuées ? (Saga pattern)\n4. **Scalabilité** : Comment scalez-vous chaque service indépendamment ?\n5. **Observabilité** : Comment tracez-vous une commande de bout en bout ?\n6. **Coûts** : Estimation de la complexité opérationnelle vs bénéfices\n\n**BONUS :**\n- Implémentation d'un circuit breaker\n- Distributed tracing avec OpenTelemetry\n- Monitoring avec Prometheus/Grafana",
+            "criteria": [
+              {
+                "id": "crit-tp-1",
+                "description": "Découpage cohérent des services selon les domaines métiers (DDD), avec justification claire de chaque service et de ses responsabilités"
+              },
+              {
+                "id": "crit-tp-2",
+                "description": "Utilisation pertinente des événements : identification correcte des cas d'usage asynchrones, choix approprié REST vs Events pour chaque communication"
+              },
+              {
+                "id": "crit-tp-3",
+                "description": "Gestion des erreurs distribuées : stratégies de retry, DLQ, circuit breaker, et gestion des pannes partielles"
+              },
+              {
+                "id": "crit-tp-4",
+                "description": "Idempotence maîtrisée : mécanismes d'idempotence pour les événements et les opérations critiques, prévention des doublons"
+              },
+              {
+                "id": "crit-tp-5",
+                "description": "Observabilité inter-services : distributed tracing, logging structuré avec correlation ID, métriques clés définies et instrumentées"
+              },
+              {
+                "id": "crit-tp-6",
+                "description": "Cohérence éventuelle : Saga pattern ou compensation pour garantir la cohérence des données sans transactions distribuées"
+              },
+              {
+                "id": "crit-tp-7",
+                "description": "Qualité du code POC : code propre, tests, gestion d'erreurs, documentation"
+              }
+            ],
+            "deliverables": [
+              {
+                "id": "deliv-1",
+                "title": "Diagramme d'architecture",
+                "description": "Diagramme complet montrant les services, leurs communications (REST/Events), bases de données, message broker, API Gateway, et patterns de résilience. Format : draw.io, Mermaid, ou image haute résolution.",
+                "format": "image/diagram"
+              },
+              {
+                "id": "deliv-2",
+                "title": "Schémas d'événements",
+                "description": "Document JSON ou Markdown définissant les événements métiers : nom, structure, producteur, consommateurs, garanties de livraison, stratégie d'idempotence. Minimum 5 événements.",
+                "format": "json/markdown"
+              },
+              {
+                "id": "deliv-3",
+                "title": "POC technique",
+                "description": "Code source du POC avec au moins 2 services (Order + Notification), démontrant publication/consommation d'événements, retry, DLQ, idempotence, logging. Repository Git avec README.",
+                "format": "code/git"
+              },
+              {
+                "id": "deliv-4",
+                "title": "Analyse des compromis",
+                "description": "Document de 2-3 pages analysant les choix d'architecture : découpage, REST vs Events, cohérence, scalabilité, observabilité, coûts. Format PDF ou Markdown.",
+                "format": "document"
+              },
+              {
+                "id": "deliv-5",
+                "title": "Présentation orale (optionnel)",
+                "description": "Présentation de 10-15 minutes expliquant l'architecture, les choix techniques, et démonstration du POC. Slides + démo live.",
+                "format": "presentation"
+              }
+            ],
+            "estimatedDuration": 1200,
+            "difficulty": "expert"
+          }
+        }
+      ]
+    }
+  ]
+}

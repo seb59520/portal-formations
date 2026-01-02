@@ -1,0 +1,1470 @@
+{
+  "title": "Tests & Qualité des APIs – Fiabilité, Contrats et Intégration Continue",
+  "description": "Formation professionnelle niveau AVANCÉ / MAÎTRISE sur la qualité et les tests d'APIs : garantir la fiabilité, la stabilité et la maintenabilité d'APIs en production. Ce module couvre les stratégies de test, les tests contractuels, l'intégration continue et les bonnes pratiques qualité.",
+  "status": "draft",
+  "access_type": "free",
+  "theme": {
+    "primaryColor": "#10B981",
+    "secondaryColor": "#059669",
+    "fontFamily": "Inter"
+  },
+  "modules": [
+    {
+      "title": "Tests & Qualité des APIs – Fiabilité, Contrats et Intégration Continue",
+      "position": 2,
+      "items": [
+        {
+          "type": "slide",
+          "title": "Pourquoi tester une API ?",
+          "position": 0,
+          "published": true,
+          "content": {
+            "description": "Comprendre les enjeux métier et techniques du testing API, le coût d'une API défaillante en production, et la différence entre 'ça marche' et 'c'est fiable'."
+          },
+          "chapters": [
+            {
+              "title": "Enjeux métier et techniques",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Les risques d'une API non testée" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Une API non testée ou insuffisamment testée expose l'entreprise à des risques majeurs :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Pertes financières directes" }, { "type": "text", "text": " : transactions échouées, remboursements, perte de revenus" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Impact sur la réputation" }, { "type": "text", "text": " : perte de confiance des partenaires B2B, clients externes" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Coûts de correction exponentiels" }, { "type": "text", "text": " : un bug détecté en production coûte 10 à 100 fois plus cher qu'en développement" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Blocage des équipes consommatrices" }, { "type": "text", "text": " : développement ralenti, déploiements bloqués" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Exemple concret : panne d'API de paiement" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Une API de paiement défaillante peut générer :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Perte de 1000€/minute de revenus pour un e-commerce" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Remboursements massifs si double facturation" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Coût de correction d'urgence : équipe mobilisée 24/7, hotfix en production" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Coût d'une API défaillante en production",
+              "position": 1,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Modèle de coût selon la phase de détection" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Le coût de correction d'un bug augmente exponentiellement selon le moment où il est détecté :" }
+                    ]
+                  },
+                  {
+                    "type": "orderedList",
+                    "attrs": { "start": 1 },
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Détection en développement" }, { "type": "text", "text": " : 1x (coût de base)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Détection en intégration" }, { "type": "text", "text": " : 10x (déploiement, rollback, coordination)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Détection en staging/pre-production" }, { "type": "text", "text": " : 50x (impact sur la roadmap, régression)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Détection en production" }, { "type": "text", "text": " : 100x à 1000x (incidents critiques, perte de données, SLA violés)" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Coûts indirects" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Temps de diagnostic et de correction (on-call, hotfix)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Communication avec les consommateurs (support, documentation)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Perte de confiance et réputation (partenaires B2B, clients)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Dette technique accumulée (workarounds, code de contournement)" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Différence entre 'ça marche' et 'c'est fiable'",
+              "position": 2,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Le piège du 'happy path'" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Tester uniquement le cas nominal (happy path) donne une fausse impression de fiabilité. Une API fiable doit gérer :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Cas limites" }, { "type": "text", "text": " : valeurs nulles, chaînes vides, nombres négatifs, très grandes valeurs" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Cas d'erreur" }, { "type": "text", "text": " : ressources inexistantes, conflits, validations échouées" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Concurrence" }, { "type": "text", "text": " : accès simultanés, race conditions, transactions parallèles" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Charge et performance" }, { "type": "text", "text": " : latence sous charge, timeouts, dégradation gracieuse" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Évolutivité" }, { "type": "text", "text": " : compatibilité ascendante, migrations de schémas, dépréciations" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Indicateurs de fiabilité" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Disponibilité" }, { "type": "text", "text": " : uptime > 99.9%, résilience aux pannes" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Cohérence" }, { "type": "text", "text": " : comportement prévisible, pas de régressions" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Observabilité" }, { "type": "text", "text": " : logs, métriques, traces pour diagnostiquer rapidement" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Maintenabilité" }, { "type": "text", "text": " : tests automatisés, documentation à jour, refactoring sécurisé" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Typologies de tests API",
+          "position": 1,
+          "published": true,
+          "content": {
+            "description": "Comprendre les différents types de tests API : unitaires, intégration, end-to-end, contractuels et non-régression. Savoir quand utiliser chaque type selon le contexte."
+          },
+          "chapters": [
+            {
+              "title": "Tests unitaires",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Définition et périmètre" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Les tests unitaires valident une " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "unité de code isolée" },
+                      { "type": "text", "text": " (fonction, méthode, classe) sans dépendances externes. Pour une API, cela inclut :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Validation de la logique métier (calculs, transformations, règles)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Parsing et validation des payloads (Zod, Joi, class-validator)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Génération de réponses (formatage, codes HTTP, headers)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Gestion d'erreurs et exceptions" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Exemple : validation d'email" }]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "typescript" },
+                    "content": [
+                      { "type": "text", "text": "describe('Email validation', () => {\n  it('should reject invalid email format', () => {\n    expect(validateEmail('invalid')).toBe(false);\n  });\n  \n  it('should accept valid email', () => {\n    expect(validateEmail('user@example.com')).toBe(true);\n  });\n});" }
+                    ]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Avantages : rapides, isolés, feedback immédiat. Limites : ne détectent pas les problèmes d'intégration." }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Tests d'intégration",
+              "position": 1,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Valider les interactions entre composants" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Les tests d'intégration vérifient que plusieurs composants fonctionnent ensemble correctement. Pour une API, cela inclut :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Interaction avec la base de données (CRUD, transactions, contraintes)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Communication avec des services externes (mocks ou stubs)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Authentification et autorisation (JWT, OAuth, RBAC)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Middleware et pipelines de requêtes" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Exemple : test d'endpoint complet" }]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "typescript" },
+                    "content": [
+                      { "type": "text", "text": "describe('POST /api/users', () => {\n  it('should create user and return 201', async () => {\n    const response = await request(app)\n      .post('/api/users')\n      .send({ email: 'test@example.com', name: 'Test' });\n    \n    expect(response.status).toBe(201);\n    expect(response.body.id).toBeDefined();\n    \n    // Vérifier en DB\n    const user = await db.users.findUnique({ where: { id: response.body.id } });\n    expect(user).toBeTruthy();\n  });\n});" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Tests end-to-end",
+              "position": 2,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Valider un flux complet utilisateur" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Les tests E2E simulent un " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "scénario utilisateur complet" },
+                      { "type": "text", "text": " de bout en bout, avec tous les systèmes réels (ou très proches)." }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Flux métier complets (ex: création de commande → paiement → notification)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Environnement proche de la production (staging, pré-prod)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Détection de régressions globales" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Limites et bonnes pratiques" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Lents et coûteux à maintenir" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Fragiles (dépendances externes, timing)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "À utiliser avec parcimonie : quelques scénarios critiques uniquement" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Tests contractuels (Pact)",
+              "position": 3,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Consumer Driven Contracts" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Les tests contractuels garantissent que le " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "contrat entre consommateur et fournisseur" },
+                      { "type": "text", "text": " est respecté. Le consommateur définit ses attentes, le fournisseur les valide." }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Consumer : génère un contrat (Pact file) basé sur ses attentes" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Provider : vérifie qu'il satisfait tous les contrats des consommateurs" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Détection précoce des breaking changes" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Exemple Pact" }]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "javascript" },
+                    "content": [
+                      { "type": "text", "text": "// Consumer test\nawait provider\n  .given('user exists')\n  .uponReceiving('a request for user')\n  .withRequest({ method: 'GET', path: '/api/users/123' })\n  .willRespondWith({ status: 200, body: { id: 123, name: 'John' } });" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Tests de non-régression",
+              "position": 4,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Garantir la stabilité dans le temps" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Les tests de non-régression vérifient qu'une " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "modification n'a pas cassé des fonctionnalités existantes" },
+                      { "type": "text", "text": "." }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Suite de tests existants exécutée à chaque modification" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Snapshots pour valider la structure des réponses" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Golden files pour les réponses complexes" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Stratégie" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Maintenir une suite de tests stable et rapide, exécutée en CI à chaque commit. Éviter les tests flaky (non déterministes)." }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Tests contractuels et API First",
+          "position": 2,
+          "published": true,
+          "content": {
+            "description": "Maîtriser les tests contractuels avec Pact, comprendre le Consumer Driven Contracts, gérer les breaking changes et assurer la compatibilité ascendante."
+          },
+          "chapters": [
+            {
+              "title": "Consumer Driven Contracts",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Principe fondamental" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Le " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "Consumer Driven Contract (CDC)" },
+                      { "type": "text", "text": " inverse la logique traditionnelle : ce sont les consommateurs qui définissent leurs besoins, et le fournisseur s'adapte." }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Chaque consommateur définit un contrat exprimant ses attentes" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Le fournisseur doit satisfaire tous les contrats pour déployer" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Évite le sur-design : l'API expose uniquement ce qui est nécessaire" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Avantages" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Communication explicite entre équipes" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Détection précoce des incompatibilités" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Évolution guidée par les besoins réels" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Pact Provider / Consumer",
+              "position": 1,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Architecture Pact" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Pact est l'outil de référence pour les tests contractuels. Il fonctionne en deux phases :" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Phase 1 : Consumer" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Le consommateur écrit des tests qui définissent ses attentes" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Pact génère un fichier de contrat (Pact file) au format JSON" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Le contrat est publié dans un broker (Pact Broker) ou partagé" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Phase 2 : Provider" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Le fournisseur récupère les contrats de tous ses consommateurs" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Pact simule les requêtes et vérifie que l'API répond conformément" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Si un contrat échoue, le déploiement est bloqué" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "typescript" },
+                    "content": [
+                      { "type": "text", "text": "// Consumer\nconst pact = new Pact({ consumer: 'Frontend', provider: 'UserAPI' });\nawait pact.addInteraction({\n  state: 'user exists',\n  uponReceiving: 'a request for user',\n  withRequest: { method: 'GET', path: '/api/users/123' },\n  willRespondWith: { status: 200, body: { id: 123, name: 'John' } }\n});\n\n// Provider verification\nawait pact.verifyProvider({\n  providerBaseUrl: 'http://localhost:3000',\n  pactUrls: ['pacts/frontend-userapi.json']\n});" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Gestion des breaking changes",
+              "position": 2,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Détection et stratégie" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Un " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "breaking change" },
+                      { "type": "text", "text": " est une modification qui casse la compatibilité avec les consommateurs existants." }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Types de breaking changes" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Suppression d'endpoint" }, { "type": "text", "text": " : endpoint retiré" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Modification de schéma" }, { "type": "text", "text": " : champ requis devenu optionnel (ou inversement), type changé" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Changement de code HTTP" }, { "type": "text", "text": " : 200 → 404 pour une ressource inexistante" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Modification sémantique" }, { "type": "text", "text": " : comportement différent pour la même requête" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Stratégie de migration" }]
+                  },
+                  {
+                    "type": "orderedList",
+                    "attrs": { "start": 1 },
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Déprécier l'ancienne version (headers, documentation)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Maintenir les deux versions en parallèle (versioning)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Communiquer avec les consommateurs (timeline, migration guide)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Sunset planifié après période de transition" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Compatibilité ascendante",
+              "position": 3,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Règles d'évolution sécurisée" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Pour garantir la " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "compatibilité ascendante" },
+                      { "type": "text", "text": ", suivre ces règles :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Ajouter, ne jamais supprimer" }, { "type": "text", "text": " : nouveaux champs optionnels uniquement" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Rendre optionnel, jamais requis" }, { "type": "text", "text": " : un champ optionnel peut devenir requis dans une nouvelle version majeure" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Étendre les enums" }, { "type": "text", "text": " : ajouter des valeurs, jamais en retirer" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Versioning sémantique" }, { "type": "text", "text": " : MAJOR.MINOR.PATCH (SemVer)" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Exemple : évolution sécurisée" }]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "json" },
+                    "content": [
+                      { "type": "text", "text": "// v1.0 - Compatible\n{\n  \"id\": 123,\n  \"name\": \"John\"\n}\n\n// v1.1 - Compatible (nouveau champ optionnel)\n{\n  \"id\": 123,\n  \"name\": \"John\",\n  \"email\": \"john@example.com\"  // nouveau, optionnel\n}\n\n// v2.0 - Breaking change (email requis)\n{\n  \"id\": 123,\n  \"name\": \"John\",\n  \"email\": \"john@example.com\"  // maintenant requis\n}" }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Mocks, stubs et environnements",
+          "position": 3,
+          "published": true,
+          "content": {
+            "description": "Comprendre quand et comment utiliser les mocks et stubs, créer des données de test réalistes, et isoler les environnements de test."
+          },
+          "chapters": [
+            {
+              "title": "Pourquoi mocker",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Objectifs du mocking" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Le mocking permet de " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "isoler le code testé" },
+                      { "type": "text", "text": " en remplaçant les dépendances externes par des implémentations contrôlées." }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Isolation" }, { "type": "text", "text": " : tester uniquement la logique de l'unité, pas ses dépendances" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Rapidité" }, { "type": "text", "text": " : éviter les appels réseau, les accès DB lents" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Contrôle" }, { "type": "text", "text": " : simuler des erreurs, des timeouts, des cas limites" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Stabilité" }, { "type": "text", "text": " : tests non dépendants de services externes (APIs tierces, DB distante)" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Exemple : mock d'un service externe" }]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "typescript" },
+                    "content": [
+                      { "type": "text", "text": "// Mock d'un service de paiement\njest.mock('./paymentService', () => ({\n  processPayment: jest.fn().mockResolvedValue({ success: true, transactionId: '123' }),\n  refundPayment: jest.fn().mockResolvedValue({ success: true })\n}));" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Quand ne PAS mocker",
+              "position": 1,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Pièges du sur-mocking" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Mocker trop souvent peut " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "masquer des problèmes réels" },
+                      { "type": "text", "text": " et donner une fausse confiance. Ne pas mocker :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Les dépendances internes" }, { "type": "text", "text": " : utiliser de vraies implémentations dans les tests d'intégration" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "La base de données" }, { "type": "text", "text": " : utiliser une DB de test (SQLite en mémoire, Testcontainers)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Les validations" }, { "type": "text", "text": " : tester avec de vraies règles de validation" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Les transformations" }, { "type": "text", "text": " : mapper, formater, calculer avec la vraie logique" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Règle d'or" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Mocker uniquement ce qui est " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "hors de votre contrôle" },
+                      { "type": "text", "text": " (services externes, APIs tierces, systèmes distants). Pour tout le reste, utiliser de vraies implémentations dans des tests d'intégration." }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Données de test réalistes",
+              "position": 2,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Factories et fixtures" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Utiliser des " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "factories" },
+                      { "type": "text", "text": " pour générer des données de test cohérentes et réalistes." }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "typescript" },
+                    "content": [
+                      { "type": "text", "text": "// Factory pattern\nconst createUser = (overrides = {}) => ({\n  id: faker.number.int(),\n  email: faker.internet.email(),\n  name: faker.person.fullName(),\n  createdAt: new Date(),\n  ...overrides\n});\n\n// Usage dans les tests\nconst user = createUser({ email: 'test@example.com' });" }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Bonnes pratiques" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Utiliser Faker.js ou équivalent pour des données variées" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Créer des fixtures pour des scénarios complexes" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Isoler les données de test (cleanup après chaque test)" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Environnements isolés",
+              "position": 3,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Isolation complète" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Chaque test doit s'exécuter dans un " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "environnement isolé" },
+                      { "type": "text", "text": " pour éviter les interférences." }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Base de données" }, { "type": "text", "text": " : DB dédiée par test ou transaction rollback" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Services externes" }, { "type": "text", "text": " : WireMock, MockServer pour simuler des APIs" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Conteneurs" }, { "type": "text", "text": " : Testcontainers pour DB, Redis, etc." }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Nettoyage" }, { "type": "text", "text": " : beforeEach/afterEach pour reset l'état" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "typescript" },
+                    "content": [
+                      { "type": "text", "text": "// Exemple avec Testcontainers\nbeforeAll(async () => {\n  postgresContainer = await new PostgreSqlContainer().start();\n  process.env.DATABASE_URL = postgresContainer.getConnectionString();\n});\n\nafterAll(async () => {\n  await postgresContainer.stop();\n});" }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "slide",
+          "title": "Qualité continue et CI",
+          "position": 4,
+          "published": true,
+          "content": {
+            "description": "Automatiser les tests dans un pipeline CI, définir des seuils de qualité, bloquer les déploiements non conformes, et instaurer une culture qualité."
+          },
+          "chapters": [
+            {
+              "title": "Automatisation des tests",
+              "position": 0,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Pipeline CI typique" }]
+                  },
+                  {
+                    "type": "orderedList",
+                    "attrs": { "start": 1 },
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Lint et formatage (ESLint, Prettier)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Tests unitaires (rapides, < 1 min)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Tests d'intégration (moyens, < 5 min)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Tests contractuels (Pact verification)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Build et déploiement conditionnel" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Exemple GitHub Actions" }]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "yaml" },
+                    "content": [
+                      { "type": "text", "text": "name: CI\non: [push, pull_request]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v3\n      - name: Run tests\n        run: npm test\n      - name: Check coverage\n        run: npm run test:coverage\n      - name: Verify contracts\n        run: npm run test:contracts" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Seuils de qualité",
+              "position": 1,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Métriques à suivre" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Couverture de code" }, { "type": "text", "text": " : minimum 80% (idéalement 90%+ pour la logique critique)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Taux de réussite" }, { "type": "text", "text": " : 100% des tests doivent passer" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Temps d'exécution" }, { "type": "text", "text": " : suite complète < 10 minutes" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Complexité cyclomatique" }, { "type": "text", "text": " : maintenir une complexité raisonnable" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Configuration Jest" }]
+                  },
+                  {
+                    "type": "codeBlock",
+                    "attrs": { "language": "json" },
+                    "content": [
+                      { "type": "text", "text": "{\n  \"coverageThreshold\": {\n    \"global\": {\n      \"branches\": 80,\n      \"functions\": 80,\n      \"lines\": 80,\n      \"statements\": 80\n    }\n  }\n}" }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Bloquer un déploiement",
+              "position": 2,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Gatekeepers dans le pipeline" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Le pipeline CI doit " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "bloquer automatiquement" },
+                      { "type": "text", "text": " un déploiement si :" }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Des tests échouent (unitaires, intégration, E2E)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "La couverture de code est en dessous du seuil" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Les contrats Pact ne sont pas satisfaits" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Des vulnérabilités critiques sont détectées (SAST, dépendances)" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Le build échoue" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Principe : fail fast" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "Détecter et bloquer les problèmes le plus tôt possible dans le pipeline. Un échec en CI coûte moins cher qu'un échec en production." }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Culture qualité et responsabilité partagée",
+              "position": 3,
+              "content": {
+                "type": "doc",
+                "content": [
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 2 },
+                    "content": [{ "type": "text", "text": "Qualité = responsabilité de tous" }]
+                  },
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      { "type": "text", "text": "La qualité n'est pas la responsabilité exclusive d'une équipe QA. C'est une " },
+                      { "type": "text", "marks": [{ "type": "bold" }], "text": "responsabilité partagée" },
+                      { "type": "text", "text": " de toute l'équipe." }
+                    ]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Développeurs" }, { "type": "text", "text": " : écrire des tests, maintenir la couverture" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Architectes" }, { "type": "text", "text": " : définir les stratégies de test, les contrats" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "DevOps" }, { "type": "text", "text": " : maintenir les pipelines, les environnements" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Product Owners" }, { "type": "text", "text": " : allouer du temps pour la qualité" }] }]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "heading",
+                    "attrs": { "level": 3 },
+                    "content": [{ "type": "text", "text": "Pratiques" }]
+                  },
+                  {
+                    "type": "bulletList",
+                    "content": [
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Definition of Done incluant les tests" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Code review obligatoire avec vérification des tests" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Rétrospectives incluant la qualité" }] }]
+                      },
+                      {
+                        "type": "listItem",
+                        "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Métriques de qualité visibles (dashboards)" }] }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "exercise",
+          "title": "Identifier les tests manquants",
+          "position": 5,
+          "published": true,
+          "content": {
+            "instruction": "**Contexte :**\n\nVous êtes responsable qualité d'une API de gestion de commandes en production depuis 3 mois. L'API est consommée par une application web et une application mobile. Vous recevez régulièrement des remontées d'incidents en production.\n\n**API fournie :**\n\n```typescript\n// Endpoint : POST /api/orders\nasync function createOrder(req: Request, res: Response) {\n  const { userId, items, total } = req.body;\n  \n  // Validation basique\n  if (!userId || !items || items.length === 0) {\n    return res.status(400).json({ error: 'Invalid request' });\n  }\n  \n  // Création de la commande\n  const order = await db.orders.create({\n    data: {\n      userId,\n      items: JSON.stringify(items),\n      total,\n      status: 'pending',\n      createdAt: new Date()\n    }\n  });\n  \n  // Appel service de paiement (externe)\n  const payment = await paymentService.processPayment({\n    orderId: order.id,\n    amount: total\n  });\n  \n  if (payment.success) {\n    await db.orders.update({\n      where: { id: order.id },\n      data: { status: 'paid' }\n    });\n  }\n  \n  return res.status(201).json({ orderId: order.id, status: order.status });\n}\n\n// Endpoint : GET /api/orders/:id\nasync function getOrder(req: Request, res: Response) {\n  const order = await db.orders.findUnique({\n    where: { id: parseInt(req.params.id) }\n  });\n  \n  if (!order) {\n    return res.status(404).json({ error: 'Order not found' });\n  }\n  \n  return res.status(200).json(order);\n}\n```\n\n**Incidents remontés en production :**\n\n1. Double facturation : certaines commandes sont facturées deux fois\n2. Commandes créées avec un total incorrect (calcul côté client non validé)\n3. Timeout lors de l'appel au service de paiement → commande créée mais non payée\n4. Erreur 500 quand l'ID de commande est une chaîne de caractères\n5. Commandes accessibles par n'importe quel utilisateur (pas de vérification d'autorisation)\n\n**Consignes :**\n\n1. Identifiez les risques liés à l'absence de tests pour chaque endpoint\n2. Pour chaque incident, proposez le type de test qui aurait permis de le détecter\n3. Rédigez un plan de tests couvrant les cas critiques\n4. Justifiez vos choix de stratégie de test",
+            "criteria": [
+              "Identification d'au moins 5 risques liés à l'absence de tests (sécurité, intégrité des données, gestion d'erreurs, concurrence)",
+              "Association correcte entre chaque incident et le type de test approprié (unitaire, intégration, E2E, contractuel)",
+              "Plan de tests structuré couvrant les cas critiques (happy path, erreurs, limites, sécurité)",
+              "Justification claire de la stratégie de test proposée avec explication des choix",
+              "Prise en compte des contraintes réelles (services externes, base de données, concurrence)"
+            ],
+            "deliverables": [
+              "Document d'analyse des risques (format Markdown ou PDF)",
+              "Tableau récapitulatif : Incident → Type de test → Scénario de test",
+              "Plan de tests détaillé avec scénarios pour chaque endpoint",
+              "Justification de la stratégie de test avec explication des choix techniques"
+            ]
+          }
+        },
+        {
+          "type": "exercise",
+          "title": "Choisir une stratégie de test",
+          "position": 6,
+          "published": true,
+          "content": {
+            "instruction": "**Objectif :** Choisir et justifier une stratégie de test adaptée à différents contextes d'architecture.\n\n**Scénarios :**\n\n### Scénario 1 : API monolithique interne\n- API REST utilisée uniquement par l'équipe frontend de la même entreprise\n- Déploiements fréquents (plusieurs fois par jour)\n- Équipe de 5 développeurs\n- Pas de SLA strict\n\n### Scénario 2 : Micro-services distribués\n- 10 micro-services communiquant via APIs REST\n- Chaque service a ses propres consommateurs (autres services, frontend)\n- Déploiements indépendants\n- SLA de 99.9% requis\n\n### Scénario 3 : API publique B2B\n- API REST exposée à des partenaires externes\n- Versioning strict (SemVer)\n- SLA contractuel (99.95%)\n- Breaking changes interdits sans migration plan\n- Documentation publique obligatoire\n\n**Consignes :**\n\nPour chaque scénario :\n1. Identifiez les types de tests prioritaires (unitaire, intégration, E2E, contractuel)\n2. Justifiez vos choix en fonction des contraintes du contexte\n3. Proposez une répartition de l'effort de test (pyramide de tests)\n4. Définissez les critères de qualité et les seuils à respecter\n5. Expliquez comment intégrer les tests dans le pipeline CI/CD",
+            "criteria": [
+              "Choix de stratégie de test adapté à chaque contexte avec justification claire",
+              "Répartition de l'effort de test cohérente (pyramide : beaucoup d'unitaires, moins d'E2E)",
+              "Définition de critères de qualité pertinents pour chaque contexte (couverture, temps d'exécution, SLA)",
+              "Intégration CI/CD réaliste avec étapes de test appropriées",
+              "Prise en compte des contraintes spécifiques (déploiements fréquents, SLA, breaking changes)"
+            ],
+            "deliverables": [
+              "Tableau comparatif des stratégies de test pour les 3 scénarios",
+              "Diagramme de pyramide de tests pour chaque scénario",
+              "Document de justification des choix avec explication des compromis",
+              "Configuration CI/CD proposée (fichier YAML ou équivalent) pour au moins un scénario"
+            ]
+          }
+        },
+        {
+          "type": "game",
+          "title": "Test Pyramid Builder",
+          "position": 7,
+          "published": true,
+          "content": {
+            "description": "Jeu interactif pour comprendre la pyramide de tests et associer chaque type de test à la bonne couche."
+          },
+          "game_content": {
+            "gameType": "column-matching",
+            "description": "Associez chaque type de test à sa position dans la pyramide de tests et à ses caractéristiques",
+            "instructions": "Glissez chaque élément de la colonne de gauche vers la colonne de droite correspondante. Vous pouvez réessayer jusqu'à obtenir toutes les bonnes associations.",
+            "leftColumn": [
+              "Tests unitaires",
+              "Tests d'intégration",
+              "Tests end-to-end",
+              "Tests contractuels",
+              "Tests de performance"
+            ],
+            "rightColumn": [
+              "Base de la pyramide - Rapides, isolés, nombreux",
+              "Milieu de la pyramide - Valident les interactions entre composants",
+              "Sommet de la pyramide - Lents, peu nombreux, scénarios critiques",
+              "Spécifiques aux micro-services - Valident les contrats consommateurs/fournisseurs",
+              "Tests non-fonctionnels - Valident la charge et la latence"
+            ],
+            "correctMatches": [
+              { "left": 0, "right": 0 },
+              { "left": 1, "right": 1 },
+              { "left": 2, "right": 2 },
+              { "left": 3, "right": 3 },
+              { "left": 4, "right": 4 }
+            ]
+          }
+        },
+        {
+          "type": "game",
+          "title": "Contract Breaker",
+          "position": 8,
+          "published": true,
+          "content": {
+            "description": "Jeu pour identifier si une évolution d'API casse le contrat avec les consommateurs existants."
+          },
+          "game_content": {
+            "gameType": "api-types",
+            "description": "Analysez chaque évolution d'API et déterminez si elle casse le contrat (breaking change) ou non",
+            "instructions": "Pour chaque scénario, sélectionnez si l'évolution est un Breaking Change (casse le contrat) ou un Safe Change (évolution compatible). Vous obtiendrez un feedback immédiat.",
+            "scenarios": [
+              {
+                "id": "s1",
+                "scenario": "API v1.0 retourne : { \"id\": 123, \"name\": \"John\" }. API v1.1 ajoute un champ optionnel \"email\". Est-ce un breaking change ?",
+                "options": {
+                  "type": ["Breaking Change", "Safe Change"]
+                },
+                "correctAnswer": {
+                  "type": "Safe Change"
+                },
+                "explanation": "Ajouter un champ optionnel est compatible. Les consommateurs existants continuent de fonctionner car ils n'ont pas besoin de ce nouveau champ."
+              },
+              {
+                "id": "s2",
+                "scenario": "API v1.0 : POST /api/users accepte { \"name\": \"John\" }. API v2.0 : le champ \"email\" devient requis. Est-ce un breaking change ?",
+                "options": {
+                  "type": ["Breaking Change", "Safe Change"]
+                },
+                "correctAnswer": {
+                  "type": "Breaking Change"
+                },
+                "explanation": "Rendre un champ requis casse les consommateurs qui ne l'envoient pas. C'est acceptable dans une version majeure (v2.0) mais reste un breaking change."
+              },
+              {
+                "id": "s3",
+                "scenario": "API v1.0 : GET /api/users/123 retourne 200 avec body vide si l'utilisateur n'existe pas. API v1.1 : retourne 404 si l'utilisateur n'existe pas. Est-ce un breaking change ?",
+                "options": {
+                  "type": ["Breaking Change", "Safe Change"]
+                },
+                "correctAnswer": {
+                  "type": "Breaking Change"
+                },
+                "explanation": "Changer le code HTTP casse les consommateurs qui s'attendent à un 200. Le comportement sémantique change et peut casser la logique côté client."
+              },
+              {
+                "id": "s4",
+                "scenario": "API v1.0 : GET /api/users retourne un tableau. API v1.1 : un nouvel endpoint GET /api/users/:id/stats est ajouté. Est-ce un breaking change ?",
+                "options": {
+                  "type": ["Breaking Change", "Safe Change"]
+                },
+                "correctAnswer": {
+                  "type": "Safe Change"
+                },
+                "explanation": "Ajouter un nouvel endpoint ne casse pas les consommateurs existants. C'est une extension qui n'affecte pas les endpoints existants."
+              },
+              {
+                "id": "s5",
+                "scenario": "API v1.0 : champ \"status\" est un enum [\"pending\", \"active\"]. API v1.1 : ajoute \"archived\" à l'enum. Est-ce un breaking change ?",
+                "options": {
+                  "type": ["Breaking Change", "Safe Change"]
+                },
+                "correctAnswer": {
+                  "type": "Safe Change"
+                },
+                "explanation": "Étendre un enum est compatible. Les valeurs existantes restent valides et les nouveaux consommateurs peuvent utiliser la nouvelle valeur."
+              },
+              {
+                "id": "s6",
+                "scenario": "API v1.0 : GET /api/orders/:id retourne { \"id\": 123, \"total\": 100.50 }. API v1.1 : le champ \"total\" passe de number à string. Est-ce un breaking change ?",
+                "options": {
+                  "type": ["Breaking Change", "Safe Change"]
+                },
+                "correctAnswer": {
+                  "type": "Breaking Change"
+                },
+                "explanation": "Changer le type d'un champ casse les consommateurs qui s'attendent à un number. Le parsing JSON donnera un type incorrect et peut casser les calculs côté client."
+              },
+              {
+                "id": "s7",
+                "scenario": "API v1.0 : GET /api/users/:id retourne { \"id\": 123, \"name\": \"John\" }. API v1.1 : supprime le champ \"name\" de la réponse. Est-ce un breaking change ?",
+                "options": {
+                  "type": ["Breaking Change", "Safe Change"]
+                },
+                "correctAnswer": {
+                  "type": "Breaking Change"
+                },
+                "explanation": "Supprimer un champ existant casse les consommateurs qui s'attendent à ce champ. C'est un breaking change majeur."
+              },
+              {
+                "id": "s8",
+                "scenario": "API v1.0 : POST /api/orders accepte { \"items\": [...] }. API v1.1 : ajoute un champ optionnel \"discountCode\" dans le body. Est-ce un breaking change ?",
+                "options": {
+                  "type": ["Breaking Change", "Safe Change"]
+                },
+                "correctAnswer": {
+                  "type": "Safe Change"
+                },
+                "explanation": "Ajouter un champ optionnel dans le body de requête est compatible. Les consommateurs existants peuvent ignorer ce champ."
+              }
+            ]
+          }
+        },
+        {
+          "type": "tp",
+          "title": "TP – Mise en place d'une stratégie de tests API complète",
+          "position": 9,
+          "published": true,
+          "content": {
+            "instruction": "**Contexte :**\n\nVous êtes architecte qualité dans une entreprise qui développe une API de gestion de commandes. L'API est en production et est consommée par :\n- Une application web frontend (React)\n- Une application mobile (iOS/Android)\n- Un partenaire B2B (intégration externe)\n\n**Objectifs :**\n\nMettre en place une stratégie de tests complète garantissant :\n- Zéro régression en production\n- Détection précoce des breaking changes\n- Fiabilité et stabilité de l'API\n- Intégration dans un pipeline CI/CD existant\n\n**API à tester :**\n\n```typescript\n// Endpoints principaux\nPOST   /api/v1/orders          // Créer une commande\nGET    /api/v1/orders/:id      // Récupérer une commande\nPATCH  /api/v1/orders/:id     // Mettre à jour une commande\nPOST   /api/v1/orders/:id/pay  // Payer une commande\nGET    /api/v1/orders          // Lister les commandes (avec pagination)\n\n// Services externes utilisés\n- PaymentService (API REST externe)\n- NotificationService (webhook)\n- InventoryService (API REST interne)\n```\n\n**Contraintes :**\n\n- Environnement CI/CD : GitHub Actions\n- Base de données : PostgreSQL (utiliser Testcontainers pour les tests)\n- Framework de test : Jest (ou équivalent selon votre stack)\n- Langage : TypeScript/Node.js (ou votre stack préférée)\n- Contrats : Pact pour les tests contractuels\n- Couverture minimale requise : 80%\n\n**Tâches à réaliser :**\n\n1. **Tests unitaires**\n   - Tester la logique métier (calculs, validations, transformations)\n   - Tester les parsers et validateurs de payloads\n   - Mocker les dépendances externes\n   - Objectif : couverture > 90% pour la logique métier\n\n2. **Tests d'intégration**\n   - Tester chaque endpoint avec une vraie base de données (Testcontainers)\n   - Valider les flux principaux (création, lecture, mise à jour)\n   - Tester les cas d'erreur (404, 400, 500)\n   - Tester l'authentification et l'autorisation\n\n3. **Tests contractuels (Pact)**\n   - Créer des contrats côté consommateur (frontend, mobile, B2B)\n   - Vérifier les contrats côté fournisseur (API)\n   - Intégrer la vérification dans le pipeline CI\n   - Détecter les breaking changes avant déploiement\n\n4. **Mocks et stubs**\n   - Mocker les services externes (PaymentService, NotificationService)\n   - Utiliser WireMock ou équivalent pour simuler les APIs externes\n   - Créer des factories pour générer des données de test réalistes\n\n5. **Pipeline CI/CD**\n   - Configurer GitHub Actions (ou équivalent)\n   - Exécuter les tests unitaires en premier (rapides)\n   - Exécuter les tests d'intégration\n   - Vérifier les contrats Pact\n   - Bloquer le déploiement si les tests échouent ou si la couverture est < 80%\n   - Générer un rapport de couverture\n\n6. **Documentation**\n   - Documenter la stratégie de test\n   - Expliquer comment ajouter de nouveaux tests\n   - Documenter les mocks et leur utilisation\n   - Créer un guide pour les développeurs\n\n**Livrables attendus :**\n\n- Repository Git avec le code de l'API et tous les tests\n- Fichiers de contrats Pact (au moins 2 consommateurs)\n- Configuration CI/CD complète (fichier YAML)\n- Rapport d'analyse qualité avec métriques de couverture\n- Documentation de la stratégie de test\n\n**Critères d'évaluation :**\n\n- Qualité et exhaustivité des tests (couverture, cas limites, erreurs)\n- Utilisation pertinente des mocks (ne pas sur-mocker)\n- Intégration Pact fonctionnelle (contrats créés et vérifiés)\n- Pipeline CI opérationnel (tests exécutés, déploiement bloqué si échec)\n- Documentation claire et exploitable",
+            "criteria": [
+              "Tests unitaires couvrant la logique métier avec une couverture > 90% pour les fonctions critiques (calculs, validations, transformations)",
+              "Tests d'intégration valident les flux principaux (création, lecture, mise à jour) avec une vraie base de données (Testcontainers ou équivalent)",
+              "Tests contractuels Pact implémentés avec au moins 2 consommateurs (frontend et mobile ou B2B), contrats créés et vérification intégrée en CI",
+              "Utilisation pertinente de mocks pour les services externes (PaymentService, NotificationService) sans sur-mocking des dépendances internes",
+              "Pipeline CI/CD opérationnel avec exécution des tests, vérification des contrats, blocage du déploiement si échec ou couverture < 80%, génération de rapports",
+              "Documentation complète de la stratégie de test avec guide pour les développeurs, explication des mocks, et procédures d'ajout de nouveaux tests",
+              "Gestion des cas d'erreur et des cas limites (404, 400, 500, validations, timeouts) dans les tests d'intégration",
+              "Rapport d'analyse qualité avec métriques de couverture, temps d'exécution, et recommandations d'amélioration"
+            ],
+            "deliverables": [
+              "Repository Git avec le code de l'API et tous les tests (structure claire, README avec instructions)",
+              "Fichiers de contrats Pact pour au moins 2 consommateurs (frontend et mobile ou B2B) avec scénarios réalistes",
+              "Pipeline CI/CD documenté et fonctionnel (fichier YAML GitHub Actions ou équivalent) avec toutes les étapes de test",
+              "Rapport d'analyse qualité (format PDF ou Markdown) avec métriques de couverture, temps d'exécution, analyse des résultats",
+              "Documentation de la stratégie de test (guide développeur, explication des choix, procédures d'ajout de tests)",
+              "Configuration des mocks et stubs (WireMock, factories, fixtures) avec documentation de leur utilisation",
+              "Exemples de tests pour chaque type (unitaire, intégration, contractuel) avec commentaires expliquant les choix"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
+

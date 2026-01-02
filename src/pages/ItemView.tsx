@@ -6,6 +6,8 @@ import { Item, Submission } from '../types/database'
 import { ItemRenderer } from '../components/ItemRenderer'
 import { ChapterViewer } from '../components/ChapterViewer'
 import { RichTextEditor } from '../components/RichTextEditor'
+import { ResizableContainer } from '../components/ResizableContainer'
+import { Lexique } from './Lexique'
 
 export function ItemView() {
   const { itemId } = useParams<{ itemId: string }>()
@@ -79,8 +81,9 @@ export function ItemView() {
               })
           }
         }
-        // Pour les autres cas, vérifier l'enrollment
+        // Pour les autres cas, vérifier l'enrollment direct OU via un programme
         else {
+          // Vérifier d'abord l'enrollment direct
           const { data: accessCheck, error: accessError } = await supabase
             .from('enrollments')
             .select('id')
@@ -89,10 +92,35 @@ export function ItemView() {
             .eq('status', 'active')
             .maybeSingle()
 
+          // Si pas d'inscription directe, vérifier via un programme
           if (accessError || !accessCheck) {
-            setError('Vous n\'avez pas accès à cet élément.')
-            setLoading(false)
-            return
+            // Vérifier si l'utilisateur a accès via un programme
+            const { data: programCourses } = await supabase
+              .from('program_courses')
+              .select('program_id')
+              .eq('course_id', courseId)
+
+            if (programCourses && programCourses.length > 0) {
+              const programIds = programCourses.map(pc => pc.program_id)
+              const { data: programAccess } = await supabase
+                .from('program_enrollments')
+                .select('id')
+                .eq('user_id', user.id)
+                .eq('status', 'active')
+                .in('program_id', programIds)
+                .maybeSingle()
+
+              if (!programAccess) {
+                setError('Vous n\'avez pas accès à cet élément.')
+                setLoading(false)
+                return
+              }
+            } else {
+              // Pas de programme contenant cette formation
+              setError('Vous n\'avez pas accès à cet élément.')
+              setLoading(false)
+              return
+            }
           }
         }
       }
@@ -145,62 +173,79 @@ export function ItemView() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center space-x-4">
-              <Link
-                to={`/courses/${item.modules?.courses?.id}`}
-                className="text-blue-600 hover:text-blue-500"
-              >
-                ← Retour à la formation
-              </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">{item.title}</h1>
-                <p className="text-sm text-gray-600">
-                  Formation: {item.modules?.courses?.title}
-                </p>
+        <div className="w-full mx-auto">
+          <ResizableContainer storageKey="item-view-width" defaultWidth={95} minWidth={60} maxWidth={100}>
+            <div className="px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center py-6">
+                <div className="flex items-center space-x-4">
+                  <Link
+                    to={`/courses/${item.modules?.courses?.id}`}
+                    className="text-blue-600 hover:text-blue-500"
+                  >
+                    ← Retour à la formation
+                  </Link>
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-900">{item.title}</h1>
+                    <p className="text-sm text-gray-600">
+                      Formation: {item.modules?.courses?.title}
+                    </p>
+                  </div>
+                </div>
+                {profile?.role === 'admin' && (
+                  <Link
+                    to={`/admin/items/${item.id}/edit`}
+                    className="btn-secondary text-sm"
+                  >
+                    Modifier
+                  </Link>
+                )}
               </div>
             </div>
-            {profile?.role === 'admin' && (
-              <Link
-                to={`/admin/items/${item.id}/edit`}
-                className="btn-secondary text-sm"
-              >
-                Modifier
-              </Link>
-            )}
-          </div>
+          </ResizableContainer>
         </div>
       </header>
 
       {/* Main content */}
-      <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0 space-y-8">
-          {/* Contenu principal de l'item */}
-          {item.content?.body && (
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Contenu</h2>
-              <RichTextEditor
-                content={item.content.body}
-                onChange={() => {}} // Lecture seule
-                editable={false}
-              />
+      <main className="w-full py-6">
+        <div className="w-full mx-auto">
+          <ResizableContainer storageKey="item-view-width" defaultWidth={95} minWidth={60} maxWidth={100}>
+            <div className="px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+          {/* Détecter si c'est le lexique */}
+          {item.title.toLowerCase().includes('lexique') || item.content?.isLexique ? (
+            <div className="bg-white rounded-lg shadow">
+              <Lexique />
             </div>
+          ) : (
+            <>
+              {/* Contenu principal de l'item - seulement si ce n'est pas un jeu */}
+              {item.content?.body && item.type !== 'game' && (
+                <div className="bg-white rounded-lg shadow p-6 lg:p-8">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Contenu</h2>
+                  <RichTextEditor
+                    content={item.content.body}
+                    onChange={() => {}} // Lecture seule
+                    editable={false}
+                  />
+                </div>
+              )}
+
+              {/* Chapitres */}
+              <div className="bg-white rounded-lg shadow p-6 lg:p-8">
+                <ChapterViewer itemId={item.id} />
+              </div>
+
+              {/* Contenu spécifique selon le type (exercices, TP, etc.) */}
+              <div className="bg-white rounded-lg shadow p-6 lg:p-8">
+                <ItemRenderer
+                  item={item}
+                  submission={submission}
+                  onSubmissionUpdate={setSubmission}
+                />
+              </div>
+            </>
           )}
-
-          {/* Chapitres */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <ChapterViewer itemId={item.id} />
-          </div>
-
-          {/* Contenu spécifique selon le type (exercices, TP, etc.) */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <ItemRenderer
-              item={item}
-              submission={submission}
-              onSubmissionUpdate={setSubmission}
-            />
-          </div>
+            </div>
+          </ResizableContainer>
         </div>
       </main>
     </div>

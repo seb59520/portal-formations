@@ -1,0 +1,14 @@
+/* Masquer les headers internes des composants admin dans AdminUnified */
+.admin-unified header {
+  display: none !important;
+}
+
+.admin-unified h1 {
+  display: none !important;
+}
+
+/* Afficher les headers simplifiés dans AdminUnified */
+.admin-unified .admin-unified-header {
+  display: block !important;
+}
+

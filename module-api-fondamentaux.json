@@ -1,0 +1,1861 @@
+{
+  "title": "Fondamentaux des API & Architectures Backend Modernes",
+  "description": "Formation professionnelle niveau AVANCÉ / MAÎTRISE sur les APIs modernes : comprendre, concevoir, sécuriser, tester et exploiter des APIs. Ce module couvre les fondamentaux des API, le protocole HTTP, la gestion des erreurs, le cycle de vie d'une API et les différentes typologies d'API selon leur audience.",
+  "status": "draft",
+  "access_type": "free",
+  "theme": {
+    "primaryColor": "#3B82F6",
+    "secondaryColor": "#8B5CF6",
+    "fontFamily": "Inter"
+  },
+  "modules": [
+    {
+      "title": "Fondamentaux des API & Architectures Backend Modernes",
+      "position": 0,
+      "items": [
+    {
+      "type": "slide",
+      "title": "Qu'est-ce qu'une API ?",
+      "position": 0,
+      "published": true,
+      "content": {
+        "description": "Comprendre les fondamentaux des API, leur rôle stratégique dans l'architecture logicielle moderne et leur positionnement en tant que produit à part entière."
+      },
+      "chapters": [
+        {
+          "title": "Définition précise d'une API",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Application Programming Interface" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Une API (Application Programming Interface) est un " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "contrat d'interface" },
+                  { "type": "text", "text": " qui définit les modalités de communication entre deux systèmes logiciels. Elle spécifie :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Les endpoints disponibles et leur sémantique" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Les formats d'entrée/sortie (payloads)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Les protocoles de communication (HTTP, gRPC, WebSocket)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Les mécanismes d'authentification et d'autorisation" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Les comportements attendus en cas d'erreur" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "L'API est le " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "point de découplage" },
+                  { "type": "text", "text": " entre l'implémentation interne d'un système et ses consommateurs. Elle permet l'évolution indépendante des deux parties tant que le contrat est respecté." }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "API vs Backend vs Service vs Micro-service",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Clarification terminologique" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Ces termes sont souvent confondus. Voici leurs distinctions précises :" }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Backend" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Le backend désigne l'ensemble de la couche serveur d'une application : base de données, logique métier, orchestration, authentification. C'est un " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "périmètre technique" },
+                  { "type": "text", "text": "." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Service" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Un service est une " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "unité fonctionnelle autonome" },
+                  { "type": "text", "text": " qui encapsule une responsabilité métier précise (ex: UserService, PaymentService). Il peut être monolithique ou distribué." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Micro-service" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Un micro-service est un service " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "déployable indépendamment" },
+                  { "type": "text", "text": ", avec son propre cycle de vie, sa propre base de données, et communiquant via des APIs. C'est un pattern architectural, pas une taille." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "API" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "L'API est " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "l'interface exposée" },
+                  { "type": "text", "text": " par un service ou un backend. Un service peut exposer plusieurs APIs (REST, GraphQL, gRPC). L'API est le contrat, le service est l'implémentation." }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "L'API comme produit",
+          "position": 2,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "API-as-a-Product : une approche stratégique" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "L'approche 'API-as-a-Product' transforme l'API d'un simple artefact technique en un " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "produit à part entière" },
+                  { "type": "text", "text": " avec ses propres métriques de succès." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Les consommateurs" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Équipes internes" }, { "type": "text", "text": " : frontend, mobile, autres micro-services" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Partenaires B2B" }, { "type": "text", "text": " : intégrations avec des systèmes tiers" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Développeurs externes" }, { "type": "text", "text": " : écosystème d'applications tierces" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Service Level Agreement (SLA)" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Un SLA d'API définit les engagements mesurables :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Disponibilité" }, { "type": "text", "text": " : 99.9% uptime (8.76h de downtime/an max)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Latence" }, { "type": "text", "text": " : P95 < 200ms, P99 < 500ms" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Throughput" }, { "type": "text", "text": " : 10,000 req/s minimum" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Error rate" }, { "type": "text", "text": " : < 0.1% d'erreurs 5xx" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Versioning stratégique" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Le versioning garantit la " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "rétrocompatibilité" },
+                  { "type": "text", "text": " et permet l'évolution sans casser les intégrations existantes :" }
+                ]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "text" },
+                "content": [{ "type": "text", "text": "# Stratégies de versioning\n\n1. URL Path versioning\n   GET /api/v1/users\n   GET /api/v2/users\n\n2. Header versioning\n   Accept: application/vnd.api+json;version=2\n\n3. Query parameter versioning\n   GET /api/users?version=2" }]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Developer Experience (DX)",
+          "position": 3,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "La qualité d'une API se mesure à son adoption" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "La Developer Experience (DX) est le facteur différenciant entre une API utilisée et une API abandonnée. Elle repose sur plusieurs piliers :" }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Documentation" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "OpenAPI/Swagger" }, { "type": "text", "text": " : documentation générée et interactive" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Exemples de code" }, { "type": "text", "text": " : snippets prêts à copier-coller" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Guides d'intégration" }, { "type": "text", "text": " : tutoriels pas à pas" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Changelog" }, { "type": "text", "text": " : historique des modifications" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Outils et SDKs" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "SDKs officiels multi-langages" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Collections Postman/Insomnia" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Sandbox de test" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "CLI tools" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Prévisibilité" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Une bonne API est " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "prévisible" },
+                  { "type": "text", "text": ". Un développeur qui connaît un endpoint peut deviner le comportement des autres :" }
+                ]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "text" },
+                "content": [{ "type": "text", "text": "# Cohérence des patterns\n\nGET    /users          → Liste paginée\nGET    /users/:id      → Détail d'un user\nPOST   /users          → Création\nPUT    /users/:id      → Mise à jour complète\nPATCH  /users/:id      → Mise à jour partielle\nDELETE /users/:id      → Suppression\n\n# Si /products suit le même pattern, l'adoption est immédiate" }]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "HTTP en profondeur",
+      "position": 1,
+      "published": true,
+      "content": {
+        "description": "Maîtriser le protocole HTTP, pierre angulaire des APIs REST : méthodes, headers, idempotence et gestion d'état."
+      },
+      "chapters": [
+        {
+          "title": "Les méthodes HTTP et leur sémantique",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Méthodes HTTP : au-delà de GET et POST" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "HTTP définit des méthodes (ou verbes) avec une " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "sémantique précise" },
+                  { "type": "text", "text": ". Leur usage correct est fondamental pour une API REST bien conçue." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "GET - Lecture" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Récupère une ressource ou une collection" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Safe" }, { "type": "text", "text": " : ne modifie jamais l'état du serveur" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Idempotent" }, { "type": "text", "text": " : plusieurs appels identiques = même résultat" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Cacheable" }, { "type": "text", "text": " : peut être mis en cache" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "POST - Création" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Crée une nouvelle ressource" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Non-safe" }, { "type": "text", "text": " : modifie l'état du serveur" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Non-idempotent" }, { "type": "text", "text": " : 2 POST identiques créent 2 ressources" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Retourne 201 Created avec header Location" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "PUT - Remplacement complet" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Remplace intégralement une ressource existante" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Idempotent" }, { "type": "text", "text": " : le client doit envoyer la représentation complète" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Si la ressource n'existe pas : peut la créer (201) ou échouer (404)" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "PATCH - Mise à jour partielle" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Modifie partiellement une ressource" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Idempotent" }, { "type": "text", "text": " (si implémenté correctement)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Formats : JSON Merge Patch (RFC 7396) ou JSON Patch (RFC 6902)" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "DELETE - Suppression" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Supprime une ressource" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Idempotent" }, { "type": "text", "text": " : supprimer une ressource déjà supprimée = même résultat" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Retourne 204 No Content ou 200 avec body" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Codes HTTP & Gestion des erreurs",
+      "position": 2,
+      "published": true,
+      "content": {
+        "description": "Maîtriser les codes de statut HTTP et concevoir une stratégie de gestion d'erreurs cohérente et exploitable."
+      },
+      "chapters": [
+        {
+          "title": "Codes de statut HTTP : référence complète",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Classification des codes de statut" }]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "2xx - Succès" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "200 OK" }, { "type": "text", "text": " : requête réussie (GET, PUT, PATCH)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "201 Created" }, { "type": "text", "text": " : ressource créée (POST), avec header Location" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "204 No Content" }, { "type": "text", "text": " : succès sans body (DELETE, PUT sans retour)" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "4xx - Erreur client" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "400 Bad Request" }, { "type": "text", "text": " : requête malformée (validation échouée)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "401 Unauthorized" }, { "type": "text", "text": " : authentification requise ou invalide" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "404 Not Found" }, { "type": "text", "text": " : ressource inexistante" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "409 Conflict" }, { "type": "text", "text": " : conflit avec l'état actuel (duplicate, version)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "422 Unprocessable Entity" }, { "type": "text", "text": " : syntaxe OK mais sémantique invalide" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "5xx - Erreur serveur" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "500 Internal Server Error" }, { "type": "text", "text": " : erreur inattendue côté serveur" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "503 Service Unavailable" }, { "type": "text", "text": " : service temporairement indisponible" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Erreurs métier vs erreurs techniques",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Distinguer les types d'erreurs" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Une erreur bien catégorisée permet au client de réagir correctement : afficher un message à l'utilisateur, réessayer automatiquement, ou remonter une alerte technique." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Erreurs métier (Business Errors)" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Solde insuffisant pour un paiement (422)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Email déjà utilisé (409)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Commande déjà annulée (409)" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Erreurs techniques (Technical Errors)" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Base de données indisponible (503)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Timeout vers un service tiers (504)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Bug interne (500)" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Cycle de vie d'une API",
+      "position": 3,
+      "published": true,
+      "content": {
+        "description": "Comprendre les phases de conception, déploiement, évolution et dépréciation d'une API en production."
+      },
+      "chapters": [
+        {
+          "title": "Approche Design-First",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Concevoir avant de coder" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "L'approche " },
+                  { "type": "text", "marks": [{ "type": "bold" }], "text": "Design-First" },
+                  { "type": "text", "text": " consiste à définir le contrat d'API avant d'écrire la moindre ligne d'implémentation." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Avantages du Design-First" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Parallélisation" }, { "type": "text", "text": " : frontend et backend travaillent simultanément" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Documentation native" }, { "type": "text", "text": " : la spec OpenAPI EST la documentation" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Génération de code" }, { "type": "text", "text": " : SDKs clients, stubs serveur" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Stratégies de versioning",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Évolution sans rupture" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Le versioning garantit que les clients existants continuent de fonctionner quand l'API évolue." }
+                ]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "text" },
+                "content": [{ "type": "text", "text": "1. URL Path (recommandé pour APIs publiques)\n   /api/v1/users\n   /api/v2/users\n\n2. Header (recommandé pour APIs internes)\n   Accept: application/vnd.api+json;version=2\n\n3. Query Parameter\n   /api/users?version=2" }]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Typologies d'API",
+      "position": 4,
+      "published": true,
+      "content": {
+        "description": "Comprendre les différentes catégories d'API selon leur audience et les implications en termes de sécurité, gouvernance et design."
+      },
+      "chapters": [
+        {
+          "title": "APIs internes (Private APIs)",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "APIs réservées à l'organisation" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Les APIs internes sont consommées exclusivement par les équipes et services au sein de l'organisation." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Caractéristiques" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Sécurité" }, { "type": "text", "text": " : réseau privé, authentification interne (JWT, mTLS)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Performance" }, { "type": "text", "text": " : latence faible, pas de rate limiting strict" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Documentation" }, { "type": "text", "text": " : peut être minimale (équipes proches)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Évolution" }, { "type": "text", "text": " : breaking changes plus acceptables" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "APIs partenaires (Partner APIs)",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "APIs pour intégrations B2B" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Les APIs partenaires sont exposées à des organisations tierces avec lesquelles un accord commercial existe." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Caractéristiques" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Sécurité renforcée" }, { "type": "text", "text": " : API keys, OAuth 2.0, quotas par partenaire" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "SLA contractuels" }, { "type": "text", "text": " : disponibilité garantie, support dédié" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Versioning strict" }, { "type": "text", "text": " : rétrocompatibilité obligatoire" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Documentation complète" }, { "type": "text", "text": " : guides d'intégration, exemples, sandbox" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "APIs publiques (Public APIs)",
+          "position": 2,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "APIs ouvertes à tous les développeurs" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Les APIs publiques sont accessibles à n'importe quel développeur externe, souvent via un portail développeur (developer portal)." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Caractéristiques" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Sécurité maximale" }, { "type": "text", "text": " : rate limiting strict, authentification OAuth 2.0, monitoring des abus" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Documentation exemplaire" }, { "type": "text", "text": " : interactive, tutoriels, vidéos, communauté" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Stabilité absolue" }, { "type": "text", "text": " : breaking changes très rares, dépréciations longues (12+ mois)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "SDKs multi-langages" }, { "type": "text", "text": " : Python, JavaScript, Java, Go, etc." }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Portail développeur" }, { "type": "text", "text": " : inscription, gestion des clés, analytics" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Exemples" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Stripe API : paiements" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "GitHub API : gestion de code" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Twilio API : communications" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Impacts sécurité et gouvernance",
+          "position": 3,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Adapter la stratégie selon le type d'API" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Le type d'API détermine les exigences en matière de sécurité, gouvernance et opérations." }
+                ]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "text" },
+                "content": [{ "type": "text", "text": "┌─────────────────┬──────────────┬──────────────┬──────────────┐\n│ Critère         │ Interne      │ Partenaire   │ Publique     │\n├─────────────────┼──────────────┼──────────────┼──────────────┤\n│ Auth            │ JWT interne  │ OAuth 2.0    │ OAuth 2.0    │\n│ Rate Limiting   │ Optionnel    │ Par partenaire│ Strict       │\n│ Documentation   │ Minimale     │ Complète     │ Exemplaire   │\n│ Versioning      │ Flexible     │ Strict       │ Très strict  │\n│ Breaking Changes│ Acceptables  │ Rares        │ Exceptionnels│\n│ Monitoring      │ Basique      │ Avancé       │ Maximal      │\n│ Support         │ Interne      │ Dédié        │ Communauté   │\n└─────────────────┴──────────────┴──────────────┴──────────────┘" }]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Paradigmes d'API : REST, GraphQL, gRPC et au-delà",
+      "position": 5,
+      "published": true,
+      "content": {
+        "description": "Comprendre les différents paradigmes d'API, leurs forces, leurs faiblesses et leurs cas d'usage respectifs."
+      },
+      "chapters": [
+        {
+          "title": "REST : Representation State Transfer",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Le paradigme dominant du web" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "REST (Representational State Transfer) est un style architectural défini par Roy Fielding en 2000. Il repose sur 6 contraintes fondamentales :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Client-Serveur" }, { "type": "text", "text": " : séparation des responsabilités" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Stateless" }, { "type": "text", "text": " : chaque requête contient toutes les informations nécessaires" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Cacheable" }, { "type": "text", "text": " : les réponses peuvent être mises en cache" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Interface uniforme" }, { "type": "text", "text": " : méthodes HTTP standardisées, URIs, formats de représentation" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Système en couches" }, { "type": "text", "text": " : proxies, gateways, load balancers" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Code à la demande" }, { "type": "text", "text": " : optionnel, permet d'étendre les fonctionnalités client" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Avantages" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Simplicité et adoption massive" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Cache HTTP natif" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Scalabilité horizontale (stateless)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Outils et écosystème matures" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Limites" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Over-fetching : récupération de données inutiles" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Under-fetching : nécessité de multiples requêtes" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Pas de typage fort natif" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Versioning parfois complexe" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "GraphQL : Query Language for APIs",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Un seul endpoint, des requêtes flexibles" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "GraphQL est un langage de requête et un runtime développé par Facebook en 2015. Il permet au client de demander exactement les données dont il a besoin." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Concepts fondamentaux" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Schema-first" }, { "type": "text", "text": " : définition du schéma avec types, queries, mutations, subscriptions" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Queries" }, { "type": "text", "text": " : lecture de données (équivalent GET)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Mutations" }, { "type": "text", "text": " : modification de données (équivalent POST/PUT/DELETE)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Subscriptions" }, { "type": "text", "text": " : données en temps réel via WebSocket" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "graphql" },
+                "content": [{ "type": "text", "text": "# Exemple de requête GraphQL\nquery GetUser($id: ID!) {\n  user(id: $id) {\n    id\n    name\n    email\n    posts {\n      title\n      publishedAt\n    }\n  }\n}\n\n# Une seule requête récupère user + posts\n# Pas d'over-fetching ni d'under-fetching" }]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Avantages" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Flexibilité : le client demande exactement ce qu'il veut" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Typage fort avec introspection" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Évolution sans versioning (ajout de champs non-breaking)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Outils de développement excellents (GraphiQL, Apollo Studio)" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Limites" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Complexité de mise en cache (pas de cache HTTP standard)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Risque de surcharge serveur (requêtes complexes)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Courbe d'apprentissage pour les équipes" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "File upload nécessite des extensions (comme multipart)" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "gRPC : High-Performance RPC Framework",
+          "position": 2,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Performance et typage fort" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "gRPC (gRPC Remote Procedure Calls) est un framework RPC développé par Google utilisant Protocol Buffers (Protobuf) comme format de sérialisation binaire." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Caractéristiques" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "HTTP/2" }, { "type": "text", "text": " : multiplexing, compression header, streaming bidirectionnel" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Protobuf" }, { "type": "text", "text": " : sérialisation binaire compacte et typée" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Streaming" }, { "type": "text", "text": " : unary, server streaming, client streaming, bidirectional streaming" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Code generation" }, { "type": "text", "text": " : génération automatique de clients/serveurs multi-langages" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "protobuf" },
+                "content": [{ "type": "text", "text": "// Définition du service gRPC\nservice UserService {\n  rpc GetUser(GetUserRequest) returns (User);\n  rpc ListUsers(ListUsersRequest) returns (stream User);\n  rpc CreateUser(CreateUserRequest) returns (User);\n}\n\nmessage User {\n  int32 id = 1;\n  string name = 2;\n  string email = 3;\n}\n\n// Le code client/serveur est généré automatiquement" }]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Avantages" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Performance : latence faible, débit élevé" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Typage fort avec validation automatique" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Streaming natif pour les données temps réel" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Multi-langages avec génération de code" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Limites" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Pas de support navigateur natif (nécessite gRPC-Web)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Moins lisible que JSON (format binaire)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Courbe d'apprentissage pour Protobuf" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Moins adapté aux APIs publiques (complexité d'intégration)" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Comparaison des paradigmes",
+          "position": 3,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Quand utiliser quel paradigme ?" }]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "text" },
+                "content": [{ "type": "text", "text": "┌──────────────┬──────────────┬──────────────┬──────────────┐\n│ Critère      │ REST         │ GraphQL      │ gRPC         │\n├──────────────┼──────────────┼──────────────┼──────────────┤\n│ Performance  │ Bonne        │ Moyenne      │ Excellente   │\n│              │              │              │              │\n│ Cache        │ HTTP natif   │ Complexe     │ Pas natif    │\n│ Typage       │ Faible       │ Fort         │ Très fort    │\n│ Browser      │ ✓ Natif     │ ✓ Natif     │ ✗ gRPC-Web   │\n│ Streaming    │ SSE/WebSocket│ Subscriptions│ ✓ Natif     │\n│ Learning     │ Facile       │ Moyen        │ Difficile    │\n│ Public API   │ ✓ Idéal      │ ✓ Bon        │ ✗ Complexe   │\n│ Microservices│ ✓ Bon        │ ✓ Bon        │ ✓ Idéal      │\n│ Mobile       │ ✓ Excellent  │ ✓ Excellent  │ ✓ Bon        │\n└──────────────┴──────────────┴──────────────┴──────────────┘" }]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "REST : cas d'usage" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "APIs publiques avec large adoption" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Intégrations simples et standards" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Cache HTTP critique" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Équipes avec expertise HTTP" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "GraphQL : cas d'usage" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Applications avec besoins de données variés" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Mobile avec contraintes de bande passante" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Évolution fréquente des besoins clients" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "APIs internes avec contrôle du schéma" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "gRPC : cas d'usage" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Communication inter-services (micro-services)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Streaming de données en temps réel" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Performance critique (latence, débit)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Environnements contrôlés (pas de navigateur)" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Autres paradigmes émergents",
+          "position": 4,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "WebSocket, Server-Sent Events, tRPC" }]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "WebSocket" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Protocole de communication bidirectionnel en temps réel. Idéal pour :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Chats, notifications temps réel" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Collaboration en temps réel (Google Docs style)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Jeux multijoueurs" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Server-Sent Events (SSE)" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Stream unidirectionnel serveur → client. Plus simple que WebSocket pour les cas unidirectionnels :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Dashboards temps réel" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Notifications push" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Logs streaming" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "tRPC (TypeScript RPC)" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Framework RPC end-to-end type-safe pour TypeScript. Avantages :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Typage partagé client/serveur" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Pas de génération de code" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Idéal pour stack TypeScript full-stack" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Choix du paradigme : critères" }]
+              },
+              {
+                "type": "orderedList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Audience" }, { "type": "text", "text": " : publique (REST) vs interne (gRPC)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Performance" }, { "type": "text", "text": " : critique (gRPC) vs acceptable (REST/GraphQL)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Flexibilité" }, { "type": "text", "text": " : besoins variés (GraphQL) vs endpoints fixes (REST)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Temps réel" }, { "type": "text", "text": " : WebSocket/SSE vs polling REST" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Stack technique" }, { "type": "text", "text": " : TypeScript (tRPC) vs polyglotte (REST/gRPC)" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "exercise",
+      "title": "Analyse critique d'une API existante",
+      "position": 6,
+      "published": true,
+      "content": {
+        "instruction": "Vous devez analyser l'API REST suivante et identifier les problèmes de design, les violations des bonnes pratiques REST, et les erreurs de conception. L'API concerne la gestion d'une bibliothèque de livres.\n\n**Endpoints fournis :**\n\n```\nGET    /getAllBooks\nPOST   /createBook\nGET    /getBookById?id=123\nPOST   /updateBook\nPOST   /deleteBook\nGET    /searchBooks?q=keyword\nPOST   /borrowBook\nPOST   /returnBook\n```\n\n**Exemples de réponses :**\n\n```json\n// GET /getAllBooks\n{\n  \"success\": true,\n  \"data\": [...],\n  \"error\": null\n}\n\n// POST /createBook\nHTTP/1.1 200 OK\n{\n  \"success\": true,\n  \"message\": \"Book created\"\n}\n\n// POST /deleteBook\nHTTP/1.1 200 OK\n{\n  \"success\": true,\n  \"message\": \"Book deleted\"\n}\n```\n\n**Consignes :**\n1. Identifiez au moins 5 problèmes de design dans cette API\n2. Pour chaque problème, expliquez pourquoi c'est problématique\n3. Proposez une correction pour chaque problème identifié\n4. Rédigez une version corrigée des endpoints (méthodes HTTP + chemins + codes de retour attendus)\n\n**Format de rendu attendu :**\n- Liste structurée des problèmes avec explications\n- Proposition d'endpoints corrigés\n- Justification des choix de design",
+        "criteria": [
+          "Identification d'au moins 5 problèmes de design (noms d'endpoints, méthodes HTTP, codes de statut, structure des réponses)",
+          "Explication claire de chaque problème et de son impact",
+          "Proposition d'endpoints REST corrigés respectant les conventions",
+          "Justification des choix (méthodes HTTP, codes de retour, structure des réponses)",
+          "Cohérence globale de la proposition"
+        ],
+        "deliverables": [
+          "Document d'analyse listant les problèmes identifiés",
+          "Tableau comparatif avant/après pour chaque endpoint",
+          "Spécification des endpoints corrigés (méthodes + chemins + codes HTTP)",
+          "Justification architecturale des choix"
+        ]
+      }
+    },
+    {
+      "type": "exercise",
+      "title": "Identification des erreurs de design",
+      "position": 7,
+      "published": true,
+      "content": {
+        "instruction": "Analysez les scénarios suivants et identifiez les erreurs de conception dans l'utilisation des codes HTTP et des verbes HTTP.\n\n**Scénario 1 :**\n```\nPOST /api/users\nBody: { \"email\": \"user@example.com\", \"name\": \"John\" }\n\nResponse:\nHTTP/1.1 200 OK\n{\n  \"success\": false,\n  \"error\": \"Email already exists\"\n}\n```\n\n**Scénario 2 :**\n```\nGET /api/users/999\n\nResponse:\nHTTP/1.1 500 Internal Server Error\n{\n  \"message\": \"User not found\"\n}\n```\n\n**Scénario 3 :**\n```\nDELETE /api/users/123\n\nResponse:\nHTTP/1.1 200 OK\n{\n  \"success\": true,\n  \"data\": { \"id\": 123, \"deleted\": true }\n}\n```\n\n**Scénario 4 :**\n```\nPOST /api/orders/456/cancel\nBody: { \"reason\": \"Customer request\" }\n\nResponse:\nHTTP/1.1 200 OK\n{\n  \"order_id\": 456,\n  \"status\": \"cancelled\"\n}\n```\n\n**Scénario 5 :**\n```\nGET /api/products?category=electronics\n\nResponse:\nHTTP/1.1 200 OK\n{\n  \"result\": [...],\n  \"total\": 42\n}\n```\n\n**Consignes :**\n1. Pour chaque scénario, identifiez l'erreur de design\n2. Indiquez le code HTTP correct à utiliser\n3. Expliquez pourquoi le code choisi est approprié\n4. Proposez une structure de réponse corrigée si nécessaire\n\n**Objectif pédagogique :**\nComprendre l'importance de l'utilisation correcte des codes HTTP pour permettre au client de réagir de manière appropriée aux différentes situations.",
+        "criteria": [
+          "Identification correcte de l'erreur dans chaque scénario",
+          "Proposition du code HTTP approprié avec justification",
+          "Compréhension de la différence entre erreur client (4xx) et erreur serveur (5xx)",
+          "Compréhension de la sémantique des codes HTTP (200 vs 201 vs 204)",
+          "Proposition de structure de réponse cohérente"
+        ],
+        "deliverables": [
+          "Tableau récapitulatif : Scénario → Erreur → Code correct → Justification",
+          "Exemples de réponses HTTP corrigées pour chaque scénario",
+          "Document expliquant les bonnes pratiques de codes HTTP"
+        ]
+      }
+    },
+    {
+      "type": "game",
+      "title": "HTTP Master",
+      "position": 8,
+      "published": true,
+      "content": {
+        "description": "Jeu interactif pour maîtriser l'association scénario → méthode HTTP → code de retour"
+      },
+      "game_content": {
+        "gameType": "api-types",
+        "description": "Associez chaque scénario à la méthode HTTP et au code de retour appropriés",
+        "instructions": "Pour chaque scénario, sélectionnez la méthode HTTP et le code de statut HTTP corrects. Vous obtiendrez un feedback immédiat.",
+        "scenarios": [
+          {
+            "id": "s1",
+            "scenario": "Récupérer la liste de tous les utilisateurs",
+            "options": {
+              "method": ["GET", "POST", "PUT", "DELETE"],
+              "statusCode": ["200", "201", "204", "404"]
+            },
+            "correctAnswer": {
+              "method": "GET",
+              "statusCode": "200"
+            },
+            "explanation": "GET est la méthode appropriée pour récupérer des ressources. 200 OK indique un succès avec un body contenant les données."
+          },
+          {
+            "id": "s2",
+            "scenario": "Créer un nouvel utilisateur",
+            "options": {
+              "method": ["GET", "POST", "PUT", "DELETE"],
+              "statusCode": ["200", "201", "204", "400"]
+            },
+            "correctAnswer": {
+              "method": "POST",
+              "statusCode": "201"
+            },
+            "explanation": "POST est utilisé pour créer une nouvelle ressource. 201 Created indique que la ressource a été créée avec succès, généralement accompagné d'un header Location."
+          },
+          {
+            "id": "s3",
+            "scenario": "Supprimer un utilisateur existant",
+            "options": {
+              "method": ["GET", "POST", "PUT", "DELETE"],
+              "statusCode": ["200", "201", "204", "404"]
+            },
+            "correctAnswer": {
+              "method": "DELETE",
+              "statusCode": "204"
+            },
+            "explanation": "DELETE supprime une ressource. 204 No Content indique un succès sans body de réponse (la ressource n'existe plus)."
+          },
+          {
+            "id": "s4",
+            "scenario": "Mettre à jour partiellement l'email d'un utilisateur",
+            "options": {
+              "method": ["GET", "POST", "PUT", "PATCH"],
+              "statusCode": ["200", "201", "204", "404"]
+            },
+            "correctAnswer": {
+              "method": "PATCH",
+              "statusCode": "200"
+            },
+            "explanation": "PATCH est utilisé pour une mise à jour partielle. 200 OK retourne la ressource mise à jour."
+          },
+          {
+            "id": "s5",
+            "scenario": "Tentative de création d'un utilisateur avec un email déjà existant",
+            "options": {
+              "method": ["GET", "POST", "PUT", "DELETE"],
+              "statusCode": ["200", "201", "409", "500"]
+            },
+            "correctAnswer": {
+              "method": "POST",
+              "statusCode": "409"
+            },
+            "explanation": "POST pour la création, mais 409 Conflict indique un conflit avec l'état actuel (email dupliqué)."
+          },
+          {
+            "id": "s6",
+            "scenario": "Récupérer un utilisateur qui n'existe pas",
+            "options": {
+              "method": ["GET", "POST", "PUT", "DELETE"],
+              "statusCode": ["200", "404", "500", "503"]
+            },
+            "correctAnswer": {
+              "method": "GET",
+              "statusCode": "404"
+            },
+            "explanation": "GET pour récupérer, mais 404 Not Found indique que la ressource demandée n'existe pas."
+          },
+          {
+            "id": "s7",
+            "scenario": "Remplacer complètement un utilisateur existant",
+            "options": {
+              "method": ["GET", "POST", "PUT", "PATCH"],
+              "statusCode": ["200", "201", "204", "404"]
+            },
+            "correctAnswer": {
+              "method": "PUT",
+              "statusCode": "200"
+            },
+            "explanation": "PUT remplace intégralement une ressource. 200 OK retourne la ressource mise à jour."
+          },
+          {
+            "id": "s8",
+            "scenario": "Erreur de validation : email invalide",
+            "options": {
+              "method": ["GET", "POST", "PUT", "DELETE"],
+              "statusCode": ["200", "400", "422", "500"]
+            },
+            "correctAnswer": {
+              "method": "POST",
+              "statusCode": "400"
+            },
+            "explanation": "POST pour la création, mais 400 Bad Request indique une erreur de validation (format d'email invalide)."
+          },
+          {
+            "id": "s9",
+            "scenario": "Base de données temporairement indisponible",
+            "options": {
+              "method": ["GET", "POST", "PUT", "DELETE"],
+              "statusCode": ["400", "404", "500", "503"]
+            },
+            "correctAnswer": {
+              "method": "GET",
+              "statusCode": "503"
+            },
+            "explanation": "503 Service Unavailable indique que le service est temporairement indisponible (problème d'infrastructure, pas d'erreur client)."
+          },
+          {
+            "id": "s10",
+            "scenario": "Tentative d'accès sans authentification",
+            "options": {
+              "method": ["GET", "POST", "PUT", "DELETE"],
+              "statusCode": ["200", "401", "403", "500"]
+            },
+            "correctAnswer": {
+              "method": "GET",
+              "statusCode": "401"
+            },
+            "explanation": "401 Unauthorized indique que l'authentification est requise ou que les credentials sont invalides."
+          }
+        ]
+      }
+    },
+    {
+      "type": "game",
+      "title": "API Design Detective",
+      "position": 9,
+      "published": true,
+      "content": {
+        "description": "Jeu pédagogique pour identifier les erreurs de design dans une API mal conçue"
+      },
+      "game_content": {
+        "gameType": "format-files",
+        "description": "Identifiez les erreurs de design dans cette API de gestion de commandes",
+        "instructions": "Analysez chaque endpoint et identifiez les erreurs. Vous pouvez sélectionner plusieurs erreurs par endpoint.",
+        "levels": [
+          {
+            "level": 1,
+            "name": "Découverte",
+            "questions": [
+              {
+                "id": "q1-1",
+                "type": "identify-format",
+                "prompt": "Endpoint: GET /getAllOrders\nRéponse: HTTP 200 OK avec { \"success\": true, \"data\": [...] }\n\nQuelle(s) erreur(s) identifiez-vous ?",
+                "snippet": "GET /getAllOrders",
+                "options": [
+                  "Nom d'endpoint non-REST (devrait être /orders)",
+                  "Méthode HTTP incorrecte",
+                  "Code de statut incorrect",
+                  "Structure de réponse non-standard"
+                ],
+                "answer": ["Nom d'endpoint non-REST (devrait être /orders)", "Structure de réponse non-standard"],
+                "explanation": "Le nom 'getAllOrders' est verbeux et non-REST. REST utilise des noms de ressources. La structure avec 'success' et 'data' est redondante avec le code HTTP.",
+                "difficulty": 1
+              },
+              {
+                "id": "q1-2",
+                "type": "identify-format",
+                "prompt": "Endpoint: POST /createOrder\nBody: { \"product_id\": 123, \"quantity\": 2 }\nRéponse: HTTP 200 OK avec { \"success\": true, \"message\": \"Order created\" }\n\nQuelle(s) erreur(s) identifiez-vous ?",
+                "snippet": "POST /createOrder",
+                "options": [
+                  "Nom d'endpoint non-REST",
+                  "Code de statut devrait être 201",
+                  "Manque le header Location",
+                  "Structure de réponse non-standard"
+                ],
+                "answer": ["Nom d'endpoint non-REST", "Code de statut devrait être 201", "Manque le header Location"],
+                "explanation": "POST /orders serait correct. 201 Created est approprié pour une création. Le header Location devrait pointer vers la ressource créée.",
+                "difficulty": 1
+              },
+              {
+                "id": "q1-3",
+                "type": "identify-format",
+                "prompt": "Endpoint: POST /deleteOrder?id=456\nRéponse: HTTP 200 OK\n\nQuelle(s) erreur(s) identifiez-vous ?",
+                "snippet": "POST /deleteOrder?id=456",
+                "options": [
+                  "Devrait utiliser DELETE",
+                  "ID devrait être dans le path, pas en query",
+                  "Code de statut devrait être 204",
+                  "Tout est correct"
+                ],
+                "answer": ["Devrait utiliser DELETE", "ID devrait être dans le path, pas en query", "Code de statut devrait être 204"],
+                "explanation": "DELETE /orders/456 est la convention REST. 204 No Content est approprié pour une suppression réussie.",
+                "difficulty": 1
+              }
+            ]
+          },
+          {
+            "level": 2,
+            "name": "Intermédiaire",
+            "questions": [
+              {
+                "id": "q2-1",
+                "type": "identify-format",
+                "prompt": "Endpoint: GET /orders/999\nRéponse: HTTP 500 Internal Server Error avec { \"error\": \"Order not found\" }\n\nQuelle(s) erreur(s) identifiez-vous ?",
+                "snippet": "GET /orders/999 → 500",
+                "options": [
+                  "Code 500 incorrect (devrait être 404)",
+                  "500 indique une erreur serveur, pas client",
+                  "Message d'erreur correct mais code incorrect",
+                  "Tout est correct"
+                ],
+                "answer": ["Code 500 incorrect (devrait être 404)", "500 indique une erreur serveur, pas client"],
+                "explanation": "404 Not Found est le code approprié pour une ressource inexistante. 500 indique une erreur serveur, ce qui induit le client en erreur.",
+                "difficulty": 2
+              },
+              {
+                "id": "q2-2",
+                "type": "identify-format",
+                "prompt": "Endpoint: POST /orders\nBody: { \"product_id\": 123, \"quantity\": -5 }\nRéponse: HTTP 200 OK avec { \"success\": false, \"error\": \"Invalid quantity\" }\n\nQuelle(s) erreur(s) identifiez-vous ?",
+                "snippet": "POST /orders avec quantité négative → 200",
+                "options": [
+                  "Code 200 incorrect (devrait être 400 ou 422)",
+                  "200 avec success:false est un anti-pattern",
+                  "Le code HTTP devrait refléter l'erreur",
+                  "Tout est correct"
+                ],
+                "answer": ["Code 200 incorrect (devrait être 400 ou 422)", "200 avec success:false est un anti-pattern", "Le code HTTP devrait refléter l'erreur"],
+                "explanation": "400 Bad Request ou 422 Unprocessable Entity sont appropriés pour une erreur de validation. Le code HTTP doit refléter l'état, pas le body.",
+                "difficulty": 2
+              },
+              {
+                "id": "q2-3",
+                "type": "identify-format",
+                "prompt": "Endpoint: GET /orders?page=1&limit=10\nRéponse: HTTP 200 OK avec seulement un tableau [...]\n\nQuelle(s) erreur(s) identifiez-vous ?",
+                "snippet": "GET /orders paginé",
+                "options": [
+                  "Manque les métadonnées de pagination",
+                  "Devrait inclure total, page, limit",
+                  "Devrait inclure les liens next/prev",
+                  "Tout est correct"
+                ],
+                "answer": ["Manque les métadonnées de pagination", "Devrait inclure total, page, limit", "Devrait inclure les liens next/prev"],
+                "explanation": "Une API paginée devrait fournir les métadonnées nécessaires : total d'éléments, page actuelle, limite, et idéalement les liens de navigation.",
+                "difficulty": 2
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "name": "Avancé",
+            "questions": [
+              {
+                "id": "q3-1",
+                "type": "identify-format",
+                "prompt": "Endpoint: POST /orders/123/cancel\nBody: { \"reason\": \"Customer request\" }\nRéponse: HTTP 200 OK\n\nQuelle(s) erreur(s) identifiez-vous ?",
+                "snippet": "POST /orders/123/cancel",
+                "options": [
+                  "Action dans l'URL (devrait être PATCH /orders/123 avec status)",
+                  "REST préfère les ressources aux actions",
+                  "Pourrait être PATCH /orders/123 avec { \"status\": \"cancelled\" }",
+                  "Tout est correct"
+                ],
+                "answer": ["Action dans l'URL (devrait être PATCH /orders/123 avec status)", "REST préfère les ressources aux actions", "Pourrait être PATCH /orders/123 avec { \"status\": \"cancelled\" }"],
+                "explanation": "REST privilégie les ressources aux actions. Modifier le statut via PATCH /orders/123 est plus RESTful que POST /orders/123/cancel.",
+                "difficulty": 3
+              },
+              {
+                "id": "q3-2",
+                "type": "identify-format",
+                "prompt": "Endpoint: GET /orders/123\nHeader: Authorization: Bearer expired_token\nRéponse: HTTP 403 Forbidden\n\nQuelle(s) erreur(s) identifiez-vous ?",
+                "snippet": "Token expiré → 403",
+                "options": [
+                  "Devrait être 401 Unauthorized",
+                  "403 = authentifié mais non autorisé",
+                  "401 = problème d'authentification",
+                  "Tout est correct"
+                ],
+                "answer": ["Devrait être 401 Unauthorized", "403 = authentifié mais non autorisé", "401 = problème d'authentification"],
+                "explanation": "401 Unauthorized indique un problème d'authentification (token invalide/expiré). 403 Forbidden indique que l'utilisateur est authentifié mais n'a pas les permissions.",
+                "difficulty": 3
+              },
+              {
+                "id": "q3-3",
+                "type": "identify-format",
+                "prompt": "Endpoint: PUT /orders/123\nBody: { \"status\": \"shipped\" }\nRéponse: HTTP 200 OK avec la commande complète\n\nQuelle(s) erreur(s) identifiez-vous ?",
+                "snippet": "PUT /orders/123 avec seulement status",
+                "options": [
+                  "PUT nécessite la ressource complète, pas partielle",
+                  "Devrait être PATCH pour mise à jour partielle",
+                  "PUT remplace toute la ressource",
+                  "Tout est correct"
+                ],
+                "answer": ["PUT nécessite la ressource complète, pas partielle", "Devrait être PATCH pour mise à jour partielle", "PUT remplace toute la ressource"],
+                "explanation": "PUT remplace intégralement la ressource. Pour une mise à jour partielle (seulement le status), PATCH est plus approprié.",
+                "difficulty": 3
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "tp",
+      "title": "TP – Audit & redesign d'une API",
+      "position": 10,
+      "published": true,
+      "content": {
+        "instruction": "**Contexte :**\n\nVous êtes architecte API dans une entreprise e-commerce. L'équipe backend a développé une API de gestion des commandes qui est en production depuis 6 mois. Cette API est consommée par :\n- L'application web frontend (React)\n- L'application mobile iOS/Android\n- Un partenaire B2B (intégration via webhook)\n\nL'API actuelle présente plusieurs problèmes signalés par les équipes consommatrices :\n- Incohérence dans les codes HTTP\n- Endpoints non-RESTful\n- Absence de versioning\n- Gestion d'erreurs imprévisible\n- Documentation obsolète\n\n**API actuelle à auditer :**\n\n```\n# Gestion des commandes\nGET    /api/getAllOrders\nPOST   /api/createOrder\nGET    /api/getOrderById?id=123\nPOST   /api/updateOrder\nPOST   /api/cancelOrder\nPOST   /api/deleteOrder\n\n# Gestion des produits\nGET    /api/products\nPOST   /api/addProduct\nGET    /api/productDetails?id=456\nPOST   /api/updateProduct\n\n# Gestion des utilisateurs\nGET    /api/users\nPOST   /api/registerUser\nGET    /api/userProfile?userId=789\nPOST   /api/updateUserProfile\n```\n\n**Exemples de réponses actuelles :**\n\n```json\n// GET /api/getAllOrders\nHTTP/1.1 200 OK\n{\n  \"success\": true,\n  \"data\": [\n    { \"id\": 1, \"total\": 99.99, \"status\": \"pending\" },\n    { \"id\": 2, \"total\": 149.50, \"status\": \"shipped\" }\n  ]\n}\n\n// POST /api/createOrder\nHTTP/1.1 200 OK\n{\n  \"success\": true,\n  \"message\": \"Order created successfully\",\n  \"orderId\": 123\n}\n\n// POST /api/cancelOrder\nHTTP/1.1 200 OK\n{\n  \"success\": false,\n  \"error\": \"Order already shipped\"\n}\n\n// GET /api/getOrderById?id=999\nHTTP/1.1 500 Internal Server Error\n{\n  \"error\": \"Order not found\"\n}\n```\n\n**Contraintes :**\n\n1. **Rétrocompatibilité :** L'API doit maintenir la compatibilité avec les clients existants pendant une période de transition de 3 mois. Vous devez proposer une stratégie de migration.\n\n2. **Sécurité :** L'API doit supporter l'authentification JWT et l'autorisation par rôles (admin, customer, partner).\n\n3. **Performance :** L'API doit supporter la pagination pour les listes (limite : 100 éléments par page).\n\n4. **Versioning :** Vous devez implémenter un système de versioning permettant l'évolution future.\n\n5. **Documentation :** L'API doit être documentée en OpenAPI 3.1.\n\n**Travail demandé :**\n\n1. **Audit complet** : Identifiez et documentez tous les problèmes de l'API actuelle (au moins 10 problèmes).\n\n2. **Redesign RESTful** : Proposez une nouvelle version de l'API (v2) respectant les principes REST et les bonnes pratiques.\n\n3. **Stratégie de migration** : Définissez un plan de migration de v1 vers v2 avec :\n   - Période de cohabitation\n   - Headers de dépréciation\n   - Guide de migration pour les clients\n   - Timeline de sunset de v1\n\n4. **Spécification OpenAPI** : Rédigez une spécification OpenAPI 3.1 complète pour la v2 (au moins 3 endpoints détaillés).\n\n5. **Gestion d'erreurs** : Définissez un format d'erreur standardisé (RFC 7807) et documentez tous les codes d'erreur possibles.\n\n6. **Justification architecturale** : Justifiez vos choix de design (versioning, structure des URLs, codes HTTP, format des réponses).",
+        "criteria": [
+          "Audit complet identifiant au moins 10 problèmes de design avec explications détaillées",
+          "Redesign RESTful cohérent respectant les conventions REST (ressources, méthodes HTTP, codes de statut)",
+          "Stratégie de migration réaliste avec période de transition, dépréciation et sunset planifiés",
+          "Spécification OpenAPI 3.1 complète et valide pour au moins 3 endpoints principaux",
+          "Format d'erreur standardisé (RFC 7807) avec documentation des codes d'erreur",
+          "Justification architecturale solide pour chaque choix de design",
+          "Prise en compte des contraintes (sécurité, performance, rétrocompatibilité)",
+          "Documentation claire et exploitable par les équipes consommatrices"
+        ],
+        "deliverables": [
+          "Document d'audit (format PDF ou Markdown) listant tous les problèmes identifiés avec explications",
+          "Spécification OpenAPI 3.1 complète de la v2 (fichier YAML ou JSON)",
+          "Document de stratégie de migration (plan, timeline, guide pour les clients)",
+          "Exemples de requêtes/réponses pour chaque endpoint de la v2",
+          "Document de justification architecturale expliquant les choix de design",
+          "Format d'erreur standardisé documenté avec exemples pour chaque type d'erreur",
+          "Guide de migration pour les développeurs (comment migrer de v1 vers v2)"
+        ]
+      }
+    }
+      ]
+    }
+  ]
+}
+

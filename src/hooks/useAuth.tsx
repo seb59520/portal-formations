@@ -15,6 +15,7 @@ interface AuthContextType {
   signInWithApple: () => Promise<{ error: AuthError | null }>
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>
+  refreshProfile: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -31,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let mounted = true
     let timeoutId: NodeJS.Timeout | null = null
 
-    // Timeout de sécurité pour éviter un blocage infini (augmenté à 12 secondes)
+    // Timeout de sécurité pour éviter un blocage infini (optimisé)
     timeoutId = setTimeout(() => {
       if (mounted) {
         console.warn('Auth loading timeout - forcing loading to false')
@@ -60,16 +61,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null)
         setSession(null)
       }
-    }, 20000) // 20 secondes max
+    }, 8000) // 8 secondes max (optimisé)
 
-    // Récupérer la session initiale avec retry et timeout (augmenté à 15 secondes)
+    // Récupérer la session initiale avec timeout optimisé
     withRetry(
       () => withTimeout(
         supabase.auth.getSession(),
-        15000,
+        5000, // Réduit à 5 secondes
         'Session fetch timeout'
       ),
-      { maxRetries: 3, initialDelay: 1000, maxDelay: 3000 }
+      { maxRetries: 1, initialDelay: 500, maxDelay: 1000 } // Réduire les retries
     )
       .then((result: any) => {
         if (!mounted) return
@@ -249,7 +250,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       console.log('Fetching profile for user:', userId)
       
-      // Utiliser retry et timeout
+      // Utiliser retry et timeout optimisé
       const result = await withRetry(
         () => withTimeout(
           supabase
@@ -257,18 +258,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             .select('*')
             .eq('id', userId)
             .maybeSingle(),
-          8000,
+          5000, // Réduit à 5 secondes pour une réponse plus rapide
           'Profile fetch timeout'
         ),
-        { maxRetries: 2, initialDelay: 1000 }
+        { maxRetries: 0, initialDelay: 0 } // Pas de retry pour éviter les attentes
       )
       
       const { data, error } = result || { data: null, error: null }
 
       if (error) {
         // Si le profil n'existe pas, ce n'est pas forcément une erreur critique
-        if (error.code === 'PGRST116' || error.message?.includes('No rows')) {
+        if (error.code === 'PGRST116' || error.message?.includes('No rows') || error.message?.includes('not found')) {
           console.warn('Profile not found for user:', userId, '- This is normal for new users')
+          // Essayer de créer un profil par défaut (si les permissions le permettent)
+          try {
+            // Récupérer l'email de l'utilisateur depuis l'état ou la session
+            const currentUser = user || session?.user
+            const userName = currentUser?.email?.split('@')[0] || 'Utilisateur'
+            
+            const { data: newProfile, error: createError } = await supabase
+              .from('profiles')
+              .insert({
+                id: userId,
+                role: 'student',
+                full_name: userName
+              })
+              .select()
+              .single()
+            
+            if (!createError && newProfile) {
+              console.log('Profile created successfully:', newProfile)
+              setProfile(newProfile)
+              setLoading(false)
+              return
+            } else if (createError && !createError.message?.includes('duplicate')) {
+              console.warn('Could not create profile (may need admin action):', createError.message)
+            }
+          } catch (createErr) {
+            console.warn('Error attempting to create profile:', createErr)
+          }
           setProfile(null)
           setLoading(false)
           return
@@ -292,6 +320,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return
       } else if (data) {
         console.log('Profile fetched successfully:', data)
+        console.log('Profile role:', data.role, 'Type:', typeof data.role)
+        // Vérifier que le rôle est bien une chaîne et non null/undefined
+        if (data.role && typeof data.role === 'string') {
+          console.log('Role is valid string:', data.role)
+        } else {
+          console.warn('Role is not a valid string!', data.role, typeof data.role)
+        }
         setProfile(data)
       } else {
         // Pas de données mais pas d'erreur (maybeSingle retourne null si pas de résultat)
@@ -301,8 +336,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error: any) {
       // Gérer spécifiquement les timeouts
       if (error?.message?.includes('timeout')) {
-        console.error('Profile fetch timeout for user:', userId)
-        console.warn('Continuing without profile - this may indicate a network issue')
+        console.warn('Profile fetch timeout for user:', userId)
+        console.warn('Continuing without profile - this may indicate a network issue or slow database')
+        // Ne pas bloquer l'application, continuer sans profil
+        // Le profil peut être créé plus tard ou chargé lors d'une prochaine tentative
       } else if (isAuthError(error)) {
         console.error('Auth error, signing out')
         await supabase.auth.signOut()
@@ -310,9 +347,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null)
         setSession(null)
       } else {
-        console.error('Error fetching profile:', error)
+        console.warn('Error fetching profile:', error?.message || error)
+        // Ne pas bloquer l'application pour une erreur de profil
       }
-      // En cas d'erreur ou timeout, on continue quand même
+      // En cas d'erreur ou timeout, on continue quand même sans profil
+      // L'application peut fonctionner sans profil (rôle par défaut: student)
       setProfile(null)
     } finally {
       setLoading(false)
@@ -389,6 +428,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error }
   }
 
+  const refreshProfile = async () => {
+    if (user?.id) {
+      await fetchProfile(user.id)
+    }
+  }
+
   const value: AuthContextType = {
     user,
     profile,
@@ -400,6 +445,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signInWithApple,
     signOut,
     resetPassword,
+    refreshProfile,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

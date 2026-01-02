@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { supabase } from '../../lib/supabaseClient'
 import { Item } from '../../types/database'
-import { Save, Upload } from 'lucide-react'
+import { Save, Upload, Copy, Search, X } from 'lucide-react'
 import { FileUpload } from '../../components/FileUpload'
 import { RichTextEditor } from '../../components/RichTextEditor'
 import { ChapterManager } from '../../components/ChapterManager'
@@ -31,6 +31,11 @@ export function AdminItemEdit() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [redirected, setRedirected] = useState(false)
+  const [showGameSelector, setShowGameSelector] = useState(false)
+  const [availableGames, setAvailableGames] = useState<Item[]>([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [loadingGames, setLoadingGames] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
 
   useEffect(() => {
     // Si c'est un ID temporaire, rediriger vers la création d'un nouvel item (une seule fois)
@@ -52,10 +57,18 @@ export function AdminItemEdit() {
 
     if (!isNew && itemId && !itemId.startsWith('temp-')) {
       fetchItem()
-    } else if (isNew && moduleIdFromUrl) {
-      setItem(prev => ({ ...prev, module_id: moduleIdFromUrl }))
-      setLoading(false)
     } else if (isNew) {
+      // Vérifier si un type est spécifié dans l'URL
+      const typeFromUrl = searchParams.get('type')
+      if (typeFromUrl) {
+        setItem(prev => ({ 
+          ...prev, 
+          type: typeFromUrl as Item['type'],
+          module_id: moduleIdFromUrl || undefined
+        }))
+      } else if (moduleIdFromUrl) {
+        setItem(prev => ({ ...prev, module_id: moduleIdFromUrl }))
+      }
       setLoading(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,6 +110,13 @@ export function AdminItemEdit() {
         return
       }
       
+      // Pour les jeux, nettoyer le contenu pour éviter les erreurs TipTap
+      // Si le contenu contient body mais que c'est un jeu, on retire body
+      if (data.type === 'game' && data.content && data.content.body) {
+        const { body, ...gameContent } = data.content
+        data.content = gameContent
+      }
+      
       setItem(data)
     } catch (error: any) {
       console.error('Error fetching item:', error)
@@ -107,10 +127,13 @@ export function AdminItemEdit() {
   }
 
   const handleSave = async () => {
-    if (!item.title?.trim() || !item.module_id) {
-      setError('Le titre et le module sont obligatoires.')
+    if (!item.title?.trim()) {
+      setError('Le titre est obligatoire.')
       return
     }
+    
+    // Le module_id est optionnel - permet de créer des items indépendants
+    // Si pas de module_id, l'item peut être utilisé via des blocs interactifs
 
     setSaving(true)
     setError('')
@@ -121,7 +144,9 @@ export function AdminItemEdit() {
       // Upload du fichier si nouveau
       if (selectedFile) {
         const fileExt = selectedFile.name.split('.').pop()
-        const fileName = `${item.module_id}/${itemId || 'new'}/${Date.now()}.${fileExt}`
+        // Utiliser module_id si disponible, sinon utiliser 'independent' pour les items indépendants
+        const folder = item.module_id || 'independent'
+        const fileName = `${folder}/${itemId || 'new'}/${Date.now()}.${fileExt}`
 
         const { error: uploadError } = await supabase.storage
           .from('course-assets')
@@ -176,6 +201,177 @@ export function AdminItemEdit() {
     })
   }
 
+  const fetchAvailableGames = async () => {
+    try {
+      setLoadingGames(true)
+      setError('')
+      console.log('Fetching available games...')
+      
+      // Récupérer tous les jeux
+      const { data: games, error: gamesError } = await supabase
+        .from('items')
+        .select('*')
+        .eq('type', 'game')
+        .neq('id', itemId || '')
+        .order('title', { ascending: true })
+
+      if (gamesError) {
+        console.error('Error fetching games:', gamesError)
+        throw gamesError
+      }
+
+      console.log('Found games:', games?.length || 0)
+
+      // Récupérer les modules et cours pour chaque jeu
+      const gamesWithCourse = await Promise.all(
+        (games || []).map(async (game) => {
+          if (!game.module_id) {
+            return { ...game, courseTitle: 'Cours inconnu' }
+          }
+
+          try {
+            const { data: moduleData, error: moduleError } = await supabase
+              .from('modules')
+              .select('course_id')
+              .eq('id', game.module_id)
+              .single()
+
+            if (moduleError) {
+              console.warn('Error fetching module for game:', game.id, moduleError)
+              return { ...game, courseTitle: 'Cours inconnu' }
+            }
+
+            if (moduleData?.course_id) {
+              const { data: courseData, error: courseError } = await supabase
+                .from('courses')
+                .select('title')
+                .eq('id', moduleData.course_id)
+                .single()
+
+              if (courseError) {
+                console.warn('Error fetching course for game:', game.id, courseError)
+                return { ...game, courseTitle: 'Cours inconnu' }
+              }
+
+              return {
+                ...game,
+                courseTitle: courseData?.title || 'Cours inconnu'
+              }
+            }
+          } catch (err) {
+            console.warn('Error processing game:', game.id, err)
+          }
+
+          return { ...game, courseTitle: 'Cours inconnu' }
+        })
+      )
+
+      console.log('Games with course info:', gamesWithCourse.length)
+      setAvailableGames(gamesWithCourse)
+    } catch (error: any) {
+      console.error('Error fetching games:', error)
+      setError(`Erreur lors de la recherche des jeux: ${error?.message || 'Erreur inconnue'}`)
+      setAvailableGames([])
+    } finally {
+      setLoadingGames(false)
+    }
+  }
+
+  const handleOpenGameSelector = () => {
+    setShowGameSelector(true)
+    setSearchTerm('')
+    fetchAvailableGames()
+  }
+
+  const handleDuplicateGame = (sourceGame: Item) => {
+    try {
+      console.log('Duplicating game:', sourceGame)
+      
+      // Le contenu peut être un objet JSON ou déjà parsé
+      let gameContent = sourceGame.content
+      if (typeof gameContent === 'string') {
+        try {
+          gameContent = JSON.parse(gameContent)
+        } catch (e) {
+          console.error('Error parsing game content:', e)
+          setError('Le contenu du jeu source n\'est pas valide.')
+          return
+        }
+      }
+
+      if (!gameContent || typeof gameContent !== 'object') {
+        setError('Le jeu source n\'a pas de contenu valide.')
+        return
+      }
+
+      // Copier les données du jeu source en profondeur
+      const newContent: any = {
+        gameType: gameContent.gameType || 'matching',
+        description: gameContent.description || '',
+        instructions: gameContent.instructions || '',
+      }
+
+      // Copier les paires pour les jeux d'association de cartes
+      if (gameContent.pairs && Array.isArray(gameContent.pairs)) {
+        newContent.pairs = gameContent.pairs.map((pair: any) => ({
+          term: pair.term || '',
+          definition: pair.definition || ''
+        }))
+      } else {
+        newContent.pairs = []
+      }
+
+      // Copier les colonnes pour les jeux d'association de colonnes
+      if (gameContent.leftColumn && Array.isArray(gameContent.leftColumn)) {
+        newContent.leftColumn = [...gameContent.leftColumn]
+      } else {
+        newContent.leftColumn = []
+      }
+
+      if (gameContent.rightColumn && Array.isArray(gameContent.rightColumn)) {
+        newContent.rightColumn = [...gameContent.rightColumn]
+      } else {
+        newContent.rightColumn = []
+      }
+
+      // Copier les correspondances
+      if (gameContent.correctMatches && Array.isArray(gameContent.correctMatches)) {
+        newContent.correctMatches = gameContent.correctMatches.map((match: any) => ({
+          left: match.left || 0,
+          right: match.right || 0
+        }))
+      } else {
+        newContent.correctMatches = []
+      }
+
+      console.log('New content:', newContent)
+
+      setItem({
+        ...item,
+        content: newContent,
+        title: item.title || sourceGame.title || 'Nouveau jeu'
+      })
+
+      setShowGameSelector(false)
+      setError('')
+      setSuccessMessage('Jeu dupliqué avec succès ! Les données ont été copiées.')
+      
+      // Effacer le message de succès après 5 secondes
+      setTimeout(() => setSuccessMessage(''), 5000)
+      
+      // Afficher un message de succès
+      console.log('Game duplicated successfully!')
+    } catch (error: any) {
+      console.error('Error duplicating game:', error)
+      setError(`Erreur lors de la duplication: ${error?.message || 'Erreur inconnue'}`)
+    }
+  }
+
+  const filteredGames = availableGames.filter(game =>
+    game.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (game as any).courseTitle?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -219,6 +415,12 @@ export function AdminItemEdit() {
           {error && (
             <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
               {error}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="mb-4 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+              {successMessage}
             </div>
           )}
 
@@ -297,8 +499,8 @@ export function AdminItemEdit() {
               </div>
             </div>
 
-            {/* Contenu principal avec éditeur riche */}
-            {!isNew && itemId && (
+            {/* Contenu principal avec éditeur riche - seulement pour les types qui utilisent body */}
+            {!isNew && itemId && item.type !== 'game' && (
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900">Contenu principal</h3>
                 <div>
@@ -531,7 +733,17 @@ export function AdminItemEdit() {
 
             {item.type === 'game' && (
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900">Mini-jeu</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-medium text-gray-900">Mini-jeu</h3>
+                  <button
+                    type="button"
+                    onClick={handleOpenGameSelector}
+                    className="btn-secondary inline-flex items-center space-x-2 text-sm"
+                  >
+                    <Copy className="w-4 h-4" />
+                    <span>Dupliquer depuis un autre jeu</span>
+                  </button>
+                </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -544,6 +756,8 @@ export function AdminItemEdit() {
                   >
                     <option value="matching">Association de cartes</option>
                     <option value="column-matching">Association de colonnes</option>
+                    <option value="api-types">Types d'API</option>
+                    <option value="format-files">Formats de fichiers (JSON/XML/Protobuf)</option>
                   </select>
                 </div>
 
@@ -836,11 +1050,142 @@ export function AdminItemEdit() {
                     </div>
                   </div>
                 )}
+
+                {item.content?.gameType === 'api-types' && (
+                  <div className="space-y-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <p className="text-blue-800 text-sm">
+                        <strong>Note :</strong> Pour configurer ce type de jeu (Types d'API), utilisez l'éditeur JSON 
+                        (<Link to={`/admin/items/${itemId}/json`} className="underline">Éditeur JSON</Link>) 
+                        car la structure est complexe (apiTypes, scenarios).
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {item.content?.gameType === 'format-files' && (
+                  <div className="space-y-4">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <p className="text-green-800 text-sm mb-2">
+                        <strong>Jeu : Formats de fichiers (JSON / XML / Protobuf)</strong>
+                      </p>
+                      <p className="text-green-700 text-sm mb-3">
+                        Ce jeu comprend 3 niveaux de difficulté avec différents types de questions.
+                      </p>
+                      <p className="text-green-800 text-sm">
+                        <strong>Configuration :</strong> Pour configurer ce jeu, utilisez l'éditeur JSON 
+                        (<Link to={`/admin/items/${itemId}/json`} className="underline font-semibold">Éditeur JSON</Link>) 
+                        car la structure est complexe (niveaux, questions avec différents types).
+                      </p>
+                      <p className="text-green-700 text-xs mt-2">
+                        Le jeu utilise par défaut les 30 questions prédéfinies si aucun niveau n'est spécifié dans le JSON.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
       </main>
+
+      {/* Modale de sélection de jeu */}
+      {showGameSelector && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b">
+              <h2 className="text-xl font-bold text-gray-900">Sélectionner un jeu à dupliquer</h2>
+              <button
+                onClick={() => setShowGameSelector(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="p-6 flex-1 overflow-hidden flex flex-col">
+              <div className="mb-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Rechercher par titre ou cours..."
+                    className="input-field pl-10"
+                  />
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto">
+                {loadingGames ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  </div>
+                ) : filteredGames.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    {searchTerm ? 'Aucun jeu trouvé pour cette recherche.' : 'Aucun jeu disponible.'}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {filteredGames.map((game) => (
+                      <div
+                        key={game.id}
+                        className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 cursor-pointer transition-colors"
+                        onClick={() => handleDuplicateGame(game)}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h3 className="font-medium text-gray-900">{game.title}</h3>
+                            <p className="text-sm text-gray-500 mt-1">
+                              {(game as any).courseTitle}
+                            </p>
+                            <div className="mt-2 flex items-center space-x-4 text-xs text-gray-400">
+                              <span>
+                                Type: {
+                                  game.content?.gameType === 'matching' ? 'Association de cartes' :
+                                  game.content?.gameType === 'column-matching' ? 'Association de colonnes' :
+                                  game.content?.gameType === 'api-types' ? 'Types d\'API' :
+                                  game.content?.gameType === 'format-files' ? 'Formats de fichiers' :
+                                  'Autre'
+                                }
+                              </span>
+                              {game.content?.gameType === 'matching' && game.content?.pairs && (
+                                <span>{game.content.pairs.length} paire(s)</span>
+                              )}
+                              {game.content?.gameType === 'column-matching' && (
+                                <span>
+                                  {game.content?.leftColumn?.length || 0} / {game.content?.rightColumn?.length || 0} éléments
+                                </span>
+                              )}
+                              {game.content?.gameType === 'api-types' && game.content?.apiTypes && (
+                                <span>{game.content.apiTypes.length} type(s) d'API</span>
+                              )}
+                              {game.content?.gameType === 'format-files' && game.content?.levels && (
+                                <span>{game.content.levels.length} niveau(x)</span>
+                              )}
+                            </div>
+                          </div>
+                          <Copy className="w-5 h-5 text-gray-400" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="p-6 border-t bg-gray-50">
+              <button
+                onClick={() => setShowGameSelector(false)}
+                className="btn-secondary w-full"
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

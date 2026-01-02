@@ -1,0 +1,161 @@
+{
+  "title": "Jeu : Formats de fichiers (JSON/XML/Protobuf)",
+  "position": 0,
+  "type": "game",
+  "game_content": {
+    "gameType": "format-files",
+    "description": "Apprenez à reconnaître et utiliser les formats JSON, XML et Protobuf",
+    "instructions": "Répondez aux questions pour progresser dans les 3 niveaux de difficulté",
+    "levels": [
+      {
+        "level": 1,
+        "name": "Découverte",
+        "questions": [
+          {
+            "id": "q1-1",
+            "type": "identify-format",
+            "prompt": "Quel est ce format de données ?",
+            "snippet": "{\n  \"name\": \"John\",\n  \"age\": 30\n}",
+            "options": ["JSON", "XML", "Protobuf"],
+            "answer": "JSON",
+            "explanation": "C'est du JSON : accolades {} et clés/valeurs entre guillemets doubles.",
+            "difficulty": 1
+          },
+          {
+            "id": "q1-2",
+            "type": "identify-format",
+            "prompt": "Quel est ce format de données ?",
+            "snippet": "<user>\n  <name>John</name>\n  <age>30</age>\n</user>",
+            "options": ["JSON", "XML", "Protobuf"],
+            "answer": "XML",
+            "explanation": "C'est du XML : balises ouvrantes/fermantes et structure hiérarchique.",
+            "difficulty": 1
+          },
+          {
+            "id": "q1-3",
+            "type": "identify-format",
+            "prompt": "Quel est ce format de données ?",
+            "snippet": "message User {\n  string name = 1;\n  int32 age = 2;\n}",
+            "options": ["JSON", "XML", "Protobuf"],
+            "answer": "Protobuf",
+            "explanation": "C'est un schéma Protobuf : définition de message, types et numéros de champs.",
+            "difficulty": 1
+          },
+          {
+            "id": "q1-4",
+            "type": "json-valid",
+            "prompt": "Ce JSON est-il valide ?",
+            "snippet": "{\n  \"name\": \"John\",\n  \"age\": 30,\n}",
+            "answer": false,
+            "explanation": "Non : il y a une virgule traînante après le dernier élément.",
+            "difficulty": 1
+          },
+          {
+            "id": "q1-5",
+            "type": "choose-format",
+            "prompt": "Quel format utilise des balises ouvrantes et fermantes ?",
+            "options": ["JSON", "XML", "Protobuf"],
+            "answer": "XML",
+            "explanation": "XML utilise des balises comme <tag>...</tag> pour structurer les données.",
+            "difficulty": 1
+          }
+        ]
+      },
+      {
+        "level": 2,
+        "name": "Intermédiaire",
+        "questions": [
+          {
+            "id": "q2-1",
+            "type": "fix-json-mcq",
+            "prompt": "Quelle est la correction de ce JSON ?",
+            "snippet": "{\n  name: \"John\",\n  age: 30\n}",
+            "options": [
+              "{\"name\": \"John\", \"age\": 30}",
+              "{name: \"John\", age: 30}",
+              "{\"name\": \"John\", \"age\": 30}"
+            ],
+            "answer": "{\"name\": \"John\", \"age\": 30}",
+            "explanation": "En JSON, les clés doivent être entre guillemets doubles.",
+            "difficulty": 2
+          },
+          {
+            "id": "q2-2",
+            "type": "choose-format",
+            "prompt": "Quel format est le plus adapté pour une API web lisible et facile à déboguer ?",
+            "options": ["JSON", "Protobuf", "XML"],
+            "answer": "JSON",
+            "explanation": "JSON est très courant sur le web, lisible par l'humain et largement supporté.",
+            "difficulty": 2
+          },
+          {
+            "id": "q2-3",
+            "type": "choose-format",
+            "prompt": "Quel format est le plus adapté pour une communication microservices haute performance (binaire) ?",
+            "options": ["XML", "JSON", "Protobuf"],
+            "answer": "Protobuf",
+            "explanation": "Protobuf est binaire, compact, typé, et souvent utilisé avec gRPC pour la performance.",
+            "difficulty": 2
+          },
+          {
+            "id": "q2-4",
+            "type": "identify-format",
+            "prompt": "Quel est ce format de données ?",
+            "snippet": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<users>\n  <user id=\"1\">\n    <name>John</name>\n  </user>\n</users>",
+            "options": ["JSON", "XML", "Protobuf"],
+            "answer": "XML",
+            "explanation": "C'est du XML : déclaration XML, balises et attributs.",
+            "difficulty": 2
+          }
+        ]
+      },
+      {
+        "level": 3,
+        "name": "Avancé",
+        "questions": [
+          {
+            "id": "q3-1",
+            "type": "fix-json-editor",
+            "prompt": "Corrigez ce JSON dans l'éditeur :",
+            "snippet": "{\n  \"users\": [\n    {\"name\": \"John\", \"age\": 30}\n    {\"name\": \"Jane\", \"age\": 25}\n  ]\n}",
+            "answer": "{\n  \"users\": [\n    {\"name\": \"John\", \"age\": 30},\n    {\"name\": \"Jane\", \"age\": 25}\n  ]\n}",
+            "explanation": "Il manque une virgule entre les deux objets du tableau.",
+            "difficulty": 3
+          },
+          {
+            "id": "q3-2",
+            "type": "choose-format",
+            "prompt": "Vous devez versionner proprement un schéma, garantir des types stricts et réduire la taille des messages. Quel format privilégier ?",
+            "options": ["JSON", "XML", "Protobuf"],
+            "answer": "Protobuf",
+            "explanation": "Protobuf impose un schéma typé, facilite l'évolution et produit des messages compacts.",
+            "difficulty": 3
+          },
+          {
+            "id": "q3-3",
+            "type": "choose-format",
+            "prompt": "Pourquoi les champs Protobuf ont-ils des numéros (=1, =2, etc.) ?",
+            "options": [
+              "Pour indiquer l'ordre d'affichage des champs dans JSON",
+              "Pour identifier les champs dans l'encodage binaire et garder la compatibilité",
+              "Pour chiffrer automatiquement les données"
+            ],
+            "answer": "Pour identifier les champs dans l'encodage binaire et garder la compatibilité",
+            "explanation": "Les numéros sont utilisés dans l'encodage binaire et permettent l'évolution du schéma (compatibilité).",
+            "difficulty": 3
+          },
+          {
+            "id": "q3-4",
+            "type": "json-valid",
+            "prompt": "Ce JSON est-il valide ?",
+            "snippet": "{\n  \"users\": [\n    {\"name\": \"John\", \"age\": 30},\n    {\"name\": \"Jane\", \"age\": 25}\n  ],\n  \"total\": 2\n}",
+            "answer": true,
+            "explanation": "Oui, ce JSON est valide : structure correcte, guillemets doubles, virgules bien placées.",
+            "difficulty": 3
+          }
+        ]
+      }
+    ]
+  }
+}
+

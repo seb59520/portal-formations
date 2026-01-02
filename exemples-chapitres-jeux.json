@@ -1,0 +1,233 @@
+{
+  "exemples": {
+    "chapitre_jeu_matching": {
+      "title": "Jeu : Associer les termes",
+      "position": 1,
+      "type": "game",
+      "game_content": {
+        "gameType": "matching",
+        "description": "Associez chaque terme à sa définition",
+        "instructions": "Cliquez sur une carte pour la retourner, puis trouvez sa paire",
+        "pairs": [
+          {
+            "term": "REST",
+            "definition": "Architecture stateless avec ressources HTTP"
+          },
+          {
+            "term": "GraphQL",
+            "definition": "Requêtes flexibles avec un seul endpoint"
+          },
+          {
+            "term": "WebSocket",
+            "definition": "Communication bidirectionnelle en temps réel"
+          },
+          {
+            "term": "gRPC",
+            "definition": "RPC haute performance avec Protocol Buffers"
+          }
+        ]
+      }
+    },
+    "chapitre_jeu_column_matching": {
+      "title": "Jeu : Associer les colonnes",
+      "position": 2,
+      "type": "game",
+      "game_content": {
+        "gameType": "column-matching",
+        "description": "Associez les éléments de la colonne gauche à ceux de la colonne droite",
+        "instructions": "Glissez les éléments de la colonne gauche vers la colonne droite",
+        "leftColumn": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE"
+        ],
+        "rightColumn": [
+          "Récupérer une ressource",
+          "Créer une ressource",
+          "Mettre à jour une ressource",
+          "Supprimer une ressource"
+        ],
+        "correctMatches": [
+          {
+            "left": 0,
+            "right": 0
+          },
+          {
+            "left": 1,
+            "right": 1
+          },
+          {
+            "left": 2,
+            "right": 2
+          },
+          {
+            "left": 3,
+            "right": 3
+          }
+        ]
+      }
+    },
+    "chapitre_jeu_api_types": {
+      "title": "Jeu : Quel type d'API utiliser ?",
+      "position": 3,
+      "type": "game",
+      "game_content": {
+        "gameType": "api-types",
+        "description": "Choisissez le bon type d'API pour chaque scénario",
+        "instructions": "Glissez le type d'API approprié pour chaque scénario",
+        "apiTypes": [
+          {
+            "id": "rest",
+            "name": "REST API",
+            "color": "bg-blue-500",
+            "description": "Architecture stateless avec ressources HTTP"
+          },
+          {
+            "id": "graphql",
+            "name": "GraphQL",
+            "color": "bg-pink-500",
+            "description": "Requêtes flexibles avec un seul endpoint"
+          },
+          {
+            "id": "websocket",
+            "name": "WebSocket",
+            "color": "bg-green-500",
+            "description": "Communication bidirectionnelle en temps réel"
+          },
+          {
+            "id": "grpc",
+            "name": "gRPC",
+            "color": "bg-purple-500",
+            "description": "RPC haute performance avec Protocol Buffers"
+          }
+        ],
+        "scenarios": [
+          {
+            "id": 1,
+            "text": "Application de chat en temps réel",
+            "correctType": "websocket",
+            "explanation": "Les chats nécessitent une communication bidirectionnelle en temps réel."
+          },
+          {
+            "id": 2,
+            "text": "API publique pour un site e-commerce",
+            "correctType": "rest",
+            "explanation": "REST est idéal pour les APIs publiques avec des ressources bien définies."
+          },
+          {
+            "id": 3,
+            "text": "Application mobile avec besoins de données flexibles",
+            "correctType": "graphql",
+            "explanation": "GraphQL permet de récupérer exactement les données nécessaires."
+          },
+          {
+            "id": 4,
+            "text": "Microservices internes haute performance",
+            "correctType": "grpc",
+            "explanation": "gRPC offre de meilleures performances pour la communication inter-services."
+          }
+        ]
+      }
+    },
+    "chapitre_jeu_format_files": {
+      "title": "Jeu : Formats de fichiers (JSON/XML/Protobuf)",
+      "position": 4,
+      "type": "game",
+      "game_content": {
+        "gameType": "format-files",
+        "description": "Apprenez à reconnaître et utiliser les formats JSON, XML et Protobuf",
+        "instructions": "Répondez aux questions pour progresser dans les 3 niveaux de difficulté",
+        "levels": [
+          {
+            "level": 1,
+            "name": "Découverte",
+            "questions": [
+              {
+                "id": "q1-1",
+                "type": "identify-format",
+                "prompt": "Quel est ce format de données ?",
+                "snippet": "{\n  \"name\": \"John\",\n  \"age\": 30\n}",
+                "answer": "JSON",
+                "explanation": "C'est du JSON : les accolades {} et les guillemets doubles indiquent ce format.",
+                "difficulty": 1
+              },
+              {
+                "id": "q1-2",
+                "type": "json-valid",
+                "prompt": "Ce JSON est-il valide ?",
+                "snippet": "{\n  \"name\": \"John\",\n  \"age\": 30,\n}",
+                "answer": false,
+                "explanation": "Non, il y a une virgule traînante après le dernier élément.",
+                "difficulty": 1
+              }
+            ]
+          },
+          {
+            "level": 2,
+            "name": "Intermédiaire",
+            "questions": [
+              {
+                "id": "q2-1",
+                "type": "fix-json-mcq",
+                "prompt": "Quelle est la correction de ce JSON ?",
+                "snippet": "{\n  name: \"John\",\n  age: 30\n}",
+                "options": [
+                  "{\"name\": \"John\", \"age\": 30}",
+                  "{name: \"John\", age: 30}",
+                  "{\"name\": \"John\", \"age\": 30}"
+                ],
+                "answer": "{\"name\": \"John\", \"age\": 30}",
+                "explanation": "En JSON, les clés doivent être entre guillemets doubles.",
+                "difficulty": 2
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "name": "Avancé",
+            "questions": [
+              {
+                "id": "q3-1",
+                "type": "fix-json-editor",
+                "prompt": "Corrigez ce JSON dans l'éditeur :",
+                "snippet": "{\n  \"users\": [\n    {\"name\": \"John\", \"age\": 30}\n    {\"name\": \"Jane\", \"age\": 25}\n  ]\n}",
+                "answer": "{\n  \"users\": [\n    {\"name\": \"John\", \"age\": 30},\n    {\"name\": \"Jane\", \"age\": 25}\n  ]\n}",
+                "explanation": "Il manque une virgule entre les deux objets du tableau.",
+                "difficulty": 3
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "structure_minimale": {
+    "title": "Titre du jeu",
+    "position": 0,
+    "type": "game",
+    "game_content": {
+      "gameType": "matching",
+      "pairs": []
+    }
+  },
+  "notes": {
+    "types_disponibles": [
+      "matching - Jeu d'association de cartes (termes/définitions)",
+      "column-matching - Jeu d'association de colonnes",
+      "api-types - Jeu de choix de type d'API selon le scénario",
+      "format-files - Jeu sur les formats JSON/XML/Protobuf avec niveaux et questions"
+    ],
+    "champs_requis": {
+      "title": "string - Titre du chapitre",
+      "position": "number - Position dans la liste (0-indexed)",
+      "type": "string - Doit être 'game'",
+      "game_content": {
+        "gameType": "string - Type de jeu (matching, column-matching, api-types, format-files)",
+        "...": "Autres champs selon le gameType"
+      }
+    },
+    "utilisation": "Ce JSON doit être placé dans le champ 'game_content' d'un chapitre de type 'game'"
+  }
+}
+

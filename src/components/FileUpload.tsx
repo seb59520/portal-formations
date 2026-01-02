@@ -45,12 +45,17 @@ export function FileUpload({
 
   const handleFileSelect = (file: File | null) => {
     if (file && validateFile(file)) {
+      console.log('✅ Fichier validé:', file.name, file.size, 'bytes')
       setSelectedFile(file)
       onFileSelect(file)
+      setError('')
     } else if (!file) {
       setSelectedFile(null)
       onFileSelect(null)
       setError('')
+    } else {
+      // Fichier invalide - l'erreur est déjà définie par validateFile
+      console.log('❌ Fichier invalide:', file.name)
     }
   }
 
@@ -114,9 +119,14 @@ export function FileUpload({
           ref={fileInputRef}
           type="file"
           accept={accept}
-          onChange={(e) => handleFileSelect(e.target.files?.[0] || null)}
+          onChange={(e) => {
+            const selectedFile = e.target.files?.[0] || null
+            console.log('📁 Fichier sélectionné:', selectedFile?.name, selectedFile?.size, 'bytes')
+            handleFileSelect(selectedFile)
+          }}
           disabled={disabled}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          style={{ zIndex: 10 }}
         />
 
         <div className="flex flex-col items-center space-y-2">

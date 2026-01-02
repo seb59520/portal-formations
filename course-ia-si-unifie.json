@@ -1,0 +1,343 @@
+{
+  "title": "Intelligence artificielle appliquée aux systèmes d'information de l'entreprise",
+  "description": "Cette formation vise à acquérir une compréhension approfondie des concepts et applications de l'Intelligence Artificielle dans les systèmes d'information des entreprises, en mettant l'accent sur les impacts organisationnels, stratégiques et métiers.",
+  "status": "published",
+  "access_type": "paid",
+  "theme": {
+    "primaryColor": "#2563EB",
+    "secondaryColor": "#7C3AED",
+    "fontFamily": "Inter"
+  },
+  "modules": [
+    {
+      "title": "Intelligence artificielle appliquée aux systèmes d'information de l'entreprise",
+      "position": 1,
+      "items": [
+        {
+          "type": "slide",
+          "title": "Panorama Big Data, Data Science et Machine Learning",
+          "position": 1,
+          "published": true,
+          "content": {
+            "summary": "Comprendre les briques fondamentales de l'IA et leur rôle dans les systèmes d'information modernes."
+          },
+          "chapters": [
+            {
+              "title": "Big Data : définition et caractéristiques",
+              "position": 1,
+              "content": {
+                "text": "Le Big Data se caractérise classiquement par les 5V (Volume, Vélocité, Variété, Véracité, Valeur). Dans un SI, il provient des applications métiers, capteurs, logs, partenaires et sources externes."
+              }
+            },
+            {
+              "title": "Data Science : exploitation et création de valeur",
+              "position": 2,
+              "content": {
+                "text": "La Data Science combine statistiques, programmation et connaissance métier pour transformer les données en informations exploitables pour la décision."
+              }
+            },
+            {
+              "title": "Machine Learning : automatiser la décision",
+              "position": 3,
+              "content": {
+                "text": "Le Machine Learning permet aux systèmes d'apprendre à partir des données : apprentissage supervisé, non supervisé et semi-supervisé."
+              }
+            }
+          ]
+        },
+        {
+          "type": "exercise",
+          "title": "Exercice – Identifier les usages IA dans son SI",
+          "position": 2,
+          "published": true,
+          "content": {
+            "objective": "Identifier où et comment les données et l'IA peuvent être exploitées dans un système d'information existant.",
+            "duration_minutes": 30,
+            "instruction": "À partir de ton contexte professionnel (ou d'un SI fictif), liste les sources de données disponibles, les usages actuels et les opportunités potentielles d'exploitation par l'IA.",
+            "criteria": [
+              "Identification claire des sources de données",
+              "Lien cohérent entre données et usages métiers",
+              "Capacité à distinguer décision humaine et automatisation",
+              "Réalisme des propositions"
+            ],
+            "deliverables": [
+              "Carte simplifiée du SI et des flux de données",
+              "Liste de 3 cas d'usage IA potentiels",
+              "Priorisation des cas d'usage (faible / moyen / fort impact)"
+            ]
+          }
+        },
+        {
+          "type": "slide",
+          "title": "Données et nouveaux business models",
+          "position": 3,
+          "published": true,
+          "content": {
+            "summary": "Comprendre comment la donnée devient un actif stratégique dans l'économie numérique."
+          },
+          "chapters": [
+            {
+              "title": "La donnée comme actif stratégique",
+              "position": 1,
+              "content": {
+                "text": "Les données sont au cœur des nouveaux business models : personnalisation, plateformes, services prédictifs, économie de l'abonnement."
+              }
+            },
+            {
+              "title": "Transformation des modèles économiques",
+              "position": 2,
+              "content": {
+                "text": "L'IA permet de passer de modèles réactifs à des modèles proactifs (anticipation, recommandation, optimisation)."
+              }
+            },
+            {
+              "title": "Risques et limites",
+              "position": 3,
+              "content": {
+                "text": "Dépendance aux données, biais algorithmiques, enjeux éthiques et réglementaires."
+              }
+            }
+          ]
+        },
+        {
+          "type": "exercise",
+          "title": "Étude de cas – Analyse d'un business model data-driven",
+          "position": 4,
+          "published": true,
+          "content": {
+            "objective": "Analyser l'impact stratégique de la donnée sur un modèle économique.",
+            "duration_minutes": 45,
+            "instruction": "Analyse un cas d'entreprise utilisant massivement les données (ex : retail, transport, services numériques) et explique comment l'IA modifie son SI et son organisation.",
+            "criteria": [
+              "Compréhension du modèle économique",
+              "Lien clair entre données, SI et création de valeur",
+              "Analyse des impacts organisationnels",
+              "Capacité critique (avantages / limites)"
+            ],
+            "deliverables": [
+              "Analyse écrite du cas",
+              "Schéma simplifié du SI avant/après",
+              "Synthèse des gains et risques"
+            ]
+          }
+        },
+        {
+          "type": "slide",
+          "title": "Rôle de la Data Science et gouvernance des données",
+          "position": 5,
+          "published": true,
+          "content": {
+            "summary": "Comprendre l'organisation et la gouvernance nécessaires pour exploiter l'IA dans un SI."
+          },
+          "chapters": [
+            {
+              "title": "Organisation data-driven",
+              "position": 1,
+              "content": {
+                "text": "Rôles clés : data owner, data steward, data scientist, équipes IT et métiers."
+              }
+            },
+            {
+              "title": "Gouvernance et qualité des données",
+              "position": 2,
+              "content": {
+                "text": "Qualité, sécurité, traçabilité, conformité (RGPD) et responsabilités."
+              }
+            },
+            {
+              "title": "Intégration dans le SI",
+              "position": 3,
+              "content": {
+                "text": "L'IA n'est pas isolée : elle s'intègre aux applications existantes via APIs, pipelines et outils décisionnels."
+              }
+            }
+          ]
+        },
+        {
+          "type": "exercise",
+          "title": "Exercice – Évaluer la maturité data d'une organisation",
+          "position": 6,
+          "published": true,
+          "content": {
+            "objective": "Évaluer la capacité d'une organisation à intégrer l'IA dans son SI.",
+            "duration_minutes": 30,
+            "instruction": "Évalue une organisation (réelle ou fictive) selon 4 axes : données, SI, compétences, gouvernance. Propose 2 actions prioritaires d'amélioration.",
+            "criteria": [
+              "Analyse structurée par axe",
+              "Pertinence du diagnostic",
+              "Cohérence des actions proposées",
+              "Vision réaliste de la transformation"
+            ],
+            "deliverables": [
+              "Grille de maturité complétée",
+              "Diagnostic synthétique",
+              "Plan d'actions priorisées"
+            ]
+          }
+        },
+        {
+          "type": "slide",
+          "title": "Machine Learning et Deep Learning : concepts et usages en entreprise",
+          "position": 7,
+          "published": true,
+          "content": {
+            "summary": "Comprendre les principes du Machine Learning et du Deep Learning et leurs usages concrets dans les systèmes d'information."
+          },
+          "chapters": [
+            {
+              "title": "Rappels sur le Machine Learning",
+              "position": 1,
+              "content": {
+                "text": "Le Machine Learning repose sur l'apprentissage à partir des données : apprentissage supervisé (prédiction), non supervisé (segmentation) et par renforcement. Il est intégré au SI pour automatiser ou assister la décision."
+              }
+            },
+            {
+              "title": "Deep Learning : quand et pourquoi",
+              "position": 2,
+              "content": {
+                "text": "Le Deep Learning s'appuie sur des réseaux de neurones profonds. Il est pertinent pour les données complexes (images, texte, son), mais nécessite des volumes importants, des compétences spécifiques et des ressources adaptées."
+              }
+            },
+            {
+              "title": "Critères de choix des technologies",
+              "position": 3,
+              "content": {
+                "text": "Choisir entre règles métier, ML classique et Deep Learning dépend du contexte : volume de données, criticité métier, explicabilité attendue, coûts et délais."
+              }
+            }
+          ]
+        },
+        {
+          "type": "exercise",
+          "title": "Exercice – Associer problèmes métiers et techniques IA",
+          "position": 8,
+          "published": true,
+          "content": {
+            "objective": "Savoir identifier la technique IA la plus adaptée à un problème métier.",
+            "duration_minutes": 30,
+            "instruction": "Pour chaque problème métier proposé (prévision, recommandation, détection d'anomalies, classification), indique s'il est préférable d'utiliser des règles métier, du Machine Learning classique ou du Deep Learning, et justifie ton choix.",
+            "criteria": [
+              "Bonne identification du type de problème",
+              "Choix technologique cohérent",
+              "Justification claire et réaliste",
+              "Capacité à refuser l'IA quand elle n'est pas pertinente"
+            ],
+            "deliverables": [
+              "Tableau Problème métier → Technique recommandée",
+              "Justification synthétique pour chaque choix"
+            ]
+          }
+        },
+        {
+          "type": "slide",
+          "title": "Cas d'usage IA intégrés aux systèmes d'information",
+          "position": 9,
+          "published": true,
+          "content": {
+            "summary": "Explorer les principaux cas d'usage de l'IA intégrés dans les SI d'entreprise."
+          },
+          "chapters": [
+            {
+              "title": "Prévision et optimisation",
+              "position": 1,
+              "content": {
+                "text": "Prévision des ventes, de la charge, de la demande ou de la maintenance. Ces usages s'intègrent aux ERP, CRM et outils décisionnels."
+              }
+            },
+            {
+              "title": "Personnalisation et recommandation",
+              "position": 2,
+              "content": {
+                "text": "Recommandations produits, contenus, actions commerciales. Fort impact sur l'expérience client et le marketing."
+              }
+            },
+            {
+              "title": "Détection d'anomalies et fraudes",
+              "position": 3,
+              "content": {
+                "text": "Détection de comportements anormaux (finance, sécurité, qualité). Cas d'usage sensibles nécessitant gouvernance et explicabilité."
+              }
+            }
+          ]
+        },
+        {
+          "type": "exercise",
+          "title": "Étude de cas – Intégration d'un cas d'usage IA dans un SI",
+          "position": 10,
+          "published": true,
+          "content": {
+            "objective": "Comprendre l'impact technique et organisationnel de l'intégration d'un cas d'usage IA.",
+            "duration_minutes": 45,
+            "instruction": "À partir d'un cas d'usage (prévision des ventes, détection de fraudes ou recommandation), décris comment l'IA s'intègre dans le SI existant : sources de données, flux, applications consommatrices et impacts métiers.",
+            "criteria": [
+              "Compréhension du SI existant",
+              "Cohérence des flux de données proposés",
+              "Identification des impacts métiers et IT",
+              "Vision réaliste de l'industrialisation"
+            ],
+            "deliverables": [
+              "Schéma d'intégration du cas d'usage dans le SI",
+              "Description des flux de données",
+              "Liste des impacts organisationnels"
+            ]
+          }
+        },
+        {
+          "type": "slide",
+          "title": "Ouverture du SI et exploitation des données externes",
+          "position": 11,
+          "published": true,
+          "content": {
+            "summary": "Comprendre pourquoi et comment ouvrir le SI pour exploiter pleinement l'IA."
+          },
+          "chapters": [
+            {
+              "title": "Collecte de données externes",
+              "position": 1,
+              "content": {
+                "text": "APIs, open data, partenaires, IoT. L'ouverture du SI permet d'enrichir les modèles IA."
+              }
+            },
+            {
+              "title": "Partage et exposition des données",
+              "position": 2,
+              "content": {
+                "text": "APIs, services décisionnels, tableaux de bord. L'IA produit de la valeur lorsqu'elle est consommée par les métiers."
+              }
+            },
+            {
+              "title": "Sécurité et conformité",
+              "position": 3,
+              "content": {
+                "text": "Gestion des accès, protection des données, conformité réglementaire. L'ouverture du SI accroît les risques si elle n'est pas maîtrisée."
+              }
+            }
+          ]
+        },
+        {
+          "type": "tp",
+          "title": "TP – Élaborer une stratégie IA pour un système d'information",
+          "position": 12,
+          "published": true,
+          "content": {
+            "instruction": "À partir d'une organisation réelle ou fictive, définir une stratégie d'intégration de l'IA dans le SI : objectifs, cas d'usage prioritaires, impacts organisationnels, risques et feuille de route.",
+            "criteria": [
+              "Alignement entre stratégie métier et usages IA",
+              "Identification réaliste des données disponibles",
+              "Cohérence de l'architecture SI proposée",
+              "Prise en compte des enjeux humains et organisationnels",
+              "Vision progressive et priorisée"
+            ],
+            "deliverables": [
+              "Diagnostic synthétique du SI et des données",
+              "Liste priorisée des cas d'usage IA",
+              "Schéma cible d'intégration IA dans le SI",
+              "Feuille de route IA (court / moyen terme)"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
+

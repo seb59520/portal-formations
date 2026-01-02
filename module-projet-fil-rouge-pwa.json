@@ -1,0 +1,1127 @@
+{
+  "title": "Projet fil rouge – Application Full-Stack PWA orientée API",
+  "description": "Formation professionnelle niveau AVANCÉ / MAÎTRISE sur le développement d'applications Full-Stack PWA orientées API. Ce module couvre la conception, le développement, la sécurisation, le test et le déploiement d'une application moderne prête pour la production.",
+  "status": "draft",
+  "access_type": "free",
+  "currency": "EUR",
+  "theme": {
+    "primaryColor": "#3B82F6",
+    "secondaryColor": "#8B5CF6",
+    "fontFamily": "Inter"
+  },
+  "modules": [
+    {
+      "title": "Projet fil rouge – Application Full-Stack PWA orientée API",
+      "position": 5,
+      "items": [
+    {
+      "type": "slide",
+      "title": "Présentation du projet",
+      "position": 0,
+      "published": true,
+      "content": {
+        "description": "Contexte métier réaliste, objectifs fonctionnels et techniques, vision produit du projet fil rouge."
+      },
+      "chapters": [
+        {
+          "title": "Contexte métier",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Scénario : Plateforme de réservation de services B2B" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Vous développez une application de réservation de services professionnels (maintenance, nettoyage, livraison) pour une entreprise qui souhaite digitaliser ses processus B2B. L'application doit permettre à des clients entreprises de :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Consulter un catalogue" }, { "type": "text", "text": " de services disponibles avec tarification dynamique" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Réserver des interventions" }, { "type": "text", "text": " avec gestion de créneaux, récurrence et notifications" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Suivre les interventions en temps réel" }, { "type": "text", "text": " avec statuts, photos, signatures électroniques" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Gérer la facturation" }, { "type": "text", "text": " et les paiements avec intégration bancaire simulée" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Administrer les comptes" }, { "type": "text", "text": " avec gestion multi-utilisateurs, rôles et permissions" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Enjeux métier" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Réduction de 40% du temps de traitement des réservations" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Amélioration de la satisfaction client grâce au suivi en temps réel" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Scalabilité pour gérer 1000+ clients entreprises et 5000+ interventions/mois" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Conformité RGPD et sécurité des données clients" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Objectifs fonctionnels",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Fonctionnalités minimales obligatoires" }]
+              },
+              {
+                "type": "orderedList",
+                "attrs": { "start": 1 },
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Authentification sécurisée" }, { "type": "text", "text": " : JWT avec refresh tokens ou OAuth2, gestion multi-rôles (admin, client, technicien)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Catalogue de services" }, { "type": "text", "text": " : CRUD complet, recherche, filtres, tarification dynamique selon zone géographique" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Gestion des réservations" }, { "type": "text", "text": " : création, modification, annulation, récurrence, validation de créneaux disponibles" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Suivi en temps réel" }, { "type": "text", "text": " : WebSocket ou Server-Sent Events pour notifications de statut, géolocalisation, photos" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Dashboard d'administration" }, { "type": "text", "text": " : statistiques, gestion utilisateurs, configuration système, logs d'audit" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Paiement simulé" }, { "type": "text", "text": " : intégration avec service de paiement fictif (Stripe test mode ou équivalent), gestion des remboursements" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Exigences utilisateur" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Interface responsive mobile-first, accessible sur tous les appareils" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Fonctionnement offline pour consultation et saisie basique (PWA)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Temps de chargement < 2s sur connexion 3G" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Expérience utilisateur fluide avec feedback visuel immédiat" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Objectifs techniques",
+          "position": 2,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Stack technique cible" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "L'application doit démontrer la maîtrise de technologies modernes et de bonnes pratiques d'architecture :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Frontend PWA" }, { "type": "text", "text": " : React/Vue.js avec Vite, Service Workers, IndexedDB, stratégie de cache offline-first" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Backend API" }, { "type": "text", "text": " : Node.js/Express ou Python/FastAPI, architecture RESTful ou GraphQL, validation stricte des entrées" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Base de données" }, { "type": "text", "text": " : PostgreSQL avec migrations, indexation optimale, transactions ACID" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Authentification" }, { "type": "text", "text": " : JWT avec rotation de tokens, OAuth2, ou Auth0/Firebase Auth" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Temps réel" }, { "type": "text", "text": " : WebSocket (Socket.io), Server-Sent Events, ou GraphQL Subscriptions" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Observabilité" }, { "type": "text", "text": " : logs structurés (Winston/Pino), métriques (Prometheus), tracing distribué (OpenTelemetry)" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Qualité et DevOps" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Tests automatisés : unitaires (>80% couverture), intégration, E2E (Playwright/Cypress)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "CI/CD : pipeline GitHub Actions/GitLab CI avec tests, lint, build, déploiement automatique" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Conteneurisation : Docker avec Docker Compose pour environnement local et production" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Documentation : README complet, spécification API (OpenAPI/Swagger), diagrammes d'architecture" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Vision produit",
+          "position": 3,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Positionnement et valeur" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Cette application démontre la capacité à concevoir, développer et déployer une solution complète prête pour la production. Elle doit être :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Production-ready" }, { "type": "text", "text": " : code propre, tests, documentation, sécurité, performance" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Scalable" }, { "type": "text", "text": " : architecture modulaire, séparation des responsabilités, possibilité d'évolution" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Maintenable" }, { "type": "text", "text": " : patterns clairs, conventions de code, documentation technique" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Déployable" }, { "type": "text", "text": " : CI/CD fonctionnel, conteneurisation, configuration d'environnement" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Pièges à éviter" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Ne pas négliger la sécurité : validation des entrées, protection CSRF/XSS, gestion des secrets" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Éviter le sur-engineering : privilégier la simplicité et la lisibilité du code" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Ne pas oublier les tests : une fonctionnalité non testée est une fonctionnalité fragile" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Documenter au fur et à mesure : la documentation écrite après coup est souvent incomplète" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Architecture cible",
+      "position": 1,
+      "published": true,
+      "content": {
+        "description": "Architecture frontend PWA, backend API, authentification, base de données et observabilité."
+      },
+      "chapters": [
+        {
+          "title": "Frontend PWA",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Architecture Progressive Web App" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Le frontend doit être une PWA installable et fonctionnelle offline avec les composants suivants :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Service Worker" }, { "type": "text", "text": " : stratégie de cache (Cache First pour assets statiques, Network First pour API, Stale While Revalidate pour données)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "IndexedDB" }, { "type": "text", "text": " : stockage local pour données utilisateur, réservations en attente de synchronisation" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Manifest.json" }, { "type": "text", "text": " : configuration PWA (icônes, thème, mode standalone)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Queue de synchronisation" }, { "type": "text", "text": " : gestion des requêtes en échec, retry automatique, indicateur de statut réseau" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Structure frontend recommandée" }]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "text" },
+                "content": [
+                  { "type": "text", "text": "src/\n  components/     # Composants réutilisables\n  pages/          # Pages/routes\n  hooks/          # Custom hooks React\n  services/       # Appels API, cache\n  store/          # État global (Redux/Zustand)\n  utils/          # Helpers, validations\n  workers/        # Service Worker, Web Workers\n  types/          # TypeScript types\npublic/\n  manifest.json\n  sw.js          # Service Worker\n  icons/         # Icônes PWA" }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Backend API",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Architecture REST ou GraphQL" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Le backend doit exposer une API claire, documentée et sécurisée avec une architecture modulaire :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Routes/Resolvers" }, { "type": "text", "text": " : organisation par domaine métier (auth, services, reservations, payments)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Services métier" }, { "type": "text", "text": " : logique métier isolée, réutilisable, testable" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Modèles/ORM" }, { "type": "text", "text": " : Prisma, TypeORM, ou Sequelize pour abstraction base de données" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Middleware" }, { "type": "text", "text": " : authentification, validation, logging, gestion d'erreurs" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Validation" }, { "type": "text", "text": " : Zod, Joi, ou class-validator pour validation stricte des entrées" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Exemple de structure backend" }]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "text" },
+                "content": [
+                  { "type": "text", "text": "src/\n  routes/        # Définition des routes\n  controllers/   # Gestion des requêtes/réponses\n  services/      # Logique métier\n  models/         # Modèles de données\n  middleware/    # Auth, validation, logging\n  utils/         # Helpers, erreurs\n  config/        # Configuration (DB, env)\n  tests/         # Tests unitaires et intégration" }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Authentification et sécurité",
+          "position": 2,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Stratégies d'authentification" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "L'authentification doit être robuste et conforme aux bonnes pratiques :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "JWT avec refresh tokens" }, { "type": "text", "text": " : tokens courts (15min), refresh tokens longs (7j), rotation automatique" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "OAuth2" }, { "type": "text", "text": " : Authorization Code Flow pour applications web, Client Credentials pour API-to-API" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Hachage des mots de passe" }, { "type": "text", "text": " : bcrypt/argon2 avec salt, jamais de stockage en clair" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Rate limiting" }, { "type": "text", "text": " : protection contre brute force, limitation par IP et par utilisateur" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "CORS" }, { "type": "text", "text": " : configuration stricte des origines autorisées, credentials sécurisés" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Autorisation fine" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Implémenter un système de rôles et permissions (RBAC) :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Admin : accès complet, gestion utilisateurs, configuration" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Client : consultation catalogue, réservations, historique" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Technicien : consultation planning, mise à jour statuts, upload photos" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Base de données",
+          "position": 3,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Schéma relationnel PostgreSQL" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "La base de données doit être normalisée, performante et évolutive :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Tables principales" }, { "type": "text", "text": " : users, companies, services, reservations, payments, notifications" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Relations" }, { "type": "text", "text": " : foreign keys, contraintes d'intégrité, cascades appropriées" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Index" }, { "type": "text", "text": " : index sur colonnes fréquemment requêtées (email, status, dates), index composites pour requêtes complexes" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Migrations" }, { "type": "text", "text": " : versioning du schéma, rollback possible, migrations automatiques en CI/CD" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Exemple de schéma simplifié" }]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "sql" },
+                "content": [
+                  { "type": "text", "text": "CREATE TABLE users (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  email VARCHAR(255) UNIQUE NOT NULL,\n  password_hash VARCHAR(255) NOT NULL,\n  role VARCHAR(50) NOT NULL,\n  company_id UUID REFERENCES companies(id),\n  created_at TIMESTAMP DEFAULT NOW()\n);\n\nCREATE TABLE reservations (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  user_id UUID REFERENCES users(id),\n  service_id UUID REFERENCES services(id),\n  scheduled_at TIMESTAMP NOT NULL,\n  status VARCHAR(50) NOT NULL,\n  created_at TIMESTAMP DEFAULT NOW()\n);\n\nCREATE INDEX idx_reservations_user ON reservations(user_id);\nCREATE INDEX idx_reservations_status ON reservations(status);" }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Observabilité",
+          "position": 4,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Logs, métriques et tracing" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "L'observabilité est essentielle pour le debugging et le monitoring en production :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Logs structurés" }, { "type": "text", "text": " : format JSON, niveaux (error, warn, info, debug), contexte (user_id, request_id, timestamp)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Métriques" }, { "type": "text", "text": " : taux d'erreur, latence (p50, p95, p99), débit (req/s), utilisation ressources" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Tracing distribué" }, { "type": "text", "text": " : corrélation des requêtes entre services, identification des goulots d'étranglement" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Alertes" }, { "type": "text", "text": " : seuils critiques (erreur > 5%, latence > 1s), notifications (email, Slack, PagerDuty)" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Outils recommandés" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Winston, Pino (Node.js) ou structlog (Python) pour logs" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Prometheus + Grafana pour métriques et dashboards" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "OpenTelemetry pour tracing distribué" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "ELK Stack (Elasticsearch, Logstash, Kibana) ou Loki pour agrégation de logs" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Contraintes non fonctionnelles",
+      "position": 2,
+      "published": true,
+      "content": {
+        "description": "Sécurité, performance, scalabilité, maintenabilité et évolutivité."
+      },
+      "chapters": [
+        {
+          "title": "Sécurité",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Exigences de sécurité" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "La sécurité doit être intégrée dès la conception (security by design) :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "OWASP Top 10" }, { "type": "text", "text": " : protection contre injection SQL, XSS, CSRF, authentification cassée, exposition de données sensibles" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "HTTPS obligatoire" }, { "type": "text", "text": " : TLS 1.3, certificats valides, HSTS headers" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Validation stricte" }, { "type": "text", "text": " : sanitization des entrées, validation côté serveur (jamais uniquement côté client)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Secrets management" }, { "type": "text", "text": " : variables d'environnement, secrets managers (AWS Secrets Manager, HashiCorp Vault), jamais de secrets en code" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Audit logs" }, { "type": "text", "text": " : traçabilité des actions critiques (connexions, modifications, paiements)" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Conformité RGPD" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Consentement explicite pour traitement des données" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Droit à l'effacement (suppression des données utilisateur)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Chiffrement des données sensibles au repos et en transit" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Minimisation des données collectées" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Performance",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Objectifs de performance" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Temps de réponse API" }, { "type": "text", "text": " : < 200ms p95 pour requêtes simples, < 500ms pour requêtes complexes" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "First Contentful Paint" }, { "type": "text", "text": " : < 1.5s sur connexion 3G" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Time to Interactive" }, { "type": "text", "text": " : < 3s" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Débit" }, { "type": "text", "text": " : 1000 requêtes/seconde minimum" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Techniques d'optimisation" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Cache : Redis pour données fréquemment accédées, cache HTTP (ETag, Cache-Control)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Pagination : limit/offset ou cursor-based pour grandes listes" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Lazy loading : chargement à la demande, code splitting frontend" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Optimisation base de données : requêtes N+1 évitées, eager loading, index appropriés" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "CDN : distribution des assets statiques (images, JS, CSS)" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Scalabilité",
+          "position": 2,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Architecture scalable" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "L'architecture doit permettre de gérer une croissance de charge sans refonte majeure :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Horizontal scaling" }, { "type": "text", "text": " : stateless backend, load balancing, réplication base de données" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Queue de messages" }, { "type": "text", "text": " : traitement asynchrone (RabbitMQ, Redis, AWS SQS) pour tâches longues" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Microservices" }, { "type": "text", "text": " : découpage par domaine métier si nécessaire (optionnel pour MVP)" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Database sharding" }, { "type": "text", "text": " : partitionnement horizontal si volume très important" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Auto-scaling" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Configuration d'auto-scaling basé sur CPU, mémoire, ou nombre de requêtes (Kubernetes HPA, AWS Auto Scaling Groups)." }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Maintenabilité",
+          "position": 3,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Qualité du code" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Conventions de code" }, { "type": "text", "text": " : ESLint/Prettier, style guide cohérent, nommage explicite" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Architecture modulaire" }, { "type": "text", "text": " : séparation des responsabilités, faible couplage, forte cohésion" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Tests" }, { "type": "text", "text": " : couverture > 80%, tests unitaires rapides, tests d'intégration stables" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Documentation" }, { "type": "text", "text": " : README complet, commentaires pour logique complexe, diagrammes d'architecture" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Gestion de la dette technique" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Identifier et documenter les compromis techniques, planifier leur résolution dans le backlog." }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Évolutivité",
+          "position": 4,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Design évolutif" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "L'application doit pouvoir évoluer sans breaking changes majeurs :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Versioning API" }, { "type": "text", "text": " : /api/v1/, /api/v2/, stratégie de dépréciation" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Migrations base de données" }, { "type": "text", "text": " : migrations rétrocompatibles, rollback possible" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Feature flags" }, { "type": "text", "text": " : déploiement progressif, A/B testing, rollback rapide" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Abstraction" }, { "type": "text", "text": " : interfaces claires, dépendances inversées, facilité de remplacement de composants" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Organisation du projet",
+      "position": 3,
+      "published": true,
+      "content": {
+        "description": "Découpage des responsabilités, gestion du backlog et livrables attendus."
+      },
+      "chapters": [
+        {
+          "title": "Découpage des responsabilités",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Phases de développement" }]
+              },
+              {
+                "type": "orderedList",
+                "attrs": { "start": 1 },
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Phase 1 : Setup et authentification" }, { "type": "text", "text": " (Semaine 1-2)\n- Configuration environnement (dev, staging, prod)\n- Setup base de données et migrations\n- Implémentation authentification JWT/OAuth2\n- Tests unitaires et intégration auth" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Phase 2 : API core" }, { "type": "text", "text": " (Semaine 3-4)\n- CRUD services et réservations\n- Validation et gestion d'erreurs\n- Tests API complets" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Phase 3 : Frontend PWA" }, { "type": "text", "text": " (Semaine 5-6)\n- Interface utilisateur responsive\n- Service Worker et offline\n- Intégration API" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Phase 4 : Temps réel et paiements" }, { "type": "text", "text": " (Semaine 7)\n- WebSocket/SSE pour notifications\n- Intégration paiement simulé" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Phase 5 : Observabilité et CI/CD" }, { "type": "text", "text": " (Semaine 8)\n- Logs, métriques, tracing\n- Pipeline CI/CD complet\n- Documentation finale" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Répartition des tâches" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Si travail en équipe, répartir par domaine : backend API, frontend PWA, DevOps/CI/CD, tests." }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Gestion du backlog",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Priorisation des fonctionnalités" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Must Have (P0)" }, { "type": "text", "text": " : authentification, CRUD de base, interface utilisable" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Should Have (P1)" }, { "type": "text", "text": " : temps réel, paiements, dashboard admin" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Nice to Have (P2)" }, { "type": "text", "text": " : analytics avancés, export données, notifications email" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "User Stories format" }]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "text" },
+                "content": [
+                  { "type": "text", "text": "En tant que [rôle],\nJe veux [action],\nAfin de [bénéfice].\n\nCritères d'acceptation :\n- [ ] Critère 1\n- [ ] Critère 2\n- [ ] Critère 3" }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Livrables attendus",
+          "position": 2,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Livrables techniques" }]
+              },
+              {
+                "type": "orderedList",
+                "attrs": { "start": 1 },
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Repository Git" }, { "type": "text", "text": " : code source complet, historique de commits propre, branches organisées" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Documentation technique" }, { "type": "text", "text": " : README avec setup, architecture, décisions techniques, schémas" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Spécification API" }, { "type": "text", "text": " : OpenAPI/Swagger complet avec exemples, schémas de données" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Pipeline CI/CD" }, { "type": "text", "text": " : configuration fonctionnelle, tests automatisés, déploiement" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Rapport d'architecture" }, { "type": "text", "text": " : diagrammes, justifications des choix, compromis identifiés" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "marks": [{ "type": "bold" }], "text": "Démonstration" }, { "type": "text", "text": " : vidéo de présentation ou environnement déployé accessible" }] }]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Critères de qualité" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Code fonctionnel et testé" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Documentation claire et complète" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Architecture cohérente et justifiée" }] }]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [{ "type": "paragraph", "content": [{ "type": "text", "text": "Sécurité conforme aux bonnes pratiques" }] }]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "exercise",
+      "title": "Exercice – Conception de la solution",
+      "position": 4,
+      "published": true,
+      "content": {
+        "description": "Choix des technologies, justification des décisions et analyse des compromis pour le projet fil rouge.",
+        "instruction": "**Objectif pédagogique :**\n\nAvant de commencer le développement, vous devez concevoir l'architecture complète de votre application et justifier vos choix techniques. Cet exercice vous permet de réfléchir aux compromis et de valider votre approche.\n\n**Consignes :**\n\n1. **Choix de la stack technique**\n   - Sélectionnez votre stack frontend (React, Vue.js, Angular) et backend (Node.js, Python, Go)\n   - Justifiez chaque choix en fonction des contraintes du projet\n   - Identifiez les alternatives et expliquez pourquoi vous ne les avez pas retenues\n\n2. **Architecture API**\n   - Décidez entre REST et GraphQL\n   - Concevez la structure des endpoints/résolvers\n   - Définissez les schémas de données principaux\n\n3. **Stratégie d'authentification**\n   - Choisissez entre JWT, OAuth2, ou service tiers (Auth0)\n   - Définissez le système de rôles et permissions\n   - Planifiez la gestion des refresh tokens\n\n4. **Base de données**\n   - Concevez le schéma relationnel (tables, relations, index)\n   - Justifiez les choix de normalisation/dénormalisation\n   - Planifiez les migrations\n\n5. **PWA et offline**\n   - Définissez la stratégie de cache (Service Worker)\n   - Identifiez les données à stocker en IndexedDB\n   - Planifiez la synchronisation offline/online\n\n6. **Observabilité et monitoring**\n   - Choisissez les outils de logging, métriques, tracing\n   - Définissez les métriques clés à suivre\n   - Planifiez les alertes critiques\n\n**Résultat attendu :**\n\nUn document de conception (format Markdown ou PDF) de 5-10 pages contenant :\n- Diagramme d'architecture globale (composants, flux)\n- Justification détaillée de chaque choix technique\n- Analyse des compromis (performance vs simplicité, coût vs scalabilité)\n- Plan de migration/évolutivité\n- Identification des risques techniques et mitigation\n\n**Critères d'évaluation :**\n- Cohérence des choix techniques\n- Justification argumentée\n- Prise en compte des contraintes non fonctionnelles\n- Vision à long terme (évolutivité)"
+      }
+    },
+    {
+      "type": "tp",
+      "title": "TP – Développement d'une application Full-Stack PWA",
+      "position": 5,
+      "published": true,
+      "content": {
+        "instruction": "**Contexte fonctionnel :**\n\nVous développez une application de réservation de services professionnels B2B (plateforme de maintenance, nettoyage, livraison). L'application doit permettre aux clients entreprises de consulter un catalogue de services, réserver des interventions, suivre leur statut en temps réel, et gérer la facturation.\n\n**Fonctionnalités minimales obligatoires :**\n\n1. **Authentification sécurisée**\n   - JWT avec refresh tokens ou OAuth2\n   - Gestion multi-rôles : Admin (gestion complète), Client (réservations, consultation), Technicien (mise à jour statuts, photos)\n   - Protection contre brute force, rate limiting\n\n2. **API REST ou GraphQL**\n   - Endpoints/Resolvers pour : authentification, services (CRUD), réservations (CRUD), paiements, notifications\n   - Validation stricte des entrées (Zod, Joi, ou équivalent)\n   - Gestion d'erreurs cohérente avec codes HTTP appropriés\n   - Documentation OpenAPI/Swagger ou GraphQL Schema complète\n\n3. **Catalogue de ressources**\n   - CRUD complet pour services (nom, description, tarif, durée, zone géographique)\n   - Recherche et filtres (par catégorie, prix, disponibilité)\n   - Tarification dynamique selon zone\n\n4. **Gestion des réservations**\n   - Création, modification, annulation de réservations\n   - Validation de créneaux disponibles (pas de double réservation)\n   - Gestion de récurrence (hebdomadaire, mensuelle)\n   - Statuts : PENDING, CONFIRMED, IN_PROGRESS, COMPLETED, CANCELLED\n\n5. **Temps réel**\n   - WebSocket (Socket.io) ou Server-Sent Events ou GraphQL Subscriptions\n   - Notifications de changement de statut de réservation\n   - Mise à jour en temps réel du dashboard\n\n6. **Dashboard d'administration**\n   - Statistiques : nombre de réservations, revenus, services populaires\n   - Gestion des utilisateurs (CRUD, attribution de rôles)\n   - Configuration système (paramètres, tarifs)\n   - Logs d'audit (connexions, actions critiques)\n\n7. **Paiement simulé**\n   - Intégration avec service de paiement fictif (Stripe test mode, PayPal sandbox, ou mock)\n   - Gestion des remboursements\n   - Historique des transactions\n\n**Contexte technique :**\n\n- **Backend API sécurisé** : Node.js/Express, Python/FastAPI, ou équivalent\n- **Base de données** : PostgreSQL avec migrations, indexation optimale\n- **Frontend PWA** : React/Vue.js avec Vite, Service Worker, IndexedDB\n- **Tests automatisés** : unitaires (>80% couverture), intégration, E2E (Playwright/Cypress)\n- **Observabilité** : logs structurés (JSON), métriques (Prometheus ou équivalent), tracing (OpenTelemetry optionnel)\n- **CI/CD** : pipeline GitHub Actions/GitLab CI avec tests, lint, build, déploiement automatique\n- **Conteneurisation** : Docker avec Docker Compose pour environnement local et production\n\n**Contraintes de qualité :**\n\n- Code propre : conventions respectées (ESLint/Prettier), architecture modulaire, séparation des responsabilités\n- Sécurité : OWASP Top 10 couvert, validation stricte, HTTPS, secrets management\n- Performance : < 200ms p95 pour API, < 2s First Contentful Paint, optimisation base de données\n- Documentation : README complet, spécification API, diagrammes d'architecture\n\n**Livrables attendus :**\n\nVoir section deliverables ci-dessous.",
+        "criteria": [
+          "Architecture cohérente et justifiée : séparation claire frontend/backend, structure modulaire, patterns appropriés (MVC, Repository, Service Layer), diagrammes d'architecture présents",
+          "Sécurité conforme aux bonnes pratiques : authentification robuste (JWT/OAuth2), validation stricte des entrées, protection OWASP Top 10 (injection SQL, XSS, CSRF), HTTPS, secrets management, audit logs pour actions critiques",
+          "Tests couvrant les cas critiques : tests unitaires avec couverture > 80% pour logique métier, tests d'intégration pour flux principaux (auth, CRUD, paiements), tests E2E pour parcours utilisateur clés, mocks appropriés pour services externes",
+          "Performance acceptable sous charge simulée : temps de réponse API < 200ms p95, optimisation base de données (index, requêtes N+1 évitées), cache implémenté (Redis ou équivalent), pagination pour grandes listes, tests de charge (Artillery, k6) avec rapport",
+          "Observabilité exploitable : logs structurés JSON avec contexte (user_id, request_id), métriques clés exposées (taux d'erreur, latence, débit), dashboard de monitoring (Grafana ou équivalent), alertes configurées pour seuils critiques",
+          "Pipeline CI/CD fonctionnel : exécution automatique des tests à chaque commit, lint et formatage du code, build et déploiement automatique (staging/prod), blocage du déploiement si tests échouent ou couverture < 80%, génération de rapports",
+          "Qualité du code et documentation : code lisible avec conventions respectées, documentation README complète (setup, architecture, décisions), spécification API OpenAPI/Swagger ou GraphQL Schema, diagrammes d'architecture, commentaires pour logique complexe"
+        ],
+        "deliverables": [
+          "Repository Git complet : code source organisé (frontend, backend, tests, config), historique de commits propre avec messages explicites, branches main/develop, tags de version, .gitignore approprié",
+          "Documentation technique complète : README principal avec instructions de setup (prérequis, installation, configuration), guide d'architecture avec diagrammes (composants, flux, base de données), décisions techniques documentées (ADR - Architecture Decision Records), guide de contribution",
+          "Spécification API détaillée : fichier OpenAPI 3.1/Swagger ou GraphQL Schema complet avec tous les endpoints/résolvers, schémas de données, exemples de requêtes/réponses, codes d'erreur, authentification documentée",
+          "Pipeline CI/CD opérationnel : configuration YAML (GitHub Actions, GitLab CI, ou équivalent) avec étapes de test, lint, build, déploiement, badges de statut dans README, environnement de staging accessible",
+          "Rapport d'architecture et décisions : document PDF ou Markdown (5-10 pages) avec diagrammes d'architecture (composants, séquence, déploiement), justification des choix techniques, analyse des compromis, plan d'évolutivité, identification des risques et mitigation",
+          "Démonstration fonctionnelle : vidéo de présentation (5-10 min) montrant les fonctionnalités clés OU environnement déployé accessible publiquement (URL + identifiants de test), parcours utilisateur complet démontré",
+          "Tests et rapports de qualité : rapport de couverture de code (format HTML ou texte), résultats des tests de charge avec métriques (latence, débit, erreurs), rapport de sécurité (OWASP ZAP ou équivalent optionnel)"
+        ]
+      }
+    }
+      ]
+    }
+  ]
+}
+

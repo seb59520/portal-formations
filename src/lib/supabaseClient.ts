@@ -41,17 +41,30 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     headers: {
       'apikey': supabaseAnonKey,
     },
-    // Timeout pour les requêtes
+    // Timeout pour les requêtes (optimisé pour performance)
     fetch: (url, options = {}) => {
-      // Ajouter un timeout par défaut de 30 secondes
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 30000)
+      // Si un signal existe déjà dans les options, l'utiliser
+      // Sinon, créer un nouveau AbortController pour le timeout
+      const existingSignal = options.signal
+      const controller = existingSignal ? null : new AbortController()
+      const signal = existingSignal || controller?.signal
+      
+      // Timeout réduit à 10 secondes pour une réponse plus rapide
+      // Seulement si on a créé notre propre controller
+      let timeoutId: NodeJS.Timeout | null = null
+      if (controller) {
+        timeoutId = setTimeout(() => {
+          controller.abort('Request timeout after 10 seconds')
+        }, 10000)
+      }
       
       return fetch(url, {
         ...options,
-        signal: controller.signal,
+        signal,
       }).finally(() => {
-        clearTimeout(timeoutId)
+        if (timeoutId) {
+          clearTimeout(timeoutId)
+        }
       })
     },
   },

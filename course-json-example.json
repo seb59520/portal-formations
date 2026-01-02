@@ -1,0 +1,263 @@
+{
+  "title": "Exemple de cours",
+  "description": "Ceci est un exemple de cours créé avec le système JSON.\n\n**Avantages du système JSON :**\n- Édition rapide et simple\n- Thème cohérent par module\n- Génération automatique de composants React\n\n**Structure :**\n- Modules organisés par position\n- Items avec différents types (resource, slide, exercise, tp, game)\n- Thème personnalisable par cours et par module",
+  "status": "draft",
+  "access_type": "free",
+  "theme": {
+    "primaryColor": "#3B82F6",
+    "secondaryColor": "#8B5CF6",
+    "fontFamily": "Inter"
+  },
+  "modules": [
+    {
+      "title": "Module 1 : Introduction",
+      "position": 1,
+      "theme": {
+        "primaryColor": "#3B82F6",
+        "secondaryColor": "#8B5CF6"
+      },
+      "items": [
+        {
+          "type": "resource",
+          "title": "Leçon 1.1 : Bienvenue",
+          "position": 1,
+          "published": true,
+          "content": {
+            "body": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Bienvenue dans ce cours ! Cette leçon vous présente les concepts de base."
+                    }
+                  ]
+                }
+              ]
+            },
+            "description": "Introduction au cours"
+          }
+        },
+        {
+          "type": "slide",
+          "title": "Support de présentation",
+          "position": 2,
+          "published": true,
+          "content": {
+            "description": "Support visuel pour la présentation"
+          },
+          "asset_path": "module1/slide1.pdf"
+        },
+        {
+          "type": "exercise",
+          "title": "Exercice pratique",
+          "position": 3,
+          "published": true,
+          "content": {
+            "question": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Qu'est-ce qu'une API ?"
+                    }
+                  ]
+                }
+              ]
+            },
+            "correction": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Une API (Application Programming Interface) est une interface qui permet à différents logiciels de communiquer entre eux."
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "game",
+          "title": "Jeu d'association",
+          "position": 4,
+          "published": true,
+          "content": {
+            "gameType": "matching",
+            "description": "Associez les termes à leurs définitions",
+            "instructions": "Cliquez sur deux cartes pour les retourner et trouver les paires",
+            "pairs": [
+              {
+                "term": "API",
+                "definition": "Application Programming Interface"
+              },
+              {
+                "term": "REST",
+                "definition": "Representational State Transfer"
+              },
+              {
+                "term": "JSON",
+                "definition": "JavaScript Object Notation"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "title": "Module 2 : Approfondissement",
+      "position": 2,
+      "theme": {
+        "primaryColor": "#10B981",
+        "secondaryColor": "#059669"
+      },
+      "items": [
+        {
+          "type": "resource",
+          "title": "Leçon 2.1 : Concepts avancés",
+          "position": 1,
+          "published": true,
+          "content": {
+            "body": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "heading",
+                  "attrs": {
+                    "level": 2
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Concepts avancés"
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Dans cette leçon, nous allons approfondir les concepts vus précédemment."
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "tp",
+          "title": "TP : Créer une API REST",
+          "position": 2,
+          "published": true,
+          "content": {
+            "instructions": {
+              "type": "doc",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Créez une API REST simple avec les endpoints suivants :"
+                    }
+                  ]
+                },
+                {
+                  "type": "bulletList",
+                  "content": [
+                    {
+                      "type": "listItem",
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "GET /api/users"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "listItem",
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "POST /api/users"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "checklist": [
+              "Créer les routes",
+              "Implémenter les contrôleurs",
+              "Tester avec Postman",
+              "Documenter l'API"
+            ]
+          }
+        },
+        {
+          "type": "game",
+          "title": "Jeu d'association de colonnes",
+          "position": 3,
+          "published": true,
+          "content": {
+            "gameType": "column-matching",
+            "description": "Associez les concepts de la colonne 1 à ceux de la colonne 2",
+            "leftColumn": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE"
+            ],
+            "rightColumn": [
+              "Récupérer une ressource",
+              "Créer une ressource",
+              "Mettre à jour une ressource",
+              "Supprimer une ressource"
+            ],
+            "correctMatches": [
+              {
+                "left": 0,
+                "right": 0
+              },
+              {
+                "left": 1,
+                "right": 1
+              },
+              {
+                "left": 2,
+                "right": 2
+              },
+              {
+                "left": 3,
+                "right": 3
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
+

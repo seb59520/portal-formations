@@ -1,0 +1,1611 @@
+{
+  "title": "Sécurité des APIs – Authentification, Autorisation et Protection Avancée",
+  "position": 1,
+  "items": [
+    {
+      "type": "slide",
+      "title": "Menaces spécifiques aux APIs",
+      "position": 0,
+      "published": true,
+      "content": {
+        "description": "Comprendre les menaces spécifiques aux APIs et les différences avec la sécurité applicative classique"
+      },
+      "chapters": [
+        {
+          "title": "OWASP API Top 10",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Les 10 principales vulnérabilités des APIs" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "L'OWASP API Security Top 10 identifie les risques spécifiques aux APIs :" }
+                ]
+              },
+              {
+                "type": "orderedList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Broken Object Level Authorization (BOLA)" },
+                          { "type": "text", "text": " : Accès non autorisé à des ressources via manipulation d'ID" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Broken Authentication" },
+                          { "type": "text", "text": " : Faiblesses dans les mécanismes d'authentification" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Excessive Data Exposure" },
+                          { "type": "text", "text": " : Exposition de données sensibles dans les réponses" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Lack of Resources & Rate Limiting" },
+                          { "type": "text", "text": " : Absence de limitation de débit permettant le DoS" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Broken Function Level Authorization" },
+                          { "type": "text", "text": " : Contournement des contrôles d'autorisation" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Différences API vs sécurité applicative classique",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Spécificités des APIs" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Les APIs présentent des risques uniques par rapport aux applications web traditionnelles :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Exposition directe de la logique métier sans interface utilisateur" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Accès automatisé facilitant les attaques à grande échelle" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Manipulation directe des identifiants de ressources (ID dans les URLs)" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Absence de protection CSRF native (pas de cookies de session)" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Complexité de la gestion des tokens et de leur rotation" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Risques liés aux APIs publiques",
+          "position": 2,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Menaces en production" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Les APIs publiques sont exposées à des risques spécifiques nécessitant des mesures de protection adaptées :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Attaques par force brute" },
+                          { "type": "text", "text": " sur les endpoints d'authentification" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Scraping automatisé" },
+                          { "type": "text", "text": " pour extraire des données à grande échelle" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Déni de service (DoS)" },
+                          { "type": "text", "text": " par saturation des ressources" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Injection de données malveillantes" },
+                          { "type": "text", "text": " (NoSQL, command injection)" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Impact réel : compromission de données, interruption de service, non-conformité réglementaire (RGPD, PCI-DSS)." }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Authentification moderne",
+      "position": 1,
+      "published": true,
+      "content": {
+        "description": "Maîtriser les mécanismes d'authentification modernes pour les APIs"
+      },
+      "chapters": [
+        {
+          "title": "OAuth2 : flows et cas d'usage",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Les flows OAuth2" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "OAuth2 définit plusieurs flows selon le contexte d'utilisation :" }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Client Credentials Flow" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Utilisé pour les communications machine-to-machine (M2M). Le client échange ses credentials contre un access token." }
+                ]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "http" },
+                "content": [
+                  { "type": "text", "text": "POST /oauth/token HTTP/1.1\nHost: api.example.com\nContent-Type: application/x-www-form-urlencoded\n\nclient_id=xxx&client_secret=yyy&grant_type=client_credentials" }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Authorization Code Flow" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Flow standard pour les applications web et mobiles. Sécurisé car l'access token n'est jamais exposé au navigateur." }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Redirection vers l'autorisation server avec client_id et redirect_uri" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Échange du code d'autorisation contre un access token (backend uniquement)" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Utilisation du token pour accéder aux ressources protégées" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "JWT vs tokens opaques",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Comparaison des stratégies de tokens" }]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "JWT (JSON Web Token)" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Avantages : stateless, contient les claims, vérifiable sans DB" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Inconvénients : révocation difficile, taille importante, exposition des données" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Tokens opaques" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Avantages : révocation immédiate, taille réduite, pas d'exposition de données" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Inconvénients : nécessite une DB pour validation, latence supplémentaire" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Recommandation : JWT pour les APIs haute performance avec TTL court, tokens opaques pour les applications critiques nécessitant une révocation immédiate." }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Durée de vie, rotation et révocation",
+          "position": 2,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Gestion du cycle de vie des tokens" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Bonnes pratiques pour la gestion des tokens :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Access tokens" },
+                          { "type": "text", "text": " : TTL court (15-60 min) pour limiter la fenêtre d'exposition" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Refresh tokens" },
+                          { "type": "text", "text": " : TTL long (7-30 jours), stockés de manière sécurisée, rotation obligatoire" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Révocation" },
+                          { "type": "text", "text": " : Blacklist pour JWT, suppression en DB pour tokens opaques" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Rotation" },
+                          { "type": "text", "text": " : Nouveau refresh token à chaque utilisation pour limiter la réutilisation" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Autorisation et contrôle d'accès",
+      "position": 2,
+      "published": true,
+      "content": {
+        "description": "Implémenter des mécanismes d'autorisation robustes"
+      },
+      "chapters": [
+        {
+          "title": "RBAC vs ABAC",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Modèles d'autorisation" }]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "RBAC (Role-Based Access Control)" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Autorisation basée sur les rôles. Simple à implémenter mais limité en granularité." }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Utilisateur → Rôle → Permissions" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Exemple : admin, manager, user" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Limitation : ne gère pas les permissions contextuelles (ex: propriétaire d'une ressource)" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "ABAC (Attribute-Based Access Control)" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Autorisation basée sur les attributs. Plus flexible mais plus complexe." }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Décision basée sur : utilisateur, ressource, action, environnement" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Exemple : \"user.department == resource.department AND time < 18:00\"" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Avantage : règles contextuelles complexes, fine granularité" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Scopes et permissions",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Granularité des permissions" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Les scopes OAuth2 permettent de limiter les permissions d'un token à des actions spécifiques." }
+                ]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "http" },
+                "content": [
+                  { "type": "text", "text": "GET /oauth/authorize?\n  client_id=xxx&\n  redirect_uri=yyy&\n  scope=read:orders write:orders&\n  response_type=code" }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Bonnes pratiques :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Principe du moindre privilège : demander uniquement les scopes nécessaires" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Format standardisé : resource:action (ex: orders:read, users:write)" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Validation côté serveur à chaque requête" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Protection des APIs",
+      "position": 3,
+      "published": true,
+      "content": {
+        "description": "Mettre en place des mécanismes de protection contre les abus"
+      },
+      "chapters": [
+        {
+          "title": "Rate limiting et throttling",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Limitation de débit" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Le rate limiting protège l'API contre la saturation et les abus." }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Stratégies" }]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Fixed window" },
+                          { "type": "text", "text": " : X requêtes par fenêtre de temps (ex: 100 req/min)" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Sliding window" },
+                          { "type": "text", "text": " : Plus précis, évite les pics en fin de fenêtre" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "marks": [{ "type": "bold" }], "text": "Token bucket" },
+                          { "type": "text", "text": " : Permet des rafales contrôlées" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": { "level": 3 },
+                "content": [{ "type": "text", "text": "Headers de réponse" }]
+              },
+              {
+                "type": "codeBlock",
+                "attrs": { "language": "http" },
+                "content": [
+                  { "type": "text", "text": "HTTP/1.1 429 Too Many Requests\nX-RateLimit-Limit: 100\nX-RateLimit-Remaining: 95\nX-RateLimit-Reset: 1640995200\nRetry-After: 60" }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Anti-bruteforce",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Protection contre les attaques par force brute" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Mesures à implémenter sur les endpoints d'authentification :" }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Limitation stricte : 5 tentatives par IP/email, puis blocage temporaire" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "CAPTCHA après 3 échecs" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Délai progressif : 1s, 5s, 30s, 5min" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Alertes sécurité après détection de pattern suspect" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Chiffrement TLS et données sensibles",
+          "position": 2,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Protection des données en transit et au repos" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "TLS 1.2 minimum (1.3 recommandé) pour toutes les communications API." }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Chiffrement des données sensibles au repos (AES-256)" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Ne jamais exposer les secrets dans les logs ou réponses d'erreur" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Hachage des mots de passe avec bcrypt/Argon2" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "Sécurité by design",
+      "position": 4,
+      "published": true,
+      "content": {
+        "description": "Intégrer la sécurité dès la conception"
+      },
+      "chapters": [
+        {
+          "title": "Principe du moindre privilège",
+          "position": 0,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Least Privilege Principle" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Chaque composant doit avoir uniquement les permissions minimales nécessaires à son fonctionnement." }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Scopes OAuth2 granulaires (read:orders vs write:orders)" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Séparation des rôles (lecture seule vs admin)" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Isolation des environnements (dev, staging, prod)" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "title": "Zero Trust et défense en profondeur",
+          "position": 1,
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": { "level": 2 },
+                "content": [{ "type": "text", "text": "Architecture Zero Trust" }]
+              },
+              {
+                "type": "paragraph",
+                "content": [
+                  { "type": "text", "text": "Principe : ne jamais faire confiance, toujours vérifier." }
+                ]
+              },
+              {
+                "type": "bulletList",
+                "content": [
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Validation à chaque requête (pas de cache de confiance)" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Défense en profondeur : WAF, rate limiting, auth, validation, sanitization" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "listItem",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          { "type": "text", "text": "Monitoring et alerting en temps réel" }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "exercise",
+      "title": "Analyse de vulnérabilités API",
+      "position": 5,
+      "published": true,
+      "content": {
+        "question": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": { "level": 2 },
+              "content": [{ "type": "text", "text": "Objectif pédagogique" }]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                { "type": "text", "text": "Identifier les failles de sécurité dans une API existante et proposer des corrections appropriées." }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 2 },
+              "content": [{ "type": "text", "text": "Consignes" }]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                { "type": "text", "text": "Analysez l'API suivante et identifiez au moins 5 vulnérabilités de sécurité :" }
+              ]
+            },
+            {
+              "type": "codeBlock",
+              "attrs": { "language": "http" },
+              "content": [
+                { "type": "text", "text": "GET /api/users/123/orders\nAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\n\n# Réponse\nHTTP/1.1 200 OK\n{\n  \"orders\": [\n    {\n      \"id\": 456,\n      \"user_id\": 123,\n      \"total\": 99.99,\n      \"credit_card\": \"4532-1234-5678-9010\",\n      \"cvv\": \"123\"\n    }\n  ]\n}\n\nPOST /api/login\nContent-Type: application/json\n\n{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}\n\n# Réponse\nHTTP/1.1 200 OK\n{\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"expires_in\": 31536000\n}\n\nGET /api/admin/users\nAuthorization: Bearer token123\n\n# Pas de validation du token, accès direct à la DB" }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 2 },
+              "content": [{ "type": "text", "text": "Résultat attendu" }]
+            },
+            {
+              "type": "bulletList",
+              "content": [
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Liste des vulnérabilités identifiées avec classification OWASP" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Impact et risque pour chaque vulnérabilité" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Corrections proposées avec justification technique" }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "correction": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": { "level": 2 },
+              "content": [{ "type": "text", "text": "Corrections identifiées" }]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 3 },
+              "content": [{ "type": "text", "text": "1. Excessive Data Exposure (OWASP #3)" }]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                { "type": "text", "text": "Exposition de données sensibles (numéro de carte, CVV) dans la réponse. Correction : ne jamais exposer ces données, utiliser des tokens de paiement." }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 3 },
+              "content": [{ "type": "text", "text": "2. Broken Authentication (OWASP #2)" }]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                { "type": "text", "text": "Token JWT avec expiration trop longue (1 an). Correction : access token 15-60 min, refresh token séparé." }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 3 },
+              "content": [{ "type": "text", "text": "3. Broken Object Level Authorization (OWASP #1)" }]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                { "type": "text", "text": "Pas de vérification que l'utilisateur peut accéder aux commandes d'un autre utilisateur. Correction : validation du user_id dans le token vs ressource demandée." }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 3 },
+              "content": [{ "type": "text", "text": "4. Lack of Rate Limiting (OWASP #4)" }]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                { "type": "text", "text": "Endpoint /api/login sans limitation. Correction : 5 tentatives max, puis blocage temporaire." }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 3 },
+              "content": [{ "type": "text", "text": "5. Broken Function Level Authorization (OWASP #5)" }]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                { "type": "text", "text": "Endpoint /api/admin/users accessible sans validation du rôle admin. Correction : middleware d'autorisation vérifiant le rôle." }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "exercise",
+      "title": "Choix de stratégie de sécurité",
+      "position": 6,
+      "published": true,
+      "content": {
+        "question": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": { "level": 2 },
+              "content": [{ "type": "text", "text": "Objectif pédagogique" }]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                { "type": "text", "text": "Comparer différents scénarios d'API et justifier les choix d'authentification et d'autorisation." }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 2 },
+              "content": [{ "type": "text", "text": "Consignes" }]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                { "type": "text", "text": "Pour chaque scénario, choisissez et justifiez :" }
+              ]
+            },
+            {
+              "type": "bulletList",
+              "content": [
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "marks": [{ "type": "bold" }], "text": "Scénario 1" },
+                        { "type": "text", "text": " : API interne microservices, communication M2M, haute performance requise" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "marks": [{ "type": "bold" }], "text": "Scénario 2" },
+                        { "type": "text", "text": " : API partenaire B2B, intégration avec systèmes externes, audit nécessaire" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "marks": [{ "type": "bold" }], "text": "Scénario 3" },
+                        { "type": "text", "text": " : API publique mobile/web, millions d'utilisateurs, données personnelles" }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 2 },
+              "content": [{ "type": "text", "text": "Résultat attendu" }]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                { "type": "text", "text": "Pour chaque scénario : flow OAuth2, type de token (JWT/opaque), stratégie d'autorisation (RBAC/ABAC), mesures de protection spécifiques." }
+              ]
+            }
+          ]
+        },
+        "correction": {
+          "type": "doc",
+          "content": [
+            {
+              "type": "heading",
+              "attrs": { "level": 2 },
+              "content": [{ "type": "text", "text": "Solutions recommandées" }]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 3 },
+              "content": [{ "type": "text", "text": "Scénario 1 : API interne M2M" }]
+            },
+            {
+              "type": "bulletList",
+              "content": [
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Flow : Client Credentials (M2M)" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Token : JWT (stateless, performance)" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Autorisation : RBAC simple (service:action)" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Protection : mTLS entre services, rate limiting par service" }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 3 },
+              "content": [{ "type": "text", "text": "Scénario 2 : API partenaire B2B" }]
+            },
+            {
+              "type": "bulletList",
+              "content": [
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Flow : Client Credentials ou Authorization Code (selon contexte)" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Token : Opaque (révocation nécessaire, audit)" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Autorisation : RBAC avec scopes granulaires par partenaire" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Protection : IP whitelisting, quotas par partenaire, audit logs complets" }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "heading",
+              "attrs": { "level": 3 },
+              "content": [{ "type": "text", "text": "Scénario 3 : API publique" }]
+            },
+            {
+              "type": "bulletList",
+              "content": [
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Flow : Authorization Code avec PKCE (mobile/web)" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Token : JWT avec refresh token opaques (compromis performance/sécurité)" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Autorisation : ABAC pour règles contextuelles (propriétaire, heure, localisation)" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        { "type": "text", "text": "Protection : Rate limiting strict, CAPTCHA, WAF, monitoring comportemental" }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "game",
+      "title": "OAuth Flow Builder",
+      "position": 7,
+      "published": true,
+      "content": {
+        "gameType": "column-matching",
+        "description": "Associez le bon flow OAuth2 au cas d'usage approprié",
+        "instructions": "Faites correspondre chaque cas d'usage avec le flow OAuth2 le plus adapté. Cliquez sur un élément de la colonne de gauche puis sur l'élément correspondant de la colonne de droite.",
+        "leftColumn": [
+          "Application web serveur (backend sécurisé)",
+          "Application mobile native",
+          "Communication machine-to-machine (microservices)",
+          "Application SPA (Single Page Application)",
+          "Application de bureau (desktop)"
+        ],
+        "rightColumn": [
+          "Authorization Code Flow avec PKCE",
+          "Authorization Code Flow standard",
+          "Client Credentials Flow",
+          "Device Code Flow",
+          "Implicit Flow (déprécié)"
+        ],
+        "correctMatches": [
+          { "left": 0, "right": 1 },
+          { "left": 1, "right": 0 },
+          { "left": 2, "right": 2 },
+          { "left": 3, "right": 0 },
+          { "left": 4, "right": 3 }
+        ]
+      }
+    },
+    {
+      "type": "game",
+      "title": "API Security Incident",
+      "position": 8,
+      "published": true,
+      "content": {
+        "gameType": "format-files",
+        "description": "Gérez un incident de sécurité sur une API en production",
+        "instructions": "Vous êtes responsable sécurité. Un incident est détecté. Choisissez les actions correctives dans l'ordre approprié. Score basé sur la pertinence et l'ordre des décisions.",
+        "levels": [
+          {
+            "level": 1,
+            "name": "Détection d'incident",
+            "questions": [
+              {
+                "id": "incident-1-1",
+                "type": "choose-format",
+                "prompt": "Alertes : 1000+ tentatives de connexion échouées depuis la même IP en 5 minutes sur /api/login. Quelle est votre première action ?",
+                "options": [
+                  "Bloquer immédiatement l'IP au niveau firewall",
+                  "Analyser les logs pour confirmer l'attaque",
+                  "Augmenter le rate limiting sur /api/login",
+                  "Désactiver temporairement l'endpoint /api/login"
+                ],
+                "answer": "Bloquer immédiatement l'IP au niveau firewall",
+                "explanation": "En cas d'attaque par force brute évidente, la priorité est de bloquer l'IP immédiatement pour limiter les dégâts, puis analyser.",
+                "difficulty": 1
+              },
+              {
+                "id": "incident-1-2",
+                "type": "choose-format",
+                "prompt": "Après le blocage, vous découvrez que 3 comptes ont été compromis. Quelle est la prochaine étape critique ?",
+                "options": [
+                  "Révoquer tous les tokens de ces comptes",
+                  "Changer les mots de passe des comptes",
+                  "Analyser les accès effectués avec ces comptes",
+                  "Tout faire en parallèle"
+                ],
+                "answer": "Tout faire en parallèle",
+                "explanation": "En cas de compromission, il faut agir rapidement sur tous les fronts : révocation tokens, changement MDP, et audit des accès.",
+                "difficulty": 2
+              }
+            ]
+          },
+          {
+            "level": 2,
+            "name": "Réponse à l'incident",
+            "questions": [
+              {
+                "id": "incident-2-1",
+                "type": "choose-format",
+                "prompt": "L'analyse révèle que les tokens JWT n'expirent qu'après 24h et qu'il n'y a pas de mécanisme de révocation. Quelle mesure immédiate implémentez-vous ?",
+                "options": [
+                  "Réduire la durée de vie des tokens à 15 minutes",
+                  "Implémenter une blacklist de tokens révoqués",
+                  "Migrer vers des tokens opaques",
+                  "Toutes les mesures ci-dessus"
+                ],
+                "answer": "Toutes les mesures ci-dessus",
+                "explanation": "Pour sécuriser rapidement, réduire la fenêtre d'exposition (TTL court), permettre la révocation (blacklist), et à terme migrer vers tokens opaques si nécessaire.",
+                "difficulty": 3
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "name": "Post-incident",
+            "questions": [
+              {
+                "id": "incident-3-1",
+                "type": "choose-format",
+                "prompt": "Après résolution, quelle mesure préventive est la plus importante pour éviter la récurrence ?",
+                "options": [
+                  "Implémenter un système de monitoring comportemental",
+                  "Renforcer le rate limiting avec sliding window",
+                  "Ajouter un CAPTCHA après 3 tentatives échouées",
+                  "Toutes les mesures ci-dessus"
+                ],
+                "answer": "Toutes les mesures ci-dessus",
+                "explanation": "La sécurité nécessite une défense en profondeur : monitoring pour détection précoce, rate limiting pour limiter l'impact, CAPTCHA pour ralentir les attaques automatisées.",
+                "difficulty": 3
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "tp",
+      "title": "Sécurisation complète d'une API exposée",
+      "position": 9,
+      "published": true,
+      "content": {
+        "instruction": "**Contexte :**\n\nVous êtes architecte sécurité dans une fintech. L'entreprise développe une API REST publique pour permettre à des partenaires (banques, assureurs) d'accéder aux données de transactions financières de leurs clients.\n\n**Contraintes métier :**\n- API exposée publiquement sur Internet\n- Données sensibles (transactions financières, informations bancaires)\n- Conformité réglementaire stricte (RGPD, PCI-DSS, PSD2)\n- Performance requise : < 200ms de latence p95\n- Scalabilité : 10 000 requêtes/seconde en pic\n- Disponibilité : 99.9% SLA\n\n**API à sécuriser :**\n\n```\n# Endpoints à implémenter\nPOST   /oauth/token              # Authentification OAuth2\nGET    /api/v1/transactions      # Liste des transactions\nGET    /api/v1/transactions/{id} # Détail d'une transaction\nGET    /api/v1/accounts/{id}    # Informations compte\nPOST   /api/v1/webhooks          # Configuration webhooks\n```\n\n**Exigences de sécurité :**\n\n1. **Authentification :**\n   - OAuth2 Client Credentials Flow pour les partenaires\n   - Support JWT avec signature RS256\n   - Refresh tokens avec rotation obligatoire\n   - Révocation immédiate en cas de compromission\n\n2. **Autorisation :**\n   - RBAC avec rôles : partner_read, partner_write, partner_admin\n   - Scopes granulaires : transactions:read, accounts:read, webhooks:write\n   - Validation à chaque requête (Zero Trust)\n   - Vérification que le partenaire peut accéder uniquement aux données de ses clients\n\n3. **Protection :**\n   - Rate limiting : 1000 req/min par client_id, 100 req/min par IP\n   - Anti-bruteforce : blocage après 5 tentatives échouées sur /oauth/token\n   - WAF pour protection contre injections\n   - TLS 1.3 obligatoire\n   - Headers de sécurité (HSTS, CSP, X-Frame-Options)\n\n4. **Conformité :**\n   - Audit logs complets (qui, quoi, quand, où)\n   - Chiffrement des données au repos (AES-256)\n   - Masquage des données sensibles dans les logs\n   - Droit à l'oubli (suppression des données sur demande)\n\n5. **Monitoring :**\n   - Alertes en temps réel sur tentatives d'intrusion\n   - Métriques de sécurité (taux d'échec auth, IPs bloquées)\n   - Dashboard de sécurité opérationnelle\n\n**Travail demandé :**\n\n1. **Architecture sécurité :** Concevez l'architecture complète de sécurité avec tous les composants (API Gateway, Auth Server, Rate Limiter, WAF, etc.)\n\n2. **Spécification OpenAPI sécurisée :** Rédigez une spécification OpenAPI 3.1 complète avec :\n   - Définition des security schemes (OAuth2)\n   - Application des security requirements sur chaque endpoint\n   - Exemples de requêtes/réponses sécurisées\n   - Codes d'erreur standardisés\n\n3. **Implémentation :** Développez une implémentation fonctionnelle (langage au choix) avec :\n   - Serveur OAuth2 avec Client Credentials Flow\n   - Middleware d'authentification et d'autorisation\n   - Rate limiting fonctionnel\n   - Gestion des tokens (émission, validation, révocation)\n   - Protection anti-bruteforce\n\n4. **Analyse des risques :** Documentez une analyse de risques complète avec :\n   - Identification des menaces (OWASP API Top 10)\n   - Évaluation du risque (probabilité × impact)\n   - Mesures de mitigation pour chaque risque\n   - Plan de réponse aux incidents\n\n**Contraintes techniques :**\n- Code production-ready (gestion d'erreurs, logging, tests)\n- Documentation technique complète\n- Justification de chaque choix architectural",
+        "criteria": [
+          "Authentification OAuth2 Client Credentials Flow fonctionnelle avec émission et validation de tokens JWT RS256",
+          "Autorisation fine implémentée avec validation des scopes et vérification d'accès aux ressources par partenaire",
+          "Rate limiting opérationnel avec stratégie sliding window et headers de réponse appropriés (X-RateLimit-*)",
+          "Protection anti-bruteforce active sur l'endpoint d'authentification avec blocage progressif",
+          "Gestion cohérente des erreurs de sécurité avec codes HTTP appropriés (401, 403, 429) et format standardisé",
+          "Architecture sécurité complète documentée avec diagrammes et justification des choix",
+          "Spécification OpenAPI 3.1 valide et complète avec security schemes et requirements",
+          "Analyse de risques détaillée couvrant les 10 risques OWASP API Top 10 avec plan de mitigation",
+          "Implémentation production-ready avec tests unitaires, gestion d'erreurs et logging sécurisé",
+          "Conformité réglementaire prise en compte (RGPD, PCI-DSS) avec audit logs et chiffrement"
+        ],
+        "deliverables": [
+          "Schéma d'architecture sécurité (format PDF ou image) montrant tous les composants de sécurité et leurs interactions",
+          "Spécification OpenAPI 3.1 complète (fichier YAML) avec security schemes, endpoints sécurisés et exemples",
+          "Repository Git avec implémentation fonctionnelle (code source, tests, documentation technique)",
+          "Rapport d'analyse des risques (format PDF) avec identification des menaces, évaluation et plan de mitigation",
+          "Document de justification architecturale expliquant les choix techniques (tokens, rate limiting, WAF, etc.)",
+          "Guide d'exploitation avec procédures de déploiement, monitoring et réponse aux incidents",
+          "Exemples de requêtes/réponses sécurisées avec tokens valides et cas d'erreur documentés"
+        ]
+      }
+    }
+  ]
+}

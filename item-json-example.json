@@ -1,0 +1,43 @@
+{
+  "type": "game",
+  "title": "Jeu d'association - Types d'API",
+  "position": 1,
+  "published": true,
+  "content": {
+    "gameType": "matching",
+    "description": "Associez les termes liés aux API à leurs définitions",
+    "instructions": "Cliquez sur deux cartes pour les retourner et trouver les paires correspondantes",
+    "pairs": [
+      {
+        "term": "REST",
+        "definition": "Representational State Transfer - Style d'architecture pour les services web"
+      },
+      {
+        "term": "GraphQL",
+        "definition": "Langage de requête et runtime pour les API"
+      },
+      {
+        "term": "gRPC",
+        "definition": "Framework RPC open source développé par Google"
+      },
+      {
+        "term": "OpenAPI",
+        "definition": "Spécification pour décrire les API REST"
+      },
+      {
+        "term": "JWT",
+        "definition": "JSON Web Token - Standard pour les tokens d'authentification"
+      },
+      {
+        "term": "OAuth2",
+        "definition": "Framework d'autorisation pour accorder l'accès aux ressources"
+      }
+    ]
+  },
+  "theme": {
+    "primaryColor": "#3B82F6",
+    "secondaryColor": "#8B5CF6",
+    "fontFamily": "Inter"
+  }
+}
+

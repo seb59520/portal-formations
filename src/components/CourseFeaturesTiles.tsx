@@ -91,8 +91,8 @@ export function CourseFeaturesTiles({ course, items, courseId }: CourseFeaturesT
   ]
 
   return (
-    <div className="mb-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">Fonctionnalités</h2>
+    <div className="mb-2">
+      <h2 className="text-xl font-semibold text-gray-900 mb-2">Fonctionnalités</h2>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
         {features.map((feature) => {
           const content = (

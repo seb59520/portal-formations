@@ -1,0 +1,204 @@
+{
+  "type": "resource",
+  "title": "Introduction aux API REST",
+  "position": 1,
+  "published": true,
+  "content": {
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Cette leçon vous introduit aux concepts fondamentaux des API REST."
+            }
+          ]
+        }
+      ]
+    },
+    "description": "Introduction aux API REST et aux principes de base"
+  },
+  "chapters": [
+    {
+      "title": "Qu'est-ce qu'une API ?",
+      "position": 1,
+      "content": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Définition d'une API"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Une API (Application Programming Interface) est une interface qui permet à différents logiciels de communiquer entre eux."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Permet la communication entre applications"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Définit un contrat d'interface"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "title": "Principes REST",
+      "position": 2,
+      "content": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Les principes REST"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "REST (Representational State Transfer) est un style d'architecture pour les services web."
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Stateless : chaque requête contient toutes les informations nécessaires"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Ressources identifiées par des URLs"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Utilisation des méthodes HTTP (GET, POST, PUT, DELETE)"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "title": "Exemples pratiques",
+      "position": 3,
+      "content": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Exemples d'utilisation"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "bash"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "GET /api/users\nPOST /api/users\nPUT /api/users/123\nDELETE /api/users/123"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "theme": {
+    "primaryColor": "#3B82F6",
+    "secondaryColor": "#8B5CF6",
+    "fontFamily": "Inter"
+  }
+}
+
