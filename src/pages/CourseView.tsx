@@ -10,8 +10,9 @@ import { ReactRenderer } from '../components/ReactRenderer'
 import { CourseSidebar } from '../components/CourseSidebar'
 import { ResizableSidebar } from '../components/ResizableSidebar'
 import { CourseJson } from '../types/courseJson'
-import { Eye, EyeOff, X, BookOpen } from 'lucide-react'
+import { Eye, EyeOff, X, BookOpen, FileText } from 'lucide-react'
 import { Lexique } from './Lexique'
+import { getCurrentUserRole } from '../lib/queries/userRole'
 
 interface ModuleWithItems extends Module {
   items: Item[]
@@ -32,6 +33,7 @@ export function CourseView() {
   // Le lexique est ouvert par défaut en mode desktop, fermé en mode mobile
   const [lexiqueDrawerOpen, setLexiqueDrawerOpen] = useState(true)
   const [isDesktop, setIsDesktop] = useState(false)
+  const [isTrainer, setIsTrainer] = useState(false)
   const viewMode = searchParams.get('view')
 
   // Détecter si on est sur desktop
@@ -67,6 +69,17 @@ export function CourseView() {
       fetchCourse()
     }
   }, [courseId, user])
+
+  // Vérifier si l'utilisateur est formateur
+  useEffect(() => {
+    async function checkTrainerRole() {
+      if (user) {
+        const roleContext = await getCurrentUserRole()
+        setIsTrainer(roleContext.role === 'trainer' || roleContext.role === 'admin')
+      }
+    }
+    checkTrainerRole()
+  }, [user])
 
   const fetchCourse = async () => {
     try {
@@ -499,6 +512,16 @@ export function CourseView() {
                   className="btn-secondary text-sm"
                 >
                   Retour au contenu
+                </Link>
+              )}
+              {isTrainer && (
+                <Link
+                  to={`/trainer/courses/${course.id}/script`}
+                  className="flex items-center space-x-2 px-3 py-1.5 text-sm text-white bg-purple-600 hover:bg-purple-700 rounded-md transition-colors"
+                  title="Voir le script pédagogique détaillé"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>Script prof</span>
                 </Link>
               )}
               {profile?.role === 'admin' && (

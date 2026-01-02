@@ -30,6 +30,7 @@ import { SessionLearners } from './pages/trainer/SessionLearners'
 import { SessionAnalytics } from './pages/trainer/SessionAnalytics'
 import { ExerciseResults } from './pages/trainer/ExerciseResults'
 import { TrainerNotes } from './pages/trainer/TrainerNotes'
+import { TrainerCourseScript } from './pages/trainer/TrainerCourseScript'
 import { TrainerRouteGuard } from './components/trainer/TrainerRouteGuard'
 import { Profile } from './pages/Profile'
 import { DebugProfile } from './pages/DebugProfile'
@@ -309,6 +310,14 @@ function App() {
             element={
               <TrainerRouteGuard>
                 <TrainerNotes />
+              </TrainerRouteGuard>
+            }
+          />
+          <Route
+            path="/trainer/courses/:courseId/script"
+            element={
+              <TrainerRouteGuard>
+                <TrainerCourseScript />
               </TrainerRouteGuard>
             }
           />
